@@ -1,0 +1,284 @@
+; CDROM.A - Alexander Shabarshin  13.10.2002
+       
+IDE_DAW	equ	#0150
+IDE_DAR	equ	#0050
+IDE_HDW	equ	#4152
+IDE_HDR	equ	#4052
+IDE_COM	equ	#4153
+IDE_STA	equ	#4053
+IDE_CIL	equ	#0154
+IDE_CIH	equ	#0155
+
+; Based on Vlad Sotnikov source files
+                                         
+
+; Wait when device will free
+
+NO_BSY:	
+	ld	bc,IDE_STA
+	in	a,(c)
+	rlca
+	ret	nc
+	jr	NO_BSY
+
+; Wait ready data transfer
+
+WAIT_DRQ:
+	ld	bc,IDE_STA
+	in	a,(c)
+	bit	3,a
+	ret	nz
+	jr	WAIT_DRQ
+
+; Error test
+; ---
+; fc - error
+
+IS_ERROR:
+	ld	bc,IDE_STA
+	in	a,(c)
+	rrca
+	ret
+
+; Set Slave device
+
+SEL_SLAVE:
+	ld	a,#B0
+	jr	SEL_DEV
+	
+; Set Master device
+
+SEL_MASTER:
+	ld	a,#A0
+	jr	SEL_DEV
+        
+; Set device (Slave or Master)
+; A - #A0 or #B0
+; ---
+; fc - 1 ???
+
+SEL_DEV:
+	ld	bc,IDE_HDW
+	out	(c),a
+        ld	bc,IDE_HDR
+	in	a,(c)
+	rlca
+        ret
+
+; Save HL to cilinder register
+
+HL_TO_LEN:
+	ld	bc,IDE_CIL
+	out	(c),l
+	ld	bc,IDE_CIH
+	out	(c),h
+	ret
+
+; Load HL from cilinder register
+
+LEN_TO_HL:
+	ld	bc,IDE_CIL
+	in	l,(c)
+	ld	bc,IDE_CIH
+	in	h,(c)
+	ret
+
+; Read from CD-ROM sector 2048 bytes
+
+CD_READ:
+        call	NO_BSY
+	call	WAIT_DRQ
+	ld	hl,CD_BUF
+	ld	bc,IDE_DAR
+	ld	d,0
+CD_LOOP:
+	ini
+	ini   
+	ini
+	ini
+	ini
+	ini
+	ini
+	ini
+	dec	d
+	jr	nz,CD_LOOP
+	ld	hl,CD_BUF
+	ld	bc,1024
+CD_TRANS:
+	ld	d,(hl)
+	inc	hl
+	ld	e,(hl)
+	dec	hl
+	ld	(hl),e
+	inc	hl
+	ld	(hl),d
+	inc	hl
+	dec	bc
+	ld	a,b
+	or	c
+	jr	nz,CD_TRANS
+	ret
+
+; Send ATAPI command
+; HL - address of 12-bytes command
+
+SEND_ATAPI:
+	ld	de,CD_BUF
+	di
+	ld	d,d
+	ld	a,12
+	ld	b,b
+	ld	l,l
+	ld	a,(hl)
+	ld	(de),a
+	ld	b,b
+	ei
+SA0:	call	NO_BSY
+;	call	IS_ERROR
+;	jr	c,SA0
+SA1:	call	SEL_SLAVE
+	call	NO_BSY
+SA2:	ld	bc,IDE_STA
+	in	a,(c)
+	and	#40
+	jr	z,SA2
+	ld	a,#A0
+	ld	bc,IDE_COM
+        out	(c),a
+SA3:	call	NO_BSY
+	call	IS_ERROR
+	jp	c,SA0
+	call	WAIT_DRQ
+	ld	hl,CD_BUF
+	ld	bc,IDE_DAW
+	outi
+	outi
+	outi
+	outi
+	outi
+	outi
+	outi
+	outi
+	outi
+	outi
+	outi
+	outi
+	ret
+
+; Initialisation slave CD-ROM
+; ---             
+; fc - CD-ROM exists
+
+CD_INI:
+	ld	de,#FFFF
+	call	SEL_SLAVE 
+	ld	bc,IDE_STA
+	in	a,(c)
+	rlca
+	call	c,NO_CDROM
+	ld	hl,0
+	call	HL_TO_LEN
+	ld	a,#EC
+	ld	bc,IDE_COM
+        out	(c),a
+	call	NO_BSY
+	call	LEN_TO_HL
+
+;	call	whl
+;	call	nln
+
+	push	hl
+	pop	de	
+	ld	bc,#EB14
+	or	a
+	sbc	hl,bc
+;	call	nz,NO_CDROM
+	ld	a,#A1 
+	ld	bc,IDE_COM
+	out	(c),a    
+        call	CD_READ
+	ld	hl,CD_BUF
+;	inc	hl
+	ld	a,(hl)
+	and	#1F
+	cp	5
+	jr	nz,NO_CDROM
+	scf
+	ret
+NO_CDROM:
+	pop	hl
+	xor	a
+	ret
+
+SAVE_BUF:   
+	push	hl
+        ld	hl,FNAME
+	ld	c,#0A
+	ld	a,0
+	rst	10h
+	ld	(FHAND),a
+	ld	c,#14
+	ld	a,(FHAND)
+	ld	de,2048
+	ld	hl,CD_BUF
+	rst	10h
+	ld	c,#12
+	ld	a,(FHAND)
+	rst	10h
+	pop	hl
+	ret
+
+FNAME	db	"cd_buf.dat",0
+FHAND	db	0
+
+AP_NOP:	ld	hl,AP_00
+	call	SEND_ATAPI
+	ret   
+
+; ATAPI command
+; HL - address of ATAPI command (AP_*)
+
+ATAPI:
+AP_COM:	
+	call	SEND_ATAPI
+	ret
+
+AP_00	db	#00
+	ds	11
+AP_TR0	db	#01
+	ds	11
+AP_CD1	db	#1B
+	ds	3
+	db	1
+	ds	7
+AP_CD2	db	#1B
+	ds	3
+	db	2
+	ds	7
+AP_CD3	db	#1B
+	ds	3
+	db	3
+	ds	7
+AP_PL0	db	#4B
+	ds	11
+AP_PL1	db	#4B
+	ds	7
+	db	1
+	ds	3
+AP_PLA	db	#47
+	ds	2
+	db	0,2,0
+	db	80,0,74
+	ds	3
+
+CD_BUF	ds	2048
+
+
+
+
+
+
+
+
+
+

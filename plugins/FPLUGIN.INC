@@ -17,6 +17,7 @@ PluginOrg	equ	0xC000
 WorkBuffer	equ	0x8000
 PagesList	equ	0x8400
 ; Flex Navigator API functions
+_FN_API_8600	equ	0x8600
 ClearScreen	equ	0x8603
 MakeWindow	equ	0x8606
 InvertRectan	equ	0x8609
@@ -29,20 +30,28 @@ PrnRangPathC	equ	0x861B
 InputLine	equ	0x861E
 InpLnExtN	equ	0x8621
 InpLnExtC	equ	0x8624
-
+_FN_API_8627	equ	0x8627
 InitScrBar	equ	0x862A
 PrnHScrBar	equ	0x862D
 PrnVScrBar	equ	0x8630
 InitProcess	equ	0x8633
 PrnProcess	equ	0x8636
-
+_FN_API_8639	equ	0x8639
+_FN_API_863C	equ	0x863C
+_FN_API_863F	equ	0x863F
+_FN_API_8642	equ	0x8642
+_FN_API_8645	equ	0x8645
 ResFire		equ	0x8648
 TestCoords	equ	0x864B
 SetCMOSPrint	equ	0x864E
 ResCMOSPrint	equ	0x8651
 SetClock	equ	0x8654
 SetMouse	equ	0x8657
-
+_FN_API_865A	equ	0x865A
+_FN_API_865D	equ	0x865D
+_FN_API_8660	equ	0x8660
+_FN_API_8663	equ	0x8663
+_FN_API_8666	equ	0x8666
 MoveBytes	equ	0x8669
 MoveBytesUp	equ	0x866C
 Mult8		equ	0x866F
@@ -59,7 +68,11 @@ ConvNumTxt16	equ	0x868D
 ConvNumTxt8	equ	0x8690
 ConvTxtNum32	equ	0x8693
 ConvTxtNum16	equ	0x8696
-
+_FN_API_8699	equ	0x8699
+_FN_API_869C	equ	0x869C
+_FN_API_869F	equ	0x869F
+_FN_API_86A2	equ	0x86A2
+_FN_API_86A5	equ	0x86A5
 DOSError	equ	0x86A8
 
 
