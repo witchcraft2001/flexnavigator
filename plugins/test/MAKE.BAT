@@ -1,0 +1,1 @@
+z80asm.exe -f bin test.z80 -o test.flx

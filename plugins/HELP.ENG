@@ -1,0 +1,25 @@
+
+struct FlxPluginHeader {
+	char Id[8];
+	unsigned short LoadOffset;
+	unsigned short EntryOffset;
+	unsigned char PluginMode;
+	unsigned char Reserved[3];
+};
+
+	Header of Plugin for Flex Navigator v1.xx:
+		8 bytes Id - identifier of plugin, you should begin from three symbols - FLX
+		2 bytes LoadOffset - displacement in page of memory for load (0 - 0x3FFF)
+		2 bytes EntryOffset - displacement in page of memory for executing (0 - 0x3FFF)
+		1 byte  PluginMode - modes of work:
+				0 - repairing Flex Navigator screen after finish 
+				1 - without repairing Flex Navigator screen after finish 
+		3 bytes Reserved 
+	length = 16 bytes
+
+	ATTANTION!!!
+	1. Size of plugin code (without header) must be less 4000 bytes.
+	2. ORG = 0xC000
+	3. When control will return to Flex Navigator, Carry Flag are specify error status:
+		CF = 1 error during initialization
+		CF = 0 no error

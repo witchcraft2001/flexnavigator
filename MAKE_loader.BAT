@@ -22,6 +22,10 @@ C:\asm\sjasm\sjasmplus.exe --lst=fnloader.lst --lstlab fnloader.z80
 if errorlevel 1 goto ERR
 copy /Y bin\fnloader.exe /B + bin\fnmain.hst /B + bin\fnfunc.hst /B + bin\fnview.hst /B + bin\fnedit.hst /B + bin\fnhelp.hst /B + bin\fnfont.hst /B fn.exe /B
 if errorlevel 1 goto ERR
+echo MAKE PLUGINS
+cd plugins/test
+call make_test.bat
+if errorlevel 1 goto ERR
 goto END
 :ERR
 rem pause

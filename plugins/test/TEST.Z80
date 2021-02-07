@@ -1,0 +1,98 @@
+                DEVICE ZXSPECTRUM128
+;[]=======================================================================[]
+;
+; test.z80 -- test plugin for Flex Navigator v1.xx
+;
+; Created by Anton Enin 08-June-2002
+;
+; Last update 08-June-2002
+;
+; Copyright (C) 2002 R-lab
+;
+; This program should be compiled using z80asm
+; http://www.zxasm.narod.ru/
+;
+;[]=======================================================================[]
+
+		include "..\fplugin.inc"
+
+		org	0xBFF0			; PluginOrg - Header lenght
+PluginStart:
+						; Flex Navigator plugin header
+		db	"FLX-PLUG"		; Id
+		dw	0x0000			; LoadOffset
+		dw	0x0000			; EntryOffset
+		db	0x00			; PluginMode
+		db	0x00, 0x00, 0x00	; Reserved
+
+PluginEntry:
+		call	MakeWindow
+		db	0x01
+		dw	0x00E0, 0x0050
+		dw	0x00C0, 0x0060
+		db	0x02			;head place
+		dw	0x0004, 0x0002
+		dw	0x00B8, 0x000A
+		db	0x00
+		db	0x01			;text line
+		dw	0x0052, 0x0003
+		db	0x0F
+		db	"Plugin", 0
+		db	0x01			;text line
+		dw	0x0010, 0x0014
+		db	0x84
+		db	"Flex Navigator v1.xx Plugin Test", 0
+		db	0x01			;text line
+		dw	0x002E, 0x0026
+		db	0x80
+		db	"Written by Enin Anton", 0
+		db	0x01			;text line
+		dw	0x0040,	0x0030
+		db	0x80
+		db	"June, 8 2002", 0
+		db	0x01			;text line
+		dw	0x0034, 0x003A
+		db	0x80
+		db	"Copyright (c) 2002", 0
+		db	0x04			;uprectan
+		dw	0x003C, 0x004A
+		dw	0x0048, 0x000E
+		db	0x01			;text line
+		dw	0x0058, 0x004D
+		db	0x80
+		db	"Ok", 0
+		db	0x00
+
+		call	ResFire
+.plugin_loop:
+		ld	ix, PluginMouseTab
+		call	TestCoords
+		ld	c, 0x31
+		rst	0x10
+		jr	z, .plugin_loop
+		ld	a, b
+		or	a
+		jr	nz, .plugin_loop
+		ld	a, e
+		cp	0x1B
+		jr	z, PluginExit
+		cp	0x0D
+		jr	nz, .plugin_loop
+PluginExit:
+		call	MakeWindow
+		db	0x7F
+		db	0x00
+		or	a			; cf = 0
+		ret
+
+
+;[]=======================================================================[]
+PluginMouseTab:
+		dw	0x011C, 0x0164, 0x009A, 0x00A8, 0x0021, 0x0000, PluginExit, 0x0000
+		dw	0x0000, 0x00E0, 0x0000, 0x0100, 0x0020, 0x0000, PluginExit, 0x0000
+		dw	0x01A0, 0x0280, 0x0000, 0x0100, 0x0020, 0x0000, PluginExit, 0x0000
+		dw	0x0000, 0x0280, 0x0000, 0x0050, 0x0020, 0x0000, PluginExit, 0x0000
+		dw	0x0000, 0x0280, 0x00B0, 0x0100, 0x0020, 0x0000, PluginExit, 0x0000
+		dw	0x8000
+PluginEnd:
+                savebin	"test.flx",PluginStart,PluginEnd-PluginStart
