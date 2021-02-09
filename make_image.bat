@@ -14,8 +14,10 @@ timeout 2 > nul
 osfmount.com -a -t file -o rw -f build/fn.img -m X:
 if errorlevel 1 goto ERR
 mkdir X:\FN\PLUGINGS
+mkdir X:\FN\EXAMPLES
 copy /Y fn.exe /B X:\FN\ /B
 copy /Y bin\plugins\*.* /B X:\FN\PLUGINGS\ /B
+copy /Y examples\*.* /B X:\FN\EXAMPLES\ /B
 rem copy /Y gifview.txt /A X:\GIFVIEW\ /A
 if errorlevel 1 goto ERR
 echo Unmounting image ...
