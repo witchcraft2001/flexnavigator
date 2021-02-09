@@ -25,7 +25,7 @@ LoadFl0	CALL	CorrBigChar
 	CP	#C0
 	LD	A,#1E
 	PUSH	AF
-	CALL	Z,DOSError	;!!!!!!!!!!!! Нет памяти
+	CALL	Z,DOSError	;!!!!!!!!!!!! РќРµС‚ РїР°РјСЏС‚Рё
 	POP	AF
 	SCF 
 	JP	Z,LoadExit
@@ -34,14 +34,14 @@ LoadFl0	CALL	CorrBigChar
 	OR	(IX+31)
 	LD	A,#1E
 	PUSH	AF
-	CALL	NZ,DOSError	;!!!!!!!!!!!! Нет памяти
+	CALL	NZ,DOSError	;!!!!!!!!!!!! РќРµС‚ РїР°РјСЏС‚Рё
 	POP	AF
 	SCF 
 	JP	NZ,LoadExit
 	LD	BC,#033D
 	RST	#10
 	PUSH	AF
-	CALL	C,DOSError	;!!!!!!!!!!!! Нет памяти
+	CALL	C,DOSError	;!!!!!!!!!!!! РќРµС‚ РїР°РјСЏС‚Рё
 	POP	AF
 	JP	C,LoadExit
 	LD	(MemIndef),A
@@ -76,7 +76,7 @@ LoadFl0	CALL	CorrBigChar
 	DEFW	#0008,#0010
 	DEFB	#80
 	DEFB	"Reading:",0
-	DEFB	#03	;Углубление
+	DEFB	#03	;РЈРіР»СѓР±Р»РµРЅРёРµ
 	DEFW	#0010,#001C
 	DEFW	#0120,#000C
 	DEFB	#02	;Head place
@@ -353,7 +353,7 @@ NewFE1	SUB	A
 	LD	BC,#033D
 	RST	#10
 	PUSH	AF
-	CALL	C,DOSError	;!!!!!!!!!!!! Нет памяти
+	CALL	C,DOSError	;!!!!!!!!!!!! РќРµС‚ РїР°РјСЏС‚Рё
 	POP	AF
 	JP	C,LoadExit
 	LD	(MemIndef),A
@@ -406,7 +406,7 @@ SaveFile
 	DEFW	#0008,#0010
 	DEFB	#80
 	DEFB	"Saving:",0
-	DEFB	#03	;Углубление
+	DEFB	#03	;РЈРіР»СѓР±Р»РµРЅРёРµ
 	DEFW	#0010,#001C
 	DEFW	#0120,#000C
 	DEFB	#02	;Head place

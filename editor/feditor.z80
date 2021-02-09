@@ -47,13 +47,13 @@ EditorLoop
 TEditLoop
 	LD	IX,ASCIItab
 	CALL	TestCoords
-	LD	C,#31		;Ожидаем нажатия клавиш
+	LD	C,#31		;РћР¶РёРґР°РµРј РЅР°Р¶Р°С‚РёСЏ РєР»Р°РІРёС€
 	RST	#10
 	JR	Z,EditorLoop
 	LD	A,D
 	CP	#44
 	JP	Z,EditorExit
-	LD	A,E		;Е-ASCII код
+	LD	A,E		;Р•-ASCII РєРѕРґ
 	CP	#1B		;Esc
 	JP	Z,EditorExit
 	LD	HL,EditorLoop
@@ -66,7 +66,7 @@ TEditLoop
 	CP	#3C
 	JP	Z,SaveFile
 	CP	#3E
-	JP	Z,ChEditor	;Просмотр в HEX
+	JP	Z,ChEditor	;РџСЂРѕСЃРјРѕС‚СЂ РІ HEX
 	CP	#43
 	JP	Z,PrintFile
 	CP	#4F
@@ -106,20 +106,20 @@ TEditLoop
 	CP	#52
 	JP	Z,TScrollDown
 	CP	#57		;Ctrl+Home
-	JP	Z,TBegFile	;в начало файла
+	JP	Z,TBegFile	;РІ РЅР°С‡Р°Р»Рѕ С„Р°Р№Р»Р°
 	CP	#51		;Ctrl+PageEnd
-	JP	Z,TEndFile	;в конец файла
+	JP	Z,TEndFile	;РІ РєРѕРЅРµС† С„Р°Р№Р»Р°
 	RET 
 HEditLoop
 	LD	IX,HEXtab
 	CALL	TestCoords
-	LD	C,#31		;Ожидаем нажатия клавиш
+	LD	C,#31		;РћР¶РёРґР°РµРј РЅР°Р¶Р°С‚РёСЏ РєР»Р°РІРёС€
 	RST	#10
 	JP	Z,EditorLoop
 	LD	A,D		;
 	CP	#44		;F10
 	JP	Z,EditorExit
-	LD	A,E		;Е-ASCII код
+	LD	A,E		;Р•-ASCII РєРѕРґ
 	CP	#1B		;Esc
 	JP	Z,EditorExit
 	LD	HL,EditorLoop
@@ -132,9 +132,9 @@ HEditLoop
 	CP	#3C
 	JP	Z,SaveFile
 	CP	#3E		;F4
-	JP	Z,ChEditor	;Просмотр в тексте
+	JP	Z,ChEditor	;РџСЂРѕСЃРјРѕС‚СЂ РІ С‚РµРєСЃС‚Рµ
 	CP	#3F		;F5
-	JP	Z,HGoTo		;Переход на адрес пользователя
+	JP	Z,HGoTo		;РџРµСЂРµС…РѕРґ РЅР° Р°РґСЂРµСЃ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
 	CP	#43
 	JP	Z,PrintFile
 	CP	#54
@@ -145,9 +145,9 @@ HEditLoop
 	JP	Z,HHomeString
 	CP	#51		;End
 	JP	Z,HEndString
-	CP	#58		 ;Стрелка вверх
+	CP	#58		 ;РЎС‚СЂРµР»РєР° РІРІРµСЂС…
 	JP	Z,HCursorUp
-	CP	#52		 ;Стрелка вниз
+	CP	#52		 ;РЎС‚СЂРµР»РєР° РІРЅРёР·
 	JP	Z,HCursorDown
 	CP	#59		 ;PageUp
 	JP	Z,HPageUp
@@ -166,9 +166,9 @@ HEditLoop
 	CP	#52
 	JP	Z,HScrollDown
 	CP	#57		;Ctrl+PageUp
-	JP	Z,HBegFile	;в начало файла
+	JP	Z,HBegFile	;РІ РЅР°С‡Р°Р»Рѕ С„Р°Р№Р»Р°
 	CP	#51		;Ctrl+PageDown
-	JP	Z,HEndFile	;в конец файла
+	JP	Z,HEndFile	;РІ РєРѕРЅРµС† С„Р°Р№Р»Р°
 	RET 
 ;[]==========================================================[]
 EditingFile
@@ -197,7 +197,7 @@ PageShift
 TempShift
 	DEFW	#0000
 FileLenght
-	DEFW	#0000	;Длина файла (16бит)
+	DEFW	#0000	;Р”Р»РёРЅР° С„Р°Р№Р»Р° (16Р±РёС‚)
 EmptyLines
 	DEFB	#00
 MemIndef
@@ -388,7 +388,7 @@ InitScreen
 	DEFW	#0000,#00E3
 	DEFW	#0280
 
-	DEFB	#0A		;Кнопка	SB верхняя
+	DEFB	#0A		;РљРЅРѕРїРєР°	SB РІРµСЂС…РЅСЏСЏ
 	DEFW	#0270,#001C
 
 	DEFB	#02		;Fill
@@ -396,7 +396,7 @@ InitScreen
 	DEFW	#0010,#00B8
 	DEFB	#08
 
-	DEFB	#0B		;Кнопка	SB нижняя
+	DEFB	#0B		;РљРЅРѕРїРєР°	SB РЅРёР¶РЅСЏСЏ
 	DEFW	#0270,#00DC
 
 	DEFB	#00
@@ -470,7 +470,7 @@ InitStatus
 	DEFW	#026E,#00E4
 	DEFW	#0008
 
-	DEFB	#08		;Кнопка	SB левая
+	DEFB	#08		;РљРЅРѕРїРєР°	SB Р»РµРІР°СЏ
 	DEFW	#0000,#00E4
 
 	DEFB	#02		;Fill
@@ -478,7 +478,7 @@ InitStatus
 	DEFW	#0250,#0008
 	DEFB	#08
 
-	DEFB	#09		;Кнопка	SB правая
+	DEFB	#09		;РљРЅРѕРїРєР°	SB РїСЂР°РІР°СЏ
 	DEFW	#0260,#00E4
 
 	DEFB	#06	;Horizontal line
@@ -677,25 +677,25 @@ InitFileHex
 	LD	(CLine),HL
 	RET 
 EditVBar
-	DEFW	#0270	;X позиция скролбара
-	DEFW	#0024	;Y позиция скролбара
-	DEFW	#00B8	;Max длина скролбара
-	DEFW	#0000	;тек.длина скролбара
-BarPgU	DEFW	#0000	;Адрес ячейки BarLeft
-BarPgD	DEFW	#0000	;Адрес ячейки BarRight
-	DEFW	#0019	;Кол-во	строк на странице
-ELines	DEFW	#0000	;Общее кол-во строк
-CLine	DEFW	#0000	;Первая	строка на странице
+	DEFW	#0270	;X РїРѕР·РёС†РёСЏ СЃРєСЂРѕР»Р±Р°СЂР°
+	DEFW	#0024	;Y РїРѕР·РёС†РёСЏ СЃРєСЂРѕР»Р±Р°СЂР°
+	DEFW	#00B8	;Max РґР»РёРЅР° СЃРєСЂРѕР»Р±Р°СЂР°
+	DEFW	#0000	;С‚РµРє.РґР»РёРЅР° СЃРєСЂРѕР»Р±Р°СЂР°
+BarPgU	DEFW	#0000	;РђРґСЂРµСЃ СЏС‡РµР№РєРё BarLeft
+BarPgD	DEFW	#0000	;РђРґСЂРµСЃ СЏС‡РµР№РєРё BarRight
+	DEFW	#0019	;РљРѕР»-РІРѕ	СЃС‚СЂРѕРє РЅР° СЃС‚СЂР°РЅРёС†Рµ
+ELines	DEFW	#0000	;РћР±С‰РµРµ РєРѕР»-РІРѕ СЃС‚СЂРѕРє
+CLine	DEFW	#0000	;РџРµСЂРІР°СЏ	СЃС‚СЂРѕРєР° РЅР° СЃС‚СЂР°РЅРёС†Рµ
 EditHBar
-	DEFW	#0010	;X позиция скролбара
-	DEFW	#00E4	;Y позиция скролбара
-	DEFW	#0250	;Max длина скролбара
-	DEFW	#0000	;тек.длина скролбара
-	DEFW	TBarL	;Адрес ячейки BarLeft
-	DEFW	TBarR	;Адрес ячейки BarRight
-	DEFW	#004E	;Кол-во	строк на странице
-CScrnX	DEFW	#0000	;Общее кол-во строк
-CAddX	DEFW	#0000	;Первая	строка на странице
+	DEFW	#0010	;X РїРѕР·РёС†РёСЏ СЃРєСЂРѕР»Р±Р°СЂР°
+	DEFW	#00E4	;Y РїРѕР·РёС†РёСЏ СЃРєСЂРѕР»Р±Р°СЂР°
+	DEFW	#0250	;Max РґР»РёРЅР° СЃРєСЂРѕР»Р±Р°СЂР°
+	DEFW	#0000	;С‚РµРє.РґР»РёРЅР° СЃРєСЂРѕР»Р±Р°СЂР°
+	DEFW	TBarL	;РђРґСЂРµСЃ СЏС‡РµР№РєРё BarLeft
+	DEFW	TBarR	;РђРґСЂРµСЃ СЏС‡РµР№РєРё BarRight
+	DEFW	#004E	;РљРѕР»-РІРѕ	СЃС‚СЂРѕРє РЅР° СЃС‚СЂР°РЅРёС†Рµ
+CScrnX	DEFW	#0000	;РћР±С‰РµРµ РєРѕР»-РІРѕ СЃС‚СЂРѕРє
+CAddX	DEFW	#0000	;РџРµСЂРІР°СЏ	СЃС‚СЂРѕРєР° РЅР° СЃС‚СЂР°РЅРёС†Рµ
 ;[]==========================================================[]
 PrintPage
 	LD	A,(EditMode)
@@ -898,9 +898,9 @@ ScrollSCRup
 	JR	ScrlSCRDnUp
 ScrollSCRdown
 	LD	DE,#1C24
-;На вход:
-;	 D  - Y	откуда
-;	 Е  - Y	куда
+;РќР° РІС…РѕРґ:
+;	 D  - Y	РѕС‚РєСѓРґР°
+;	 Р•  - Y	РєСѓРґР°
 ScrlSCRDnUp
 	DI 
 	LD	C,#83

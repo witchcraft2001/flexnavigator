@@ -1,9 +1,9 @@
 
 ;--------------------------------------------------------------
-;Процедура печати страницы дампа с тек.смещ. от	начала файла
-;На вход:
+;РџСЂРѕС†РµРґСѓСЂР° РїРµС‡Р°С‚Рё СЃС‚СЂР°РЅРёС†С‹ РґР°РјРїР° СЃ С‚РµРє.СЃРјРµС‰. РѕС‚	РЅР°С‡Р°Р»Р° С„Р°Р№Р»Р°
+;РќР° РІС…РѕРґ:
 ;	   None
-;На выход:
+;РќР° РІС‹С…РѕРґ:
 ;	   None
 PrnHEXpage
 	LD	HL,PrintVProc
@@ -13,7 +13,7 @@ PrnHEXpage
 	AND	#F0
 	LD	L,A
 	LD	(FileShift),HL
-	LD	(TempShift),HL	;Запоминаем тек.смещение
+	LD	(TempShift),HL	;Р—Р°РїРѕРјРёРЅР°РµРј С‚РµРє.СЃРјРµС‰РµРЅРёРµ
 	LD	HL,(FileShift+2)
 	LD	(TempShift+2),HL
 	LD	HL,LineBuffer
@@ -21,13 +21,13 @@ PrnHEXpage
 	LD	(HL),C
 	INC	L
 	DJNZ	$-2
-	LD	B,#1C		;Изнач.позиция печати
+	LD	B,#1C		;РР·РЅР°С‡.РїРѕР·РёС†РёСЏ РїРµС‡Р°С‚Рё
 PrnHEXl	PUSH	BC
-	CALL	PutHLine ;Выводим строку в буфер и на экран
+	CALL	PutHLine ;Р’С‹РІРѕРґРёРј СЃС‚СЂРѕРєСѓ РІ Р±СѓС„РµСЂ Рё РЅР° СЌРєСЂР°РЅ
 	POP	BC
-	JR	C,FillDwnHex	;CY-Закончились	байты для печати
+	JR	C,FillDwnHex	;CY-Р—Р°РєРѕРЅС‡РёР»РёСЃСЊ	Р±Р°Р№С‚С‹ РґР»СЏ РїРµС‡Р°С‚Рё
 	LD	HL,(TempShift)
-	LD	DE,#0010	;Адрес дампа+16
+	LD	DE,#0010	;РђРґСЂРµСЃ РґР°РјРїР°+16
 	ADD	HL,DE
 	LD	(TempShift),HL
 	LD	HL,(TempShift+2)
@@ -40,11 +40,11 @@ PrnHEXl	PUSH	BC
 	CP	#E4
 	JR	NZ,PrnHEXl
 	RET 
-;Процедура отчистки нижней области экрана
+;РџСЂРѕС†РµРґСѓСЂР° РѕС‚С‡РёСЃС‚РєРё РЅРёР¶РЅРµР№ РѕР±Р»Р°СЃС‚Рё СЌРєСЂР°РЅР°
 FillDwnHex
 	LD	A,B
 	CP	#E4
-	RET	Z	;Z-нет отчистки
+	RET	Z	;Z-РЅРµС‚ РѕС‚С‡РёСЃС‚РєРё
 	LD	(FPosHex),A
 	LD	A,#E4
 	SUB	B
@@ -59,7 +59,7 @@ FLenHex	DEFW	#0000
 	DEFB	PanelCol
 	DEFB	#00
 	RET 
-;Процедура печати тек.строки в буфер и на экран
+;РџСЂРѕС†РµРґСѓСЂР° РїРµС‡Р°С‚Рё С‚РµРє.СЃС‚СЂРѕРєРё РІ Р±СѓС„РµСЂ Рё РЅР° СЌРєСЂР°РЅ
 PutHLine
 	LD	LX,#00
 	LD	HX,B
@@ -88,12 +88,12 @@ PutHLine
 PutHLn	IN	A,(PAGE1)
 	PUSH	AF
 	CALL	InitFPages
-	LD	HL,LineBuffer+1	;буфер строки
+	LD	HL,LineBuffer+1	;Р±СѓС„РµСЂ СЃС‚СЂРѕРєРё
 	EXX 
-	LD	HL,LineBuffer+#3F ;место для ASCII кодов
+	LD	HL,LineBuffer+#3F ;РјРµСЃС‚Рѕ РґР»СЏ ASCII РєРѕРґРѕРІ
 	EXX 
-	LD	A,(TempShift+3)	;Кладем	смещение
-	CALL	PutHexNumb	;от начала фаила
+	LD	A,(TempShift+3)	;РљР»Р°РґРµРј	СЃРјРµС‰РµРЅРёРµ
+	CALL	PutHexNumb	;РѕС‚ РЅР°С‡Р°Р»Р° С„Р°РёР»Р°
 	LD	A,(TempShift+2)
 	CALL	PutHexNumb
 	LD	A,(TempShift+1)
@@ -111,9 +111,9 @@ PutHLoop
 	LD	(HL),A
 	INC	L
 	EXX 
-	CALL	PutHexNumb	;Процедура конверта
+	CALL	PutHexNumb	;РџСЂРѕС†РµРґСѓСЂР° РєРѕРЅРІРµСЂС‚Р°
 	INC	L
-	INC	LX		;Увелич.кол-во введенных байтов
+	INC	LX		;РЈРІРµР»РёС‡.РєРѕР»-РІРѕ РІРІРµРґРµРЅРЅС‹С… Р±Р°Р№С‚РѕРІ
 	LD	A,LX
 	CP	#04
 	JR	Z,PtHNx1
@@ -125,9 +125,9 @@ PtHNx1	INC	L
 	DJNZ	PutHLoop
 	POP	AF
 	OUT	(PAGE1),A
-;Процедура отчистки закончившихся байтов
-FillHex	LD	A,#10		;Макс.байтов
-	SUB	LX		;Тек.кол-во байтов
+;РџСЂРѕС†РµРґСѓСЂР° РѕС‚С‡РёСЃС‚РєРё Р·Р°РєРѕРЅС‡РёРІС€РёС…СЃСЏ Р±Р°Р№С‚РѕРІ
+FillHex	LD	A,#10		;РњР°РєСЃ.Р±Р°Р№С‚РѕРІ
+	SUB	LX		;РўРµРє.РєРѕР»-РІРѕ Р±Р°Р№С‚РѕРІ
 	JR	Z,FillE2
 	LD	B,A
 	LD	C,#20
@@ -141,7 +141,7 @@ FillE1	LD	(HL),C
 	INC	L
 	EXX 
 	INC	LX
-	LD	A,LX		;В центре 2 пробела
+	LD	A,LX		;Р’ С†РµРЅС‚СЂРµ 2 РїСЂРѕР±РµР»Р°
 	CP	#04
 	JR	Z,FlHNx1
 	CP	#08
@@ -157,13 +157,13 @@ FillE2	LD	HL,LineBuffer
 	LD	A,PanelCol*#10+FileCol
 	CALL	PrnTxtLnNormC
 	OR	A
-	RET		;CY-была последняя строка
-;Процедура преобразования 8битовых чисел в шестнадц. текст
-;На вход:
-;	 HL - адрес буфера
-;	  А - байт
-;На выход:
-;	  буфер	с текст.числом
+	RET		;CY-Р±С‹Р»Р° РїРѕСЃР»РµРґРЅСЏСЏ СЃС‚СЂРѕРєР°
+;РџСЂРѕС†РµРґСѓСЂР° РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёСЏ 8Р±РёС‚РѕРІС‹С… С‡РёСЃРµР» РІ С€РµСЃС‚РЅР°РґС†. С‚РµРєСЃС‚
+;РќР° РІС…РѕРґ:
+;	 HL - Р°РґСЂРµСЃ Р±СѓС„РµСЂР°
+;	  Рђ - Р±Р°Р№С‚
+;РќР° РІС‹С…РѕРґ:
+;	  Р±СѓС„РµСЂ	СЃ С‚РµРєСЃС‚.С‡РёСЃР»РѕРј
 PutHexNumb
 	PUSH	AF
 	RRCA 
@@ -187,9 +187,9 @@ PutHexNumb
 	INC	L
 	RET 
 ;--------------------------------------------------------------
-;Процедуры обработки View
+;РџСЂРѕС†РµРґСѓСЂС‹ РѕР±СЂР°Р±РѕС‚РєРё View
 ;
-;На строку вверх
+;РќР° СЃС‚СЂРѕРєСѓ РІРІРµСЂС…
 ;
 HLineUpMs
 	CALL	HLineUp
@@ -213,17 +213,17 @@ HUpMs2	CALL	HLineUp
 
 HLineUp	LD	HL,(FileShift)
 	LD	DE,(FileShift+2)
-	LD	A,H		;Проверяем на начало файла
+	LD	A,H		;РџСЂРѕРІРµСЂСЏРµРј РЅР° РЅР°С‡Р°Р»Рѕ С„Р°Р№Р»Р°
 	OR	D
 	OR	L
 	OR	E
 	SCF 
-	RET	Z		;Z-начало файла
+	RET	Z		;Z-РЅР°С‡Р°Р»Рѕ С„Р°Р№Р»Р°
 	LD	BC,#0010
 	OR	A
 	SBC	HL,BC
-	LD	(FileShift),HL	;FileShift-16байт(предид.строка)
-	LD	(TempShift),HL	;Запоминаем тек.смещение
+	LD	(FileShift),HL	;FileShift-16Р±Р°Р№С‚(РїСЂРµРґРёРґ.СЃС‚СЂРѕРєР°)
+	LD	(TempShift),HL	;Р—Р°РїРѕРјРёРЅР°РµРј С‚РµРє.СЃРјРµС‰РµРЅРёРµ
 	LD	C,B
 	EX	DE,HL
 	SBC	HL,BC
@@ -231,11 +231,11 @@ HLineUp	LD	HL,(FileShift)
 	LD	(TempShift+2),HL
 	CALL	ScrollSCRdown
 	LD	B,#1C
-	CALL	PutHLine	;Создаем и печатаем строку
+	CALL	PutHLine	;РЎРѕР·РґР°РµРј Рё РїРµС‡Р°С‚Р°РµРј СЃС‚СЂРѕРєСѓ
 	CALL	PrintVProc
 	OR	A
 	RET 
-;На строку вниз
+;РќР° СЃС‚СЂРѕРєСѓ РІРЅРёР·
 HLineDwnMs
 	CALL	HLineDwn
 	RET	C
@@ -260,14 +260,14 @@ HLineDwn
 	LD	BC,(FileShift+2)
 	LD	DE,#0190
 	ADD	HL,DE
-	LD	(TempShift),HL	;Запоминаем тек.смещение
-	JR	NC,$+3		;Прибавляем к смещению страницу
-	INC	BC		;байтов	(480б)
+	LD	(TempShift),HL	;Р—Р°РїРѕРјРёРЅР°РµРј С‚РµРє.СЃРјРµС‰РµРЅРёРµ
+	JR	NC,$+3		;РџСЂРёР±Р°РІР»СЏРµРј Рє СЃРјРµС‰РµРЅРёСЋ СЃС‚СЂР°РЅРёС†Сѓ
+	INC	BC		;Р±Р°Р№С‚РѕРІ	(480Р±)
 	LD	(TempShift+2),BC
 	EX	DE,HL
 	LD	HL,(FileLenght)
 	OR	A
-	SBC	HL,DE		;Проверяем на конец файла
+	SBC	HL,DE		;РџСЂРѕРІРµСЂСЏРµРј РЅР° РєРѕРЅРµС† С„Р°Р№Р»Р°
 	EX	DE,HL
 	LD	HL,(FileLenght+2)
 	SBC	HL,BC
@@ -276,7 +276,7 @@ HLineDwn
 	LD	A,D
 	OR	E
 	SCF 
-	RET	Z		;Z - конец
+	RET	Z		;Z - РєРѕРЅРµС†
 	LD	HL,(FileShift)
 	LD	DE,(FileShift+2)
 	LD	BC,#0010
@@ -287,11 +287,11 @@ HLineDwn
 	LD	(FileShift+2),DE
 	CALL	ScrollSCRup
 	LD	B,#DC
-	CALL	PutHLine	;Создаем и печатаем строку
+	CALL	PutHLine	;РЎРѕР·РґР°РµРј Рё РїРµС‡Р°С‚Р°РµРј СЃС‚СЂРѕРєСѓ
 	CALL	PrintVProc
 	OR	A
 	RET 
-;На страницу вверх
+;РќР° СЃС‚СЂР°РЅРёС†Сѓ РІРІРµСЂС…
 HPageUpMs
 	CALL	HPageUp
 	RET	C
@@ -314,29 +314,29 @@ HUpMs2p	CALL	HPageUp
 
 HPageUp	LD	HL,(FileShift)
 	LD	BC,(FileShift+2)
-	LD	A,H	;Проверяем на начало файла
+	LD	A,H	;РџСЂРѕРІРµСЂСЏРµРј РЅР° РЅР°С‡Р°Р»Рѕ С„Р°Р№Р»Р°
 	OR	B
 	OR	L
 	OR	C
 	SCF 
 	RET	Z
-	LD	DE,#0190  ;Отнимаем от тек.смещ. страницу байтов
+	LD	DE,#0190  ;РћС‚РЅРёРјР°РµРј РѕС‚ С‚РµРє.СЃРјРµС‰. СЃС‚СЂР°РЅРёС†Сѓ Р±Р°Р№С‚РѕРІ
 	OR	A
 	SBC	HL,DE
 	JR	NC,HPgUp1
 	LD	A,B
 	OR	C
-	DEC	BC	;Проверяем,что не вывалились за
-	JR	NZ,HPgUp1	;начало	файла Z	- вывалились
+	DEC	BC	;РџСЂРѕРІРµСЂСЏРµРј,С‡С‚Рѕ РЅРµ РІС‹РІР°Р»РёР»РёСЃСЊ Р·Р°
+	JR	NZ,HPgUp1	;РЅР°С‡Р°Р»Рѕ	С„Р°Р№Р»Р° Z	- РІС‹РІР°Р»РёР»РёСЃСЊ
 	INC	BC
-	LD	L,C	;Тогда смещение	= 0
+	LD	L,C	;РўРѕРіРґР° СЃРјРµС‰РµРЅРёРµ	= 0
 	LD	H,B
 HPgUp1	LD	(FileShift),HL
 	LD	(FileShift+2),BC
-	CALL	PrnHEXpage	;Печатаем страницу
+	CALL	PrnHEXpage	;РџРµС‡Р°С‚Р°РµРј СЃС‚СЂР°РЅРёС†Сѓ
 	OR	A
 	RET 
-;На страницу вниз
+;РќР° СЃС‚СЂР°РЅРёС†Сѓ РІРЅРёР·
 HPageDwnMs
 	CALL	HPageDwn
 	RET	C
@@ -359,49 +359,49 @@ HDnMs2p	CALL	HPageDwn
 HPageDwn
 	LD	HL,(FileShift)
 	LD	BC,(FileShift+2)
-	LD	DE,#0190	;Плюсуем к тек.смещ.
-	ADD	HL,DE		;страницу байтов
+	LD	DE,#0190	;РџР»СЋСЃСѓРµРј Рє С‚РµРє.СЃРјРµС‰.
+	ADD	HL,DE		;СЃС‚СЂР°РЅРёС†Сѓ Р±Р°Р№С‚РѕРІ
 	PUSH	HL
 	JR	NC,$+3
 	INC	BC
 	PUSH	BC
 	EX	DE,HL
-	LD	HL,(FileLenght)	   ;Проверяем,что страница
-	OR	A		;последняя
+	LD	HL,(FileLenght)	   ;РџСЂРѕРІРµСЂСЏРµРј,С‡С‚Рѕ СЃС‚СЂР°РЅРёС†Р°
+	OR	A		;РїРѕСЃР»РµРґРЅСЏСЏ
 	SBC	HL,DE
 	EX	DE,HL
 	LD	HL,(FileLenght+2)
 	SBC	HL,BC
 	POP	BC
 	POP	HL
-	RET	C	;С - нет
+	RET	C	;РЎ - РЅРµС‚
 	JR	NZ,$+6
 	LD	A,D
 	OR	E
 	SCF 
-	RET	Z	;Z - нет
+	RET	Z	;Z - РЅРµС‚
 	LD	(FileShift),HL
 	LD	(FileShift+2),BC
-	CALL	PrnHEXpage	;Печатаем страницу
+	CALL	PrnHEXpage	;РџРµС‡Р°С‚Р°РµРј СЃС‚СЂР°РЅРёС†Сѓ
 	OR	A
 	RET 
-;В начало файла
+;Р’ РЅР°С‡Р°Р»Рѕ С„Р°Р№Р»Р°
 HBegFile
 	LD	HL,ResFire
 	PUSH	HL
 	LD	HL,(FileShift)
 	LD	BC,(FileShift+2)
-	LD	A,H	;Проверяем на начало файла
+	LD	A,H	;РџСЂРѕРІРµСЂСЏРµРј РЅР° РЅР°С‡Р°Р»Рѕ С„Р°Р№Р»Р°
 	OR	B
 	OR	L
 	OR	C
-	RET	Z	;Z - Начало
-	LD	HL,#0000	;Смещение = 0000
+	RET	Z	;Z - РќР°С‡Р°Р»Рѕ
+	LD	HL,#0000	;РЎРјРµС‰РµРЅРёРµ = 0000
 	LD	(FileShift),HL
 	LD	(FileShift+2),HL
-	CALL	PrnHEXpage	;Печатаем страницу
+	CALL	PrnHEXpage	;РџРµС‡Р°С‚Р°РµРј СЃС‚СЂР°РЅРёС†Сѓ
 	RET 
-;В конец файла
+;Р’ РєРѕРЅРµС† С„Р°Р№Р»Р°
 HEndFile
 	LD	HL,ResFire
 	PUSH	HL
@@ -412,8 +412,8 @@ HEndFile
 	JR	NC,$+3
 	INC	BC
 	EX	DE,HL
-	LD	HL,(FileLenght)	;Проверяем,что мы на последней
-	PUSH	HL		;странице
+	LD	HL,(FileLenght)	;РџСЂРѕРІРµСЂСЏРµРј,С‡С‚Рѕ РјС‹ РЅР° РїРѕСЃР»РµРґРЅРµР№
+	PUSH	HL		;СЃС‚СЂР°РЅРёС†Рµ
 	OR	A
 	SBC	HL,DE
 	EX	DE,HL
@@ -422,17 +422,17 @@ HEndFile
 	SBC	HL,BC
 	POP	BC
 	POP	HL
-	RET	C	;С - в конце
+	RET	C	;РЎ - РІ РєРѕРЅС†Рµ
 	JR	NZ,$+5
 	LD	A,D
 	OR	E
-	RET	Z	;Z - в конце
+	RET	Z	;Z - РІ РєРѕРЅС†Рµ
 	LD	DE,#0190
 	OR	A
-	SBC	HL,DE  ;Просчитываем смещение последней	страницы
+	SBC	HL,DE  ;РџСЂРѕСЃС‡РёС‚С‹РІР°РµРј СЃРјРµС‰РµРЅРёРµ РїРѕСЃР»РµРґРЅРµР№	СЃС‚СЂР°РЅРёС†С‹
 	JR	NC,$+3
 	DEC	BC
-	LD	A,L	;Смещение кратно 16
+	LD	A,L	;РЎРјРµС‰РµРЅРёРµ РєСЂР°С‚РЅРѕ 16
 	AND	#0F
 	JR	Z,HEnd1
 	LD	A,L
@@ -444,75 +444,75 @@ HEndFile
 	INC	BC
 HEnd1	LD	(FileShift),HL
 	LD	(FileShift+2),BC
-	CALL	PrnHEXpage	;Печатаем страницу
+	CALL	PrnHEXpage	;РџРµС‡Р°С‚Р°РµРј СЃС‚СЂР°РЅРёС†Сѓ
 	RET 
 ;--------------------------------------------------------------
-;Процедура ввода нового	указателя смещения в файле
+;РџСЂРѕС†РµРґСѓСЂР° РІРІРѕРґР° РЅРѕРІРѕРіРѕ	СѓРєР°Р·Р°С‚РµР»СЏ СЃРјРµС‰РµРЅРёСЏ РІ С„Р°Р№Р»Рµ
 HGoTo	LD	HL,(FileLenght)
 	LD	DE,(FileLenght+2)
-	LD	A,H		;Проверяем,что длина
-	OR	D		;файла больше 16 байт
+	LD	A,H		;РџСЂРѕРІРµСЂСЏРµРј,С‡С‚Рѕ РґР»РёРЅР°
+	OR	D		;С„Р°Р№Р»Р° Р±РѕР»СЊС€Рµ 16 Р±Р°Р№С‚
 	OR	E
 	JR	NZ,HGoToOk
 	LD	A,L
 	CP	#11
-	RET	C		;меньше	16байт
-HGoToOk	LD	HL,NewShift	;Буфер для ввода нового	указ.
+	RET	C		;РјРµРЅСЊС€Рµ	16Р±Р°Р№С‚
+HGoToOk	LD	HL,NewShift	;Р‘СѓС„РµСЂ РґР»СЏ РІРІРѕРґР° РЅРѕРІРѕРіРѕ	СѓРєР°Р·.
 	SUB	A
-	LD	(CursPos+1),A	;Позиция ввода в буфере
+	LD	(CursPos+1),A	;РџРѕР·РёС†РёСЏ РІРІРѕРґР° РІ Р±СѓС„РµСЂРµ
 	INC	A
 	LD	(BuffFlg+1),A
 	LD	A,(FileShift+3)
-	CALL	PutHexNumb	;Заносим в буфер текущее смещ.
-	LD	A,(FileShift+2)	;в текстовом виде
+	CALL	PutHexNumb	;Р—Р°РЅРѕСЃРёРј РІ Р±СѓС„РµСЂ С‚РµРєСѓС‰РµРµ СЃРјРµС‰.
+	LD	A,(FileShift+2)	;РІ С‚РµРєСЃС‚РѕРІРѕРј РІРёРґРµ
 	CALL	PutHexNumb
 	LD	A,(FileShift+1)
 	CALL	PutHexNumb
 	LD	A,(FileShift)
 	CALL	PutHexNumb
-HGoToRet			;Выводим на экран буфер	и
-	CALL	PrintHGT	;печатаем курсор
-HGoToLp	HALT			;Ожидаем прерывание
-	CALL	ChangeCurs	;проверям на смену курсора
+HGoToRet			;Р’С‹РІРѕРґРёРј РЅР° СЌРєСЂР°РЅ Р±СѓС„РµСЂ	Рё
+	CALL	PrintHGT	;РїРµС‡Р°С‚Р°РµРј РєСѓСЂСЃРѕСЂ
+HGoToLp	HALT			;РћР¶РёРґР°РµРј РїСЂРµСЂС‹РІР°РЅРёРµ
+	CALL	ChangeCurs	;РїСЂРѕРІРµСЂСЏРј РЅР° СЃРјРµРЅСѓ РєСѓСЂСЃРѕСЂР°
 	LD	C,#03
 	RST	#30
 	BIT	0,A
 	JP	NZ,HGTescape
-	LD	C,#31		;Ожидаем нажатия клавиши
+	LD	C,#31		;РћР¶РёРґР°РµРј РЅР°Р¶Р°С‚РёСЏ РєР»Р°РІРёС€Рё
 	RST	#10
-	JR	Z,HGoToLp	;Z - не	нажата
+	JR	Z,HGoToLp	;Z - РЅРµ	РЅР°Р¶Р°С‚Р°
 	LD	A,B
 	AND	#3F
 	JR	NZ,HGoToLp
 	LD	A,E
 	OR	A
-	JR	Z,HGoToSys	;A=0 сист.клавиша
+	JR	Z,HGoToSys	;A=0 СЃРёСЃС‚.РєР»Р°РІРёС€Р°
 	CP	#0D
-	JP	Z,HGTenter	;нажат Enter
+	JP	Z,HGTenter	;РЅР°Р¶Р°С‚ Enter
 	CP	#08
-	JR	Z,HGTdelete	;нажат BackSpace
+	JR	Z,HGTdelete	;РЅР°Р¶Р°С‚ BackSpace
 	CP	#1B
-	JP	Z,HGTescape	;нажат Esc
+	JP	Z,HGTescape	;РЅР°Р¶Р°С‚ Esc
 	CP	#20
-	JR	C,HGoToLp	;код<#20 нам не	подходит
-	LD	C,A		;сохр. ASCII код
+	JR	C,HGoToLp	;РєРѕРґ<#20 РЅР°Рј РЅРµ	РїРѕРґС…РѕРґРёС‚
+	LD	C,A		;СЃРѕС…СЂ. ASCII РєРѕРґ
 BuffFlg	LD	A,#00
 	OR	A
 	CALL	NZ,ClearBuff
-CursPos	LD	A,#00		;тек.позиция печати в буфере
-	LD	B,A		;сохр.тек.поз.
-	LD	HL,NewShift	;Смещ.от начала	буфера
+CursPos	LD	A,#00		;С‚РµРє.РїРѕР·РёС†РёСЏ РїРµС‡Р°С‚Рё РІ Р±СѓС„РµСЂРµ
+	LD	B,A		;СЃРѕС…СЂ.С‚РµРє.РїРѕР·.
+	LD	HL,NewShift	;РЎРјРµС‰.РѕС‚ РЅР°С‡Р°Р»Р°	Р±СѓС„РµСЂР°
 	ADD	A,L
 	LD	L,A
 	JR	NC,$+3
 	INC	H
-	LD	(HL),C		;Заносим код в буфер
-	LD	A,B		;тек.поз.
-	CP	#07		;Позиция в буфере (7-последняя)
-	JR	Z,HGoToRet	;печатаем строку и курсор
-	INC	A		;след.позиция
+	LD	(HL),C		;Р—Р°РЅРѕСЃРёРј РєРѕРґ РІ Р±СѓС„РµСЂ
+	LD	A,B		;С‚РµРє.РїРѕР·.
+	CP	#07		;РџРѕР·РёС†РёСЏ РІ Р±СѓС„РµСЂРµ (7-РїРѕСЃР»РµРґРЅСЏСЏ)
+	JR	Z,HGoToRet	;РїРµС‡Р°С‚Р°РµРј СЃС‚СЂРѕРєСѓ Рё РєСѓСЂСЃРѕСЂ
+	INC	A		;СЃР»РµРґ.РїРѕР·РёС†РёСЏ
 	LD	(CursPos+1),A
-	JR	HGoToRet	;печатаем строку и курсор
+	JR	HGoToRet	;РїРµС‡Р°С‚Р°РµРј СЃС‚СЂРѕРєСѓ Рё РєСѓСЂСЃРѕСЂ
 ClearBuff
 	LD	HL,NewShift
 	LD	B,#08
@@ -523,53 +523,53 @@ ClearBuff
 	SUB	A
 	LD	(BuffFlg+1),A
 	RET 
-HGTdelete			;Забой
+HGTdelete			;Р—Р°Р±РѕР№
 	SUB	A
 	LD	(BuffFlg+1),A
-	LD	A,(CursPos+1)	;Тек.позиция в буфере
+	LD	A,(CursPos+1)	;РўРµРє.РїРѕР·РёС†РёСЏ РІ Р±СѓС„РµСЂРµ
 	OR	A
-	JR	Z,HGoToLp	;0 - выходим
+	JR	Z,HGoToLp	;0 - РІС‹С…РѕРґРёРј
 	DEC	A
-	LD	(CursPos+1),A	;предид.позиция
+	LD	(CursPos+1),A	;РїСЂРµРґРёРґ.РїРѕР·РёС†РёСЏ
 	LD	HL,NewShift
-	ADD	A,L		;смещ.в	буфере
+	ADD	A,L		;СЃРјРµС‰.РІ	Р±СѓС„РµСЂРµ
 	LD	L,A
 	JR	NC,$+3
 	INC	H
-	LD	(HL)," "	;Забиваем пробелом
+	LD	(HL)," "	;Р—Р°Р±РёРІР°РµРј РїСЂРѕР±РµР»РѕРј
 	JR	HGoToRet
-HGoToSys			;системная клавиша
+HGoToSys			;СЃРёСЃС‚РµРјРЅР°СЏ РєР»Р°РІРёС€Р°
 	LD	A,D
 	CP	#54		;<-
 	JR	Z,HGTleft
 	CP	#56		;->
 	JR	Z,HGTright
 	JR	HGoToLp
-HGTleft				;Курсор	влево
+HGTleft				;РљСѓСЂСЃРѕСЂ	РІР»РµРІРѕ
 	SUB	A
 	LD	(BuffFlg+1),A
-	LD	A,(CursPos+1)	;Тек.позиция в буфере
+	LD	A,(CursPos+1)	;РўРµРє.РїРѕР·РёС†РёСЏ РІ Р±СѓС„РµСЂРµ
 	OR	A
-	JP	Z,HGoToLp	;0 - выходим
+	JP	Z,HGoToLp	;0 - РІС‹С…РѕРґРёРј
 	DEC	A
-	LD	(CursPos+1),A	;Уменьш.поз.
+	LD	(CursPos+1),A	;РЈРјРµРЅСЊС€.РїРѕР·.
 	JP	HGoToRet
 HGTright
 	SUB	A
 	LD	(BuffFlg+1),A
-	LD	A,(CursPos+1)	;Тек.позиция в буфере
+	LD	A,(CursPos+1)	;РўРµРє.РїРѕР·РёС†РёСЏ РІ Р±СѓС„РµСЂРµ
 	CP	#07
-	JP	Z,HGoToLp	;7 - последняя
+	JP	Z,HGoToLp	;7 - РїРѕСЃР»РµРґРЅСЏСЏ
 	INC	A
-	LD	(CursPos+1),A	;Увелич.поз.
+	LD	(CursPos+1),A	;РЈРІРµР»РёС‡.РїРѕР·.
 	JP	HGoToRet
-PrintHGT		;Процедура вывода строки и курсора
+PrintHGT		;РџСЂРѕС†РµРґСѓСЂР° РІС‹РІРѕРґР° СЃС‚СЂРѕРєРё Рё РєСѓСЂСЃРѕСЂР°
 	LD	HL,NewShift
 	LD	DE,#0008
 	LD	BC,#081C
 	LD	A,PanelCol*#10+FileCol
 	CALL	PrnTxtLnNormC
-	LD	A,(CursPos+1)	;Позиция вывода	курсора
+	LD	A,(CursPos+1)	;РџРѕР·РёС†РёСЏ РІС‹РІРѕРґР°	РєСѓСЂСЃРѕСЂР°
 	INC	A
 	LD	L,A
 	LD	H,#00
@@ -578,76 +578,76 @@ PrintHGT		;Процедура вывода строки и курсора
 	ADD	HL,HL
 	EX	DE,HL
 	LD	HL,TCursor
-	LD	(HL),"«"
+	LD	(HL),0xAB       ;"В«"
 	LD	BC,#011C
 	LD	A,PanelCol*#10+FileCol
 	CALL	PrnTxtLnNormC
-	LD	A,#01		;Номер выведенного курсора
+	LD	A,#01		;РќРѕРјРµСЂ РІС‹РІРµРґРµРЅРЅРѕРіРѕ РєСѓСЂСЃРѕСЂР°
 	LD	(CurCurs+1),A
-	LD	A,#06		;Ожидание для смены курсора
+	LD	A,#06		;РћР¶РёРґР°РЅРёРµ РґР»СЏ СЃРјРµРЅС‹ РєСѓСЂСЃРѕСЂР°
 	LD	(CurWait+1),A
 	RET 
-ChangeCurs		;Процедура смены курсора
-CurWait	LD	A,#00	;Задержка между	сменой курсора
+ChangeCurs		;РџСЂРѕС†РµРґСѓСЂР° СЃРјРµРЅС‹ РєСѓСЂСЃРѕСЂР°
+CurWait	LD	A,#00	;Р—Р°РґРµСЂР¶РєР° РјРµР¶РґСѓ	СЃРјРµРЅРѕР№ РєСѓСЂСЃРѕСЂР°
 	DEC	A
 	LD	(CurWait+1),A
-	RET	NZ	;еще не	время
+	RET	NZ	;РµС‰Рµ РЅРµ	РІСЂРµРјСЏ
 	LD	A,(CursPos+1)
 	INC	A
 	LD	L,A
-	LD	H,#00	;Тек.знакоместо
+	LD	H,#00	;РўРµРє.Р·РЅР°РєРѕРјРµСЃС‚Рѕ
 	ADD	HL,HL
 	ADD	HL,HL
 	ADD	HL,HL
 	EX	DE,HL
-	LD	HL,NewShift	;Смещ.в	буфере
+	LD	HL,NewShift	;РЎРјРµС‰.РІ	Р±СѓС„РµСЂРµ
 	LD	A,(CursPos+1)
 	ADD	A,L
 	LD	L,A
 	JR	NC,CurCurs
 	INC	H
-CurCurs	LD	A,#00		;Номер текущего	курсора
-	XOR	#01		;Меняем	курсор
+CurCurs	LD	A,#00		;РќРѕРјРµСЂ С‚РµРєСѓС‰РµРіРѕ	РєСѓСЂСЃРѕСЂР°
+	XOR	#01		;РњРµРЅСЏРµРј	РєСѓСЂСЃРѕСЂ
 	LD	(CurCurs+1),A
 	LD	A,(HL)
-	JR	Z,$+4		;Печатаем
-	LD	A,"«"
+	JR	Z,$+4		;РџРµС‡Р°С‚Р°РµРј
+	LD	A,0xAB          ;"В«"
 	LD	HL,TCursor
 	LD	(HL),A
 	LD	BC,#011C
 	LD	A,PanelCol*#10+FileCol
 	CALL	PrnTxtLnNormC
-	LD	A,#0C		;Ожидание для смены курсора
+	LD	A,#0C		;РћР¶РёРґР°РЅРёРµ РґР»СЏ СЃРјРµРЅС‹ РєСѓСЂСЃРѕСЂР°
 	LD	(CurWait+1),A
 	RET 
 TCursor
 	DEFB	" "
-HGTenter			;Клавиша ENTER
-	SUB	A		;При ошибке вернемся с курсором
-	LD	(CursPos+1),A	;в нулевой позиции
-	LD	BC,NewShift	;Буфер строки
-	CALL	GetHexNum32	;Переводим текст в 32бит число
-	JP	C,HGoToRet	;CY - синтакс.ошибка
+HGTenter			;РљР»Р°РІРёС€Р° ENTER
+	SUB	A		;РџСЂРё РѕС€РёР±РєРµ РІРµСЂРЅРµРјСЃСЏ СЃ РєСѓСЂСЃРѕСЂРѕРј
+	LD	(CursPos+1),A	;РІ РЅСѓР»РµРІРѕР№ РїРѕР·РёС†РёРё
+	LD	BC,NewShift	;Р‘СѓС„РµСЂ СЃС‚СЂРѕРєРё
+	CALL	GetHexNum32	;РџРµСЂРµРІРѕРґРёРј С‚РµРєСЃС‚ РІ 32Р±РёС‚ С‡РёСЃР»Рѕ
+	JP	C,HGoToRet	;CY - СЃРёРЅС‚Р°РєСЃ.РѕС€РёР±РєР°
 	LD	C,E
 	LD	B,D
-	LD	A,L		;Адрес кратный 16
+	LD	A,L		;РђРґСЂРµСЃ РєСЂР°С‚РЅС‹Р№ 16
 	AND	#F0
 	LD	L,A
-	EX	DE,HL		;Смещ.в	BC+DE
-	LD	HL,(FileLenght)	;Проверяем,что смещение	в
-	OR	A		;пределах файла
+	EX	DE,HL		;РЎРјРµС‰.РІ	BC+DE
+	LD	HL,(FileLenght)	;РџСЂРѕРІРµСЂСЏРµРј,С‡С‚Рѕ СЃРјРµС‰РµРЅРёРµ	РІ
+	OR	A		;РїСЂРµРґРµР»Р°С… С„Р°Р№Р»Р°
 	SBC	HL,DE
 	LD	HL,(FileLenght+2)
 	SBC	HL,BC
-	JR	C,HGTent	;CY-за пределами
-	JR	NZ,HGTent1	;NZ-в пределах
+	JR	C,HGTent	;CY-Р·Р° РїСЂРµРґРµР»Р°РјРё
+	JR	NZ,HGTent1	;NZ-РІ РїСЂРµРґРµР»Р°С…
 	LD	A,D
 	OR	E
-	JR	NZ,HGTent1	;NZ-в пределах
+	JR	NZ,HGTent1	;NZ-РІ РїСЂРµРґРµР»Р°С…
 HGTent	LD	HL,(FileLenght)
 	LD	BC,#0010
 	OR	A
-	SBC	HL,BC	;смещ.=последняя строка	файла 16 байт
+	SBC	HL,BC	;СЃРјРµС‰.=РїРѕСЃР»РµРґРЅСЏСЏ СЃС‚СЂРѕРєР°	С„Р°Р№Р»Р° 16 Р±Р°Р№С‚
 	EX	DE,HL
 	LD	HL,(FileLenght+2)
 	JR	NC,$+3
@@ -656,12 +656,12 @@ HGTent	LD	HL,(FileLenght)
 	LD	B,H
 HGTent1	LD	(FileShift),DE
 	LD	(FileShift+2),BC
-	CALL	PrnHEXpage	;Печатаем страницу
+	CALL	PrnHEXpage	;РџРµС‡Р°С‚Р°РµРј СЃС‚СЂР°РЅРёС†Сѓ
 	RET 
-HGTescape		;Нажат Escape
-	LD	HL,NewShift	;Буфер строки
+HGTescape		;РќР°Р¶Р°С‚ Escape
+	LD	HL,NewShift	;Р‘СѓС„РµСЂ СЃС‚СЂРѕРєРё
 	PUSH	HL
-	LD	A,(FileShift+3)	;Заносим тек.смещение
+	LD	A,(FileShift+3)	;Р—Р°РЅРѕСЃРёРј С‚РµРє.СЃРјРµС‰РµРЅРёРµ
 	CALL	PutHexNumb
 	LD	A,(FileShift+2)
 	CALL	PutHexNumb
@@ -675,15 +675,15 @@ HGTescape		;Нажат Escape
 	LD	A,PanelCol*#10+FileCol
 	CALL	PrnTxtLnNormC
 	CALL	ResFire
-	RET			;Выходим
+	RET			;Р’С‹С…РѕРґРёРј
 NewShift
 	DEFB	"        ",0
-;Процедура конвертирования 32битового шестн.текстового числа
-;На вход:
-;	  BC - Адрес буфера с текстом (0-конец буфера)
-;На выход:
-;	  DE+HL	- Число	32бит
-;	  CY - синтаксическая ошибка
+;РџСЂРѕС†РµРґСѓСЂР° РєРѕРЅРІРµСЂС‚РёСЂРѕРІР°РЅРёСЏ 32Р±РёС‚РѕРІРѕРіРѕ С€РµСЃС‚РЅ.С‚РµРєСЃС‚РѕРІРѕРіРѕ С‡РёСЃР»Р°
+;РќР° РІС…РѕРґ:
+;	  BC - РђРґСЂРµСЃ Р±СѓС„РµСЂР° СЃ С‚РµРєСЃС‚РѕРј (0-РєРѕРЅРµС† Р±СѓС„РµСЂР°)
+;РќР° РІС‹С…РѕРґ:
+;	  DE+HL	- Р§РёСЃР»Рѕ	32Р±РёС‚
+;	  CY - СЃРёРЅС‚Р°РєСЃРёС‡РµСЃРєР°СЏ РѕС€РёР±РєР°
 GetHexNum32
 	LD	HL,#0000
 	LD	E,L

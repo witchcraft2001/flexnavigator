@@ -236,7 +236,7 @@ InsF3	SUB	A
 	LD	C,24
 	ADD	HL,BC
 	LD	A,(HL)
-	AND	#1F		;Число
+	AND	#1F		;Р§РёСЃР»Рѕ
 	LD	(DE),A
 	INC	DE
 	LD	C,(HL)
@@ -247,7 +247,7 @@ InsF3	SUB	A
 	RR	C
        EDUP 
 	LD	A,C
-	AND	#0F		;Месяц
+	AND	#0F		;РњРµСЃСЏС†
 	LD	(DE),A
 	INC	DE
 	LD	A,(HL)
@@ -255,7 +255,7 @@ InsF3	SUB	A
 	ADD	A,80
 	SUB	100
 	JR	NC,$-2
-	ADD	A,100		;Год
+	ADD	A,100		;Р“РѕРґ
 	LD	(DE),A
 	INC	DE
 	POP	HL
@@ -269,7 +269,7 @@ InsF3	SUB	A
 	RRA 
 	RRA 
 	RRA 
-	LD	(DE),A		;Часы
+	LD	(DE),A		;Р§Р°СЃС‹
 	INC	DE
        DUP     #05
 	SRL	B
@@ -277,7 +277,7 @@ InsF3	SUB	A
        EDUP 
 	LD	A,C
 	AND	#3F
-	LD	(DE),A		;Минуты
+	LD	(DE),A		;РњРёРЅСѓС‚С‹
 	INC	DE
 	LD	(AdrNxtFile),DE
 	INC	IX
@@ -329,7 +329,7 @@ TestExeC
 	POP	HL
 	SCF 
 	RET 
-;Процедура коррекции буквы к маленькой букве
+;РџСЂРѕС†РµРґСѓСЂР° РєРѕСЂСЂРµРєС†РёРё Р±СѓРєРІС‹ Рє РјР°Р»РµРЅСЊРєРѕР№ Р±СѓРєРІРµ
 CorrBigChar
 	CP	#41
 	RET	C
@@ -346,7 +346,7 @@ CorrCh1	CP	#80
 	RET	C
 	ADD	A,#30
 	RET 
-;Процедура коррекции буквы к большой букве
+;РџСЂРѕС†РµРґСѓСЂР° РєРѕСЂСЂРµРєС†РёРё Р±СѓРєРІС‹ Рє Р±РѕР»СЊС€РѕР№ Р±СѓРєРІРµ
 CorrSmallChar
 	CP	#61
 	RET	C

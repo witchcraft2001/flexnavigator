@@ -32,14 +32,14 @@ ViewerLoop
 TViewLoop
 	LD	IX,ASCIItab
 	CALL	TestCoords
-	LD	C,#31		;Ожидаем нажатия клавиш
+	LD	C,#31		;РћР¶РёРґР°РµРј РЅР°Р¶Р°С‚РёСЏ РєР»Р°РІРёС€
 	RST	#10
 	JR	Z,TViewLoop
-	LD	A,E		;Е-ASCII код
+	LD	A,E		;Р•-ASCII РєРѕРґ
 	CP	#1B		;Esc
 	JP	Z,ViewerExit
 	OR	A
-	JR	NZ,TViewLoop	;Ждем функцион.клавиши
+	JR	NZ,TViewLoop	;Р–РґРµРј С„СѓРЅРєС†РёРѕРЅ.РєР»Р°РІРёС€Рё
 	LD	A,D
 	CP	#44
 	JP	Z,ViewerExit
@@ -50,7 +50,9 @@ TViewLoop
 	CP	#3C
 	JP	Z,ChASCIImode
 	CP	#3E
-	JP	Z,ChViewer	;Просмотр в HEX
+	JP	Z,ChViewer	;РџСЂРѕСЃРјРѕС‚СЂ РІ HEX
+        CP      #42
+        JP      Z,ChCodePage    ;РЎРјРµРЅР° РєРѕРґРѕРІРѕР№ СЃС‚СЂР°РЅРёС†С‹ WIN/DOS/KOI
 	CP	#43
 	JP	Z,PrintFile
 	CP	#54
@@ -61,9 +63,9 @@ TViewLoop
 	JP	Z,THome
 	CP	81		;End
 	JP	Z,TEnd
-	CP	88		;Стрелка вверх
+	CP	88		;РЎС‚СЂРµР»РєР° РІРІРµСЂС…
 	JP	Z,TLineUp
-	CP	82		;Стрелка вниз
+	CP	82		;РЎС‚СЂРµР»РєР° РІРЅРёР·
 	JP	Z,TLineDwn
 	CP	89		;PageUp
 	JP	Z,TPageUp
@@ -78,22 +80,22 @@ TViewLoop
 	LD	A,D
 	AND	#7F
 	CP	#57		;Ctrl+PageUp
-	JP	Z,TBegFile	;в начало файла
+	JP	Z,TBegFile	;РІ РЅР°С‡Р°Р»Рѕ С„Р°Р№Р»Р°
 	CP	#51		;Ctrl+PageDown
-	JP	Z,TEndFile	;в конец файла
+	JP	Z,TEndFile	;РІ РєРѕРЅРµС† С„Р°Р№Р»Р°
 	RET 
 ;--------------------------------------------------------------
 HViewLoop
 	LD	IX,HEXtab
 	CALL	TestCoords
-	LD	C,#31		;Ожидаем нажатия клавиш
+	LD	C,#31		;РћР¶РёРґР°РµРј РЅР°Р¶Р°С‚РёСЏ РєР»Р°РІРёС€
 	RST	#10
 	JR	Z,HViewLoop
-	LD	A,E		;Е-ASCII код
+	LD	A,E		;Р•-ASCII РєРѕРґ
 	CP	#1B		;Esc
 	JP	Z,ViewerExit
 	OR	A
-	JR	NZ,HViewLoop	;Ждем функцион.клавиши
+	JR	NZ,HViewLoop	;Р–РґРµРј С„СѓРЅРєС†РёРѕРЅ.РєР»Р°РІРёС€Рё
 	LD	A,D		;
 	CP	#44		;F10
 	JP	Z,ViewerExit
@@ -102,14 +104,14 @@ HViewLoop
 	CP	#3B
 	JP	Z,About
 	CP	#3E		;F4
-	JP	Z,ChViewer	;Просмотр в тексте
+	JP	Z,ChViewer	;РџСЂРѕСЃРјРѕС‚СЂ РІ С‚РµРєСЃС‚Рµ
 	CP	#3F		;F5
-	JP	Z,HGoTo		;Переход на адрес пользователя
+	JP	Z,HGoTo		;РџРµСЂРµС…РѕРґ РЅР° Р°РґСЂРµСЃ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
 	CP	#43
 	JP	Z,PrintFile
-	CP	88		;Стрелка вверх
+	CP	88		;РЎС‚СЂРµР»РєР° РІРІРµСЂС…
 	JP	Z,HLineUp
-	CP	82		;Стрелка вниз
+	CP	82		;РЎС‚СЂРµР»РєР° РІРЅРёР·
 	JP	Z,HLineDwn
 	CP	89		;PageUp
 	JP	Z,HPageUp
@@ -124,9 +126,9 @@ HViewLoop
 	LD	A,D
 	AND	#7F
 	CP	#57		;Ctrl+PageUp
-	JP	Z,HBegFile	;в начало файла
+	JP	Z,HBegFile	;РІ РЅР°С‡Р°Р»Рѕ С„Р°Р№Р»Р°
 	CP	#51		;Ctrl+PageDown
-	JP	Z,HEndFile	;в конец файла
+	JP	Z,HEndFile	;РІ РєРѕРЅРµС† С„Р°Р№Р»Р°
 	RET 
 ;[]----------------------------------------------------------[]
 ChViewer
@@ -167,13 +169,13 @@ ASCIIaddX
 EmptyLines
 	DEFB	#00
 FileLenght
-	DEFS	4,0	;Длина файла (32бит)
+	DEFS	4,0	;Р”Р»РёРЅР° С„Р°Р№Р»Р° (32Р±РёС‚)
 FileShift
-	DEFS	4,0	;Смещение от начала файла (32бит)
+	DEFS	4,0	;РЎРјРµС‰РµРЅРёРµ РѕС‚ РЅР°С‡Р°Р»Р° С„Р°Р№Р»Р° (32Р±РёС‚)
 TempShift
-	DEFS	4,0	;Временная ячейка смещения (32бит)
+	DEFS	4,0	;Р’СЂРµРјРµРЅРЅР°СЏ СЏС‡РµР№РєР° СЃРјРµС‰РµРЅРёСЏ (32Р±РёС‚)
 NextShift
-	DEFS	4,0	;Следующая страница для	ASCII (32бит)
+	DEFS	4,0	;РЎР»РµРґСѓСЋС‰Р°СЏ СЃС‚СЂР°РЅРёС†Р° РґР»СЏ	ASCII (32Р±РёС‚)
 MemIndef
 	DEFB	#00
 FHandle
@@ -233,7 +235,7 @@ LoadFl1	LD	A,D
 	OR	E
 	LD	A,#1E
 	PUSH	AF
-	CALL	NZ,DOSError	;!!!!!!!!!!!! Нет памяти
+	CALL	NZ,DOSError	;!!!!!!!!!!!! РќРµС‚ РїР°РјСЏС‚Рё
 	POP	AF
 	SCF 
 	JP	NZ,LoadExit
@@ -248,7 +250,7 @@ LoadFl1	LD	A,D
 	LD	A,#1E
 	PUSH	DE
 	PUSH	AF
-	CALL	C,DOSError	;!!!!!!!!!!!! Нет памяти
+	CALL	C,DOSError	;!!!!!!!!!!!! РќРµС‚ РїР°РјСЏС‚Рё
 	POP	AF
 	POP	DE
 	JP	C,LoadExit
@@ -279,12 +281,12 @@ LoadFl1	LD	A,D
 	DEFB	#01	;Text Line
 	DEFW	#0070,#0003
 	DEFB	#0F
-	DEFB	"FN File Viewer v1.02",0
+	DEFB	"FN File Viewer v1.03",0
 	DEFB	#01	;Text Line
 	DEFW	#0008,#0010
 	DEFB	#80
 	DEFB	"Reading:",0
-	DEFB	#03	;Углубление
+	DEFB	#03	;РЈРіР»СѓР±Р»РµРЅРёРµ
 	DEFW	#0010,#001C
 	DEFW	#0120,#000C
 	DEFB	#02	;Head place
@@ -526,7 +528,7 @@ InitVS0	RL	C
 	DEFB	#01	;Text Line
 	DEFW	#0008,#0003
 	DEFB	#0F
-	DEFB	"  FN File Viewer v1.02",0
+	DEFB	"  FN File Viewer v1.03",0
 	DEFB	#06	;Horizontal line
 	DEFW	#0000,#000D
 	DEFW	#0280
@@ -641,7 +643,7 @@ FAttrib	DEFB	"        ",0
 FAtributs
 	DEFB	"--ad-shr"
 GetData
-;Дата
+;Р”Р°С‚Р°
 	EX	DE,HL
 	LD	A,(IX+24)
 	AND	#1F
@@ -658,19 +660,19 @@ GetData
 	CALL	Get8Bit
 	LD	(HL),"."
 	INC	HL
-	LD	A,(IX+25)      ;Год
+	LD	A,(IX+25)      ;Р“РѕРґ
 	SRL	A
 	ADD	A,80
 	SUB	100
 	JR	NC,$-2
-	ADD	A,100		;Год
+	ADD	A,100		;Р“РѕРґ
 	CALL	Get8Bit
 	EX	DE,HL
 	RET 
 GetTime
-;Время
+;Р’СЂРµРјСЏ
 	EX	DE,HL
-	LD	A,(IX+23)	;Часы
+	LD	A,(IX+23)	;Р§Р°СЃС‹
 	AND	#F8
 	RRA 
 	RRA 
@@ -718,7 +720,8 @@ ASCIIstatus
 	LD	(ASCIIx),DE
 	LD	DE,ASCIIm
 	LD	BC,#0009
-	LDIR 
+	LDIR
+        CALL    InitCodePage
 	CALL	MakeWindow
 	DEFB	#80
 	DEFB	#06	;Horizontal line
@@ -755,6 +758,15 @@ ASCIIm	DEFB	"F2 UnWrap",0
 	DEFB	#80
 	DEFB	"F4 Hex",0
 	DEFB	#04	;UpRectan
+	DEFW	#0190,#00F2
+	DEFW	#0050,#000E
+	DEFB	#01	;Text Line
+	DEFW	#01A8,#00F5
+	DEFB	#80
+	DEFB	"F8 "
+ASCIIenc
+        DEFB	"DOS",0
+	DEFB	#04	;UpRectan
 	DEFW	#01E0,#00F2
 	DEFW	#0050,#000E
 	DEFB	#01	;Text Line
@@ -774,6 +786,14 @@ UnWrapT
 	DEFB	"F2 UnWrap"
 WrapT
 	DEFB	"F2 Wrap  "
+
+EncDos
+        DEFB	"DOS"
+EncWin
+        DEFB	"WIN"
+EncKoi
+        DEFB	"KOI"
+
 HEXstatus
 	CALL	MakeWindow
 	DEFB	#80
@@ -843,7 +863,7 @@ About
 	DEFB	#01	;Text Line
 	DEFW	#0090,#001C
 	DEFB	#80
-	DEFB	"v1.02",0
+	DEFB	"v1.03",0
 	DEFB	#01	;Text Line
 	DEFW	#0012,#0028
 	DEFB	#80
@@ -890,9 +910,9 @@ ScrollSCRup
 	JR	ScrlSCRDnUp
 ScrollSCRdown
 	LD	DE,#1C24
-;На вход:
-;	 D  - Y	откуда
-;	 Е  - Y	куда
+;РќР° РІС…РѕРґ:
+;	 D  - Y	РѕС‚РєСѓРґР°
+;	 Р•  - Y	РєСѓРґР°
 ScrlSCRDnUp
 	DI 
 	LD	C,#83
@@ -932,19 +952,19 @@ InitFPages
 	PUSH	HL
 	LD	DE,(TempShift)
 	LD	HL,(TempShift+2)
-	LD	A,D		;Выделяем номер	страницы
+	LD	A,D		;Р’С‹РґРµР»СЏРµРј РЅРѕРјРµСЂ	СЃС‚СЂР°РЅРёС†С‹
 	RLA 
 	RL	L
 	RLA 
 	RL	L
 	LD	A,L
 	EXX 
-	LD	E,A		;DE - Адрес страницы в списке
+	LD	E,A		;DE - РђРґСЂРµСЃ СЃС‚СЂР°РЅРёС†С‹ РІ СЃРїРёСЃРєРµ
 	LD	D,high PagesList
-	LD	A,(DE)		;Тек.страница
+	LD	A,(DE)		;РўРµРє.СЃС‚СЂР°РЅРёС†Р°
 	OUT	(PAGE1),A
 	EXX 
-	RES	7,D		;Вкл.с #4000
+	RES	7,D		;Р’РєР».СЃ #4000
 	SET	6,D
 	POP	HL
 	RET 
@@ -954,8 +974,8 @@ TestFPages
 	RES	7,D
 	SET	6,D
 	EXX 
-	INC	E		;DE - Адрес страницы в списке
-	LD	A,(DE)		;Тек.страница
+	INC	E		;DE - РђРґСЂРµСЃ СЃС‚СЂР°РЅРёС†С‹ РІ СЃРїРёСЃРєРµ
+	LD	A,(DE)		;РўРµРє.СЃС‚СЂР°РЅРёС†Р°
 	OUT	(PAGE1),A
 	EXX 
 	RET 
@@ -983,14 +1003,14 @@ GetFPages
 	POP	HL
 	RET 
 ;[]==========================================================[]
-;Процедура инициализация таблицы процентов
+;РџСЂРѕС†РµРґСѓСЂР° РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ С‚Р°Р±Р»РёС†С‹ РїСЂРѕС†РµРЅС‚РѕРІ
 InitVProc
 	LD	A,#01
-	LD	(ProcFlag),A	;Флаг вывода процентов
+	LD	(ProcFlag),A	;Р¤Р»Р°Рі РІС‹РІРѕРґР° РїСЂРѕС†РµРЅС‚РѕРІ
 	LD	A,(ViewMode)
 	OR	A
 	JR	NZ,InProcHex
-InProcASCII			;Проценты для TextWrap
+InProcASCII			;РџСЂРѕС†РµРЅС‚С‹ РґР»СЏ TextWrap
 	LD	HL,(FileLenght)
 	LD	DE,(FileLenght+2)
 	LD	B,#19
@@ -1000,7 +1020,7 @@ InProcA	PUSH	BC
 	RET	C
 	DJNZ	InProcA
 	JR	InitProc
-InProcHex			;Проценты для Hex
+InProcHex			;РџСЂРѕС†РµРЅС‚С‹ РґР»СЏ Hex
 	LD	HL,(FileLenght)
 	LD	DE,(FileLenght+2)
 	LD	BC,#0190
@@ -1016,22 +1036,22 @@ InProcHex			;Проценты для Hex
 	OR	D
 	OR	E
 	RET	Z
-;Процедура инициализации таблицы процентов
-;На вход:
-;	  DE+HL	- Длина	файла-1страница
+;РџСЂРѕС†РµРґСѓСЂР° РёРЅРёС†РёР°Р»РёР·Р°С†РёРё С‚Р°Р±Р»РёС†С‹ РїСЂРѕС†РµРЅС‚РѕРІ
+;РќР° РІС…РѕРґ:
+;	  DE+HL	- Р”Р»РёРЅР°	С„Р°Р№Р»Р°-1СЃС‚СЂР°РЅРёС†Р°
 InitProc
 	PUSH	HL
 	PUSH	DE
 	EX	DE,HL
-	LD	BC,100		;Длина файла/100 (%)
+	LD	BC,100		;Р”Р»РёРЅР° С„Р°Р№Р»Р°/100 (%)
 	CALL	Divis32
-	LD	(Coeff1+1),DE	;Получаем кол-во байт на
-	LD	(Coeff2+1),HL	;один процент
+	LD	(Coeff1+1),DE	;РџРѕР»СѓС‡Р°РµРј РєРѕР»-РІРѕ Р±Р°Р№С‚ РЅР°
+	LD	(Coeff2+1),HL	;РѕРґРёРЅ РїСЂРѕС†РµРЅС‚
 	LD	IX,ProcentTab
 	LD	HL,#0000
 	LD	E,L
 	LD	D,H
-	LD	BC,#6300	;Генерим таблицу
+	LD	BC,#6300	;Р“РµРЅРµСЂРёРј С‚Р°Р±Р»РёС†Сѓ
 	LD	(IX+#00),L
 	INC	IX
 	LD	(IX+#00),H
@@ -1043,7 +1063,7 @@ InitProc
 	LD	(IX+#00),C
 	INC	IX
 	INC	C
-CoeffLoop			;для каждого процента
+CoeffLoop			;РґР»СЏ РєР°Р¶РґРѕРіРѕ РїСЂРѕС†РµРЅС‚Р°
 	PUSH	BC
 Coeff1	LD	BC,#0000
 	ADD	HL,BC
@@ -1066,7 +1086,7 @@ Coeff2	LD	BC,#0000
 	DJNZ	CoeffLoop
 	POP	DE
 	POP	HL
-	LD	(IX+#00),L	;Макс.процент
+	LD	(IX+#00),L	;РњР°РєСЃ.РїСЂРѕС†РµРЅС‚
 	INC	IX
 	LD	(IX+#00),H
 	INC	IX
@@ -1079,56 +1099,56 @@ Coeff2	LD	BC,#0000
 	LD	(ProcFlag),A
 	RET 
 ;[]----------------------------------------------------------[]
-;Процедура просчета и печати проценто
+;РџСЂРѕС†РµРґСѓСЂР° РїСЂРѕСЃС‡РµС‚Р° Рё РїРµС‡Р°С‚Рё РїСЂРѕС†РµРЅС‚Рѕ
 PrintVProc
 	LD	HL,PutProcent
-	PUSH	HL	;Выходим на печать
+	PUSH	HL	;Р’С‹С…РѕРґРёРј РЅР° РїРµС‡Р°С‚СЊ
 	LD	A,(ProcFlag)
 	OR	A
 	LD	A,100
-	RET	NZ		;Уже все 100%
-	LD	IX,ProcentTab+250 ;Серидина таблицы проц.50%
-	LD	HL,(FileShift)	;Текущее смещение
+	RET	NZ		;РЈР¶Рµ РІСЃРµ 100%
+	LD	IX,ProcentTab+250 ;РЎРµСЂРёРґРёРЅР° С‚Р°Р±Р»РёС†С‹ РїСЂРѕС†.50%
+	LD	HL,(FileShift)	;РўРµРєСѓС‰РµРµ СЃРјРµС‰РµРЅРёРµ
 	LD	DE,(FileShift+2)
-	CALL	TestProcent	;В какой половине наход.?
+	CALL	TestProcent	;Р’ РєР°РєРѕР№ РїРѕР»РѕРІРёРЅРµ РЅР°С…РѕРґ.?
 	JR	C,LowTest	;<50%
 	LD	A,(IX+#04)
 	RET	Z		;=50%
-	LD	IX,ProcentTab+375 ;Таблица с 75%
-	CALL	TestProcent	;В какой половине наход.?
+	LD	IX,ProcentTab+375 ;РўР°Р±Р»РёС†Р° СЃ 75%
+	CALL	TestProcent	;Р’ РєР°РєРѕР№ РїРѕР»РѕРІРёРЅРµ РЅР°С…РѕРґ.?
 	JR	C,Test2		;50%<X<75%
-;Процедура поиска процента вверх по таблице
-Test1	LD	A,(IX+#04)	;Текущий процент
+;РџСЂРѕС†РµРґСѓСЂР° РїРѕРёСЃРєР° РїСЂРѕС†РµРЅС‚Р° РІРІРµСЂС… РїРѕ С‚Р°Р±Р»РёС†Рµ
+Test1	LD	A,(IX+#04)	;РўРµРєСѓС‰РёР№ РїСЂРѕС†РµРЅС‚
 	RET	Z		;X=%
 	RET	C		;X<%
-	CP	100		;Конечный процент
+	CP	100		;РљРѕРЅРµС‡РЅС‹Р№ РїСЂРѕС†РµРЅС‚
 	RET	Z
-	LD	BC,#0005	;Ищем вверх по таблице
-	ADD	IX,BC		;Нужный	процент
+	LD	BC,#0005	;РС‰РµРј РІРІРµСЂС… РїРѕ С‚Р°Р±Р»РёС†Рµ
+	ADD	IX,BC		;РќСѓР¶РЅС‹Р№	РїСЂРѕС†РµРЅС‚
 	CALL	TestProcent
 	JR	Test1
-;Процедура поиска процента вниз	по таблице
-Test2	LD	A,(IX+#04)	;Текущий процент
+;РџСЂРѕС†РµРґСѓСЂР° РїРѕРёСЃРєР° РїСЂРѕС†РµРЅС‚Р° РІРЅРёР·	РїРѕ С‚Р°Р±Р»РёС†Рµ
+Test2	LD	A,(IX+#04)	;РўРµРєСѓС‰РёР№ РїСЂРѕС†РµРЅС‚
 	RET	Z		;X=%
 	RET	NC		;X>%
 	OR	A
 	RET	Z
-	LD	BC,-#0005	;Ищем вниз по таблице
-	ADD	IX,BC		;Нужный	процент
+	LD	BC,-#0005	;РС‰РµРј РІРЅРёР· РїРѕ С‚Р°Р±Р»РёС†Рµ
+	ADD	IX,BC		;РќСѓР¶РЅС‹Р№	РїСЂРѕС†РµРЅС‚
 	CALL	TestProcent
 	JR	Test2
 ;X<50%
-LowTest	LD	IX,ProcentTab+125 ;Таблица с 25%
-	CALL	TestProcent	;В какой половине наход.?
+LowTest	LD	IX,ProcentTab+125 ;РўР°Р±Р»РёС†Р° СЃ 25%
+	CALL	TestProcent	;Р’ РєР°РєРѕР№ РїРѕР»РѕРІРёРЅРµ РЅР°С…РѕРґ.?
 	JR	C,Test2		;01%<X<25%
 	JR	Test1		;25%<X<50%
-;Процедура тестирования	текущего смещения
-;На вход:
-;	  DE+HL	- Текущее смещение
-;На выход:
-;	  Z - Тек.смещ=процент
-;	  C - Тек.смещ<процент
-;	 NC - Тек.смещ>процент
+;РџСЂРѕС†РµРґСѓСЂР° С‚РµСЃС‚РёСЂРѕРІР°РЅРёСЏ	С‚РµРєСѓС‰РµРіРѕ СЃРјРµС‰РµРЅРёСЏ
+;РќР° РІС…РѕРґ:
+;	  DE+HL	- РўРµРєСѓС‰РµРµ СЃРјРµС‰РµРЅРёРµ
+;РќР° РІС‹С…РѕРґ:
+;	  Z - РўРµРє.СЃРјРµС‰=РїСЂРѕС†РµРЅС‚
+;	  C - РўРµРє.СЃРјРµС‰<РїСЂРѕС†РµРЅС‚
+;	 NC - РўРµРє.СЃРјРµС‰>РїСЂРѕС†РµРЅС‚
 TestProcent
 	PUSH	HL
 	PUSH	DE
@@ -1148,7 +1168,7 @@ TestProcent
 	POP	DE
 	POP	HL
 	RET 
-;Процедура вывода процентов
+;РџСЂРѕС†РµРґСѓСЂР° РІС‹РІРѕРґР° РїСЂРѕС†РµРЅС‚РѕРІ
 PutProcent
 	LD	HL,ProcText
 	PUSH	HL
@@ -1191,7 +1211,36 @@ PutProcent
 	LD	BC,#0011
 	LD	A,#80
 	CALL	PrnTxtLnNorm
-	RET 
+	RET
+InitCodePage
+        LD      A,0
+CodePage EQU    $-1
+        LD      L,A
+        LD      H,0
+        ADD     HL,HL
+        ADD     A,L
+        LD      L,A
+        LD      DE,EncDos
+        ADD     HL,DE
+        LD      DE,ASCIIenc
+        LD      BC,3
+        LDIR
+	LD	A, (CodePage)
+	AND	A
+	JR	NZ,.next
+	LD	HL,0
+.call	LD	(PutLine2),A
+	LD	(PutLine2 + 1), HL
+        RET
+.next	DEC	A
+	LD	HL,Table866
+	JR	Z,.next1
+	LD	HL,TableKoi
+.next1	LD	(DecodeSymbol.table),HL
+	LD	HL,DecodeSymbol
+	LD	A, #CD
+	JR	.call
+
 ProcText
 	DEFB	"   %",0
 ProcFlag
@@ -1211,6 +1260,7 @@ ASCIItab
     DEFW #0000,#0050,#00F2,#0100,#01,#0000,About,#0000
     DEFW #0050,#00A0,#00F2,#0100,#01,#0000,ChASCIImode,#0000
     DEFW #00A0,#00F0,#00F2,#0100,#01,#0000,ChViewer,#0000
+    DEFW #0190,#01E0,#00F2,#0100,#01,#0000,ChCodePage,#0000
     DEFW #01E0,#0230,#00F2,#0100,#01,#0000,PrintFile,#0000
     DEFW #0230,#0280,#00F2,#0100,#21,#0000,ViewerExit,#0000
     DEFW #8000

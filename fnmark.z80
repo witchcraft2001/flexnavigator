@@ -253,7 +253,7 @@ SelectGroup
 	DEFW	#000A,#0019
 	DEFB	#80
 	DEFB	"Mark mask:",0
-	DEFB	#03	;Σγλσαλενθε
+	DEFB	#03	;Π£Π³Π»ΡƒΠ±Π»ΠµΠ½ΠΈΠµ
 	DEFW	#0046,#0016
 	DEFW	#0086,#000C
 	DEFB	#02	;Head place

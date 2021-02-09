@@ -10,9 +10,9 @@ RsFire1	CALL	TestCMOS
 	RET	Z
 	JR	RsFire1
 ;[]----------------------------------------------------------[]
-;Проверка координат мыши по таблице
-;На вход:
-;	  IX - Адрес таблицы
+;РџСЂРѕРІРµСЂРєР° РєРѕРѕСЂРґРёРЅР°С‚ РјС‹С€Рё РїРѕ С‚Р°Р±Р»РёС†Рµ
+;РќР° РІС…РѕРґ:
+;	  IX - РђРґСЂРµСЃ С‚Р°Р±Р»РёС†С‹
 TestCoords
 	CALL	TestCMOS
 	LD	C,#03
@@ -97,7 +97,7 @@ RunFlag	LD	C,#00
 	OR	A
 	RET	Z
 	LD	A,C
-	OR	A		;нет огня
+	OR	A		;РЅРµС‚ РѕРіРЅСЏ
 	JR	Z,Execute1
 	BIT	0,A
 	JR	Z,Execute2
@@ -106,14 +106,14 @@ RunFlag	LD	C,#00
 	CCF 
 	RET	NC
 	OR	A
-	BIT	1,(IX+#08)	;рабочая кнопка
+	BIT	1,(IX+#08)	;СЂР°Р±РѕС‡Р°СЏ РєРЅРѕРїРєР°
 	RET	NZ
-	LD	C,(IX+#0C)	;запуск	по левой кнопке
+	LD	C,(IX+#0C)	;Р·Р°РїСѓСЃРє	РїРѕ Р»РµРІРѕР№ РєРЅРѕРїРєРµ
 	LD	B,(IX+#0D)
 	LD	A,B
 	OR	C
 	JP	Z,NxtCrds1
-	BIT	5,(IX+#08)	;запуск	без возврата
+	BIT	5,(IX+#08)	;Р·Р°РїСѓСЃРє	Р±РµР· РІРѕР·РІСЂР°С‚Р°
 	JR	Z,$+3
 	POP	AF
 	PUSH	BC
@@ -128,12 +128,12 @@ RunFlag	LD	C,#00
 	DEFB	#00
 	RET 
 Execute1
-	LD	C,(IX+#0A)	;запуск	без огня
+	LD	C,(IX+#0A)	;Р·Р°РїСѓСЃРє	Р±РµР· РѕРіРЅСЏ
 	LD	B,(IX+#0B)
 	LD	A,B
 	OR	C
 	JR	Z,NxtCrds1
-	BIT	4,(IX+#08)	;запуск	без возврата
+	BIT	4,(IX+#08)	;Р·Р°РїСѓСЃРє	Р±РµР· РІРѕР·РІСЂР°С‚Р°
 	JR	Z,$+3
 	POP	AF
 	PUSH	BC
@@ -148,12 +148,12 @@ Execute1
 	DEFB	#00
 	RET 
 Execute2
-	LD	C,(IX+#0E)	;запуск	по правой кнопке
+	LD	C,(IX+#0E)	;Р·Р°РїСѓСЃРє	РїРѕ РїСЂР°РІРѕР№ РєРЅРѕРїРєРµ
 	LD	B,(IX+#0F)
 	LD	A,B
 	OR	C
 	JR	Z,NxtCrds1
-	BIT	6,(IX+#08)	;запуск	без возврата
+	BIT	6,(IX+#08)	;Р·Р°РїСѓСЃРє	Р±РµР· РІРѕР·РІСЂР°С‚Р°
 	JR	Z,$+3
 	POP	AF
 	PUSH	BC
@@ -181,7 +181,7 @@ NxtCrds0
 NxtCrds1
 	LD	BC,#0010
 	ADD	IX,BC
-	BIT	7,(IX+#01)	;конец таблицы
+	BIT	7,(IX+#01)	;РєРѕРЅРµС† С‚Р°Р±Р»РёС†С‹
 	JP	Z,CoordLp
 	OR	A
 	RET 

@@ -52,7 +52,7 @@ EntryExec:	DI
 		LD	C, 0x13
 		RST	0x10
 		JP	C, .disk_error
-		LD	HL, 0xffff-(FNMainEnd-FNMain)		;Распаковка FNMAIN
+		LD	HL, 0xffff-(FNMainEnd-FNMain)		;Р Р°СЃРїР°РєРѕРІРєР° FNMAIN
 		LD	DE, 0x8500
 		call	UnHrust
 
@@ -64,7 +64,7 @@ EntryExec:	DI
 		LD	C, 0x13
 		RST	0x10
 		JP	C, .disk_error
-		LD	HL, 0xffff-(FNFuncEnd-FNFunc)		;Распаковка FNFUNCT
+		LD	HL, 0xffff-(FNFuncEnd-FNFunc)		;Р Р°СЃРїР°РєРѕРІРєР° FNFUNCT
 		LD	DE, 0xC000
 		call	UnHrust
 
@@ -76,7 +76,7 @@ EntryExec:	DI
 		LD	C, 0x13
 		RST	0x10
 		JP	C, .disk_error
-		LD	HL, 0xffff-(FNViewEnd-FNView)		;Распаковка FNVIEW
+		LD	HL, 0xffff-(FNViewEnd-FNView)		;Р Р°СЃРїР°РєРѕРІРєР° FNVIEW
 		LD	DE, 0xC000
 		call	UnHrust
 
@@ -88,7 +88,7 @@ EntryExec:	DI
 		LD	C, 0x13
 		RST	0x10
 		JP	C, .disk_error
-		LD	HL, 0xffff-(FNEditEnd-FNEdit)		;Распаковка FNEDIT
+		LD	HL, 0xffff-(FNEditEnd-FNEdit)		;Р Р°СЃРїР°РєРѕРІРєР° FNEDIT
 		LD	DE, 0xC000
 		call	UnHrust
 
@@ -100,7 +100,7 @@ EntryExec:	DI
 		LD	C, 0x13
 		RST	0x10
 		JP	C, .disk_error
-		LD	HL, 0xffff-(FNHelpEnd-FNHelp)		;Распаковка FNHELP
+		LD	HL, 0xffff-(FNHelpEnd-FNHelp)		;Р Р°СЃРїР°РєРѕРІРєР° FNHELP
 		LD	DE, 0xC000
 		call	UnHrust
 
@@ -112,7 +112,7 @@ EntryExec:	DI
 		LD	C, 0x13
 		RST	0x10
 		JP	C, .disk_error
-		LD	HL, 0xffff-(FNFontEnd-FNFont)		;Распаковка FNFONT
+		LD	HL, 0xffff-(FNFontEnd-FNFont)		;Р Р°СЃРїР°РєРѕРІРєР° FNFONT
 		LD	DE, 0xC000
 		call	UnHrust
 
@@ -159,7 +159,7 @@ EntryExec:	DI
 .no_memory_str:	db	"Not enough memory to load program.", 0x0D, 0x0A, 0x00
 .load_err_str:	db	"Disk loading error.", 0x0D, 0x0A, 0x00
 
-; Распаковщик (DeHrust)
+; Р Р°СЃРїР°РєРѕРІС‰РёРє (DeHrust)
 
 UnHrust		di
 		ld	ix,-12

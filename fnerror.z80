@@ -74,7 +74,7 @@ InvDrive
 	DEFW	#0058,#0021
 	DEFB	#80
 	DEFB	"Ok",0
-	DEFB	#03	;Σγλσαλενθε
+	DEFB	#03	;Π£Π³Π»ΡƒΠ±Π»ΠµΠ½ΠΈΠµ
 	DEFW	#0078,#000F
 	DEFW	#0010,#000C
 	DEFB	#02	;Head place
@@ -107,7 +107,7 @@ InvMedia
 	DEFW	#0058,#0021
 	DEFB	#80
 	DEFB	"Ok",0
-	DEFB	#03	;Σγλσαλενθε
+	DEFB	#03	;Π£Π³Π»ΡƒΠ±Π»ΠµΠ½ΠΈΠµ
 	DEFW	#0078,#000F
 	DEFW	#0010,#000C
 	DEFB	#02	;Head place
@@ -140,7 +140,7 @@ NotReady
 	DEFW	#0058,#0021
 	DEFB	#80
 	DEFB	"Ok",0
-	DEFB	#03	;Σγλσαλενθε
+	DEFB	#03	;Π£Π³Π»ΡƒΠ±Π»ΠµΠ½ΠΈΠµ
 	DEFW	#0078,#000F
 	DEFW	#0010,#000C
 	DEFB	#02	;Head place

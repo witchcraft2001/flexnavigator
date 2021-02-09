@@ -2,11 +2,11 @@
 ;[]-----------------------------------------------------------[]
 InitScrBar
 	LD	C,(IX+BarPAGEl)
-	LD	B,(IX+BarPAGEh)	;Кол-во	элем.на	стр.
+	LD	B,(IX+BarPAGEh)	;РљРѕР»-РІРѕ	СЌР»РµРј.РЅР°	СЃС‚СЂ.
 	LD	L,C
 	LD	H,B
 	LD	E,(IX+BarMAXl)
-	LD	D,(IX+BarMAXh)	;макс.элементов
+	LD	D,(IX+BarMAXh)	;РјР°РєСЃ.СЌР»РµРјРµРЅС‚РѕРІ
 	LD	A,D
 	OR	E
 	JR	NZ,$+3
@@ -18,10 +18,10 @@ InitScrBar
 	EX	DE,HL
 	PUSH	DE
 	LD	E,(IX+BarMaxLl)
-	LD	D,(IX+BarMaxLh)	;Кол-во	вид.элем.*размер бара
+	LD	D,(IX+BarMaxLh)	;РљРѕР»-РІРѕ	РІРёРґ.СЌР»РµРј.*СЂР°Р·РјРµСЂ Р±Р°СЂР°
 	CALL	Mult16X16	;DE*BC=HL+DE
-	POP	BC		;/макс.элементов
-	CALL	Divis32X16	;HL+DE/BC=DE (HL-ост)
+	POP	BC		;/РјР°РєСЃ.СЌР»РµРјРµРЅС‚РѕРІ
+	CALL	Divis32X16	;HL+DE/BC=DE (HL-РѕСЃС‚)
 	LD	A,H
 	OR	L
 	JR	Z,$+3
@@ -30,8 +30,8 @@ InitScrBar
 	SBC	HL,DE
 	JR	C,$+5
 	LD	DE,#0003
-	LD	(IX+BarLENl),E	;=длина	бара
-	LD	(IX+BarLENh),D	;=длина	бара
+	LD	(IX+BarLENl),E	;=РґР»РёРЅР°	Р±Р°СЂР°
+	LD	(IX+BarLENh),D	;=РґР»РёРЅР°	Р±Р°СЂР°
 	RET 
 PrnHScrBar
 	PUSH	IY
@@ -453,17 +453,17 @@ InitProcess
 	LD	(IX+ProcCURh2),A
 	LD	(IX+ProcCORRl),A
 	LD	(IX+ProcCORRh),A
-	LD	C,(IX+ProcMaxLl)	;Макс/макс.длину процеса
+	LD	C,(IX+ProcMaxLl)	;РњР°РєСЃ/РјР°РєСЃ.РґР»РёРЅСѓ РїСЂРѕС†РµСЃР°
 	LD	B,(IX+ProcMaxLh)
 	LD	E,(IX+ProcMAXl1)
 	LD	D,(IX+ProcMAXh1)
 	LD	L,(IX+ProcMAXl2)
 	LD	H,(IX+ProcMAXh2)
-	CALL	Divis32X16		;HL+DE/BC=DE (HL-ост)
+	CALL	Divis32X16		;HL+DE/BC=DE (HL-РѕСЃС‚)
 	LD	A,H
 	OR	L
 	JR	Z,$+3
-	INC	DE			;= коэффициент
+	INC	DE			;= РєРѕСЌС„С„РёС†РёРµРЅС‚
 	LD	HL,9
 	OR	A
 	SBC	HL,DE
@@ -477,9 +477,9 @@ InitProcess
 	LD	(IX+ProcCORRl),C
 	LD	(IX+ProcCORRh),B
 	CALL	Mult16X16
-	LD	C,(IX+ProcMaxLl)	;Макс/макс.длину процеса
+	LD	C,(IX+ProcMaxLl)	;РњР°РєСЃ/РјР°РєСЃ.РґР»РёРЅСѓ РїСЂРѕС†РµСЃР°
 	LD	B,(IX+ProcMaxLh)
-	CALL	Divis32X16		;HL+DE/BC=DE (HL-ост)
+	CALL	Divis32X16		;HL+DE/BC=DE (HL-РѕСЃС‚)
 InitPrE	LD	(IX+ProcCOEFl),E
 	LD	(IX+ProcCOEFh),D
 	RET 

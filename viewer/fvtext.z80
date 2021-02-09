@@ -10,9 +10,9 @@ PrnASCIIpage
 	LD	B,#1C
 PrnASCIIlp
 	PUSH	BC
-	CALL	PutASCIIline   ;Выводим	строку в буф и на экран
+	CALL	PutASCIIline   ;Р’С‹РІРѕРґРёРј	СЃС‚СЂРѕРєСѓ РІ Р±СѓС„ Рё РЅР° СЌРєСЂР°РЅ
 	POP	BC
-	JR	C,FillASCIIdn  ;CY-Закончились байты для печати
+	JR	C,FillASCIIdn  ;CY-Р—Р°РєРѕРЅС‡РёР»РёСЃСЊ Р±Р°Р№С‚С‹ РґР»СЏ РїРµС‡Р°С‚Рё
 	LD	A,B
 	ADD	A,#08
 	LD	B,A
@@ -25,12 +25,12 @@ PrnASCIIlp
 	SUB	A
 	LD	(EmptyLines),A
 	RET 
-;Процедура отчистки нижней области экрана
+;РџСЂРѕС†РµРґСѓСЂР° РѕС‚С‡РёСЃС‚РєРё РЅРёР¶РЅРµР№ РѕР±Р»Р°СЃС‚Рё СЌРєСЂР°РЅР°
 FillASCIIdn
 	LD	A,#E4
 	SUB	B
 	LD	(FLenASC),A
-	JR	Z,FASCIIe	;Z-нет отчистки
+	JR	Z,FASCIIe	;Z-РЅРµС‚ РѕС‚С‡РёСЃС‚РєРё
 	LD	A,B
 	LD	(FPosASC),A
 	CALL	MakeWindow
@@ -52,7 +52,7 @@ FASCIIe	LD	HL,(TempShift)
 	SRL	A
 	LD	(EmptyLines),A
 	RET 
-;Процедура печати тек.строки в буфер и на экран
+;РџСЂРѕС†РµРґСѓСЂР° РїРµС‡Р°С‚Рё С‚РµРє.СЃС‚СЂРѕРєРё РІ Р±СѓС„РµСЂ Рё РЅР° СЌРєСЂР°РЅ
 PutASCIIline
 	LD	HX,B
 	LD	A,(ASCIImode)
@@ -111,6 +111,7 @@ PutTab	LD	(HL),#20
 	JR	NZ,PutTab
 	JR	PutLine3
 PutLine2
+	CALL	DecodeSymbol
 	LD	(HL),A
 	LD	A,L
 	CP	C
@@ -153,6 +154,21 @@ PutLine4
 	CALL	PrnTxtLnNormC
 	OR	A
 	RET 
+DecodeSymbol
+	CP	#80
+	RET	C	
+	PUSH	HL
+	SUB	#80
+	LD	HL,Table866
+.table	EQU	$-2
+	ADD	A,L
+	LD	L,A
+	JR	NC,.nc
+	INC	H
+.nc	LD	A,(HL)
+	POP	HL
+	RET
+
 PutLineUWR
 	LD	C,HX
 	LD	A,L
@@ -172,7 +188,7 @@ PutLnUW1
 	LD	B,#50
 	LD	H,high LineBuffer
 	LD	A,(ASCIIaddX)
-	LD	L,A		;смещение от начала строки
+	LD	L,A		;СЃРјРµС‰РµРЅРёРµ РѕС‚ РЅР°С‡Р°Р»Р° СЃС‚СЂРѕРєРё
 	OR	A
 	JR	Z,PutLnUW2
 	PUSH	HL
@@ -217,6 +233,17 @@ SpaceLeft
 	DEFB	#1B
 SpaceRight
 	DEFB	#1A
+;[]==========================================================[]
+ChCodePage
+	LD	HL,ViewerBegin
+	EX	(SP),HL
+        LD      A,(CodePage)
+        INC     A
+        CP      3
+        JR      C,.no
+        XOR     A
+.no     LD      (CodePage), A
+	RET
 ;[]==========================================================[]
 ChASCIImode
 	LD	HL,ViewerBegin
@@ -323,7 +350,7 @@ TLineUp
 	LD	(NextShift+2),DE
 TLineU1	CALL	ScrollSCRdown
 	LD	B,#1C
-	CALL	PutASCIIline	    ;Создаем и печатаем	строку
+	CALL	PutASCIIline	    ;РЎРѕР·РґР°РµРј Рё РїРµС‡Р°С‚Р°РµРј	СЃС‚СЂРѕРєСѓ
 	CALL	PrintVProc
 	OR	A
 	RET 
@@ -369,7 +396,7 @@ TLineDwn
 	LD	(TempShift+2),DE
 	CALL	ScrollSCRup
 	LD	B,#DC
-	CALL	PutASCIIline	    ;Создаем и печатаем	строку
+	CALL	PutASCIIline	    ;РЎРѕР·РґР°РµРј Рё РїРµС‡Р°С‚Р°РµРј	СЃС‚СЂРѕРєСѓ
 	LD	HL,(TempShift)
 	LD	DE,(TempShift+2)
 	LD	(NextShift),HL
@@ -514,13 +541,13 @@ SearchUpBeg
 	PUSH	AF
 	PUSH	HL
 	PUSH	DE
-	LD	A,H		;Выделяем номер	страницы
+	LD	A,H		;Р’С‹РґРµР»СЏРµРј РЅРѕРјРµСЂ	СЃС‚СЂР°РЅРёС†С‹
 	RLA 
 	RL	E
 	RLA 
 	RL	E
 	LD	D,high PagesList
-	LD	A,(DE)		;Тек.страница
+	LD	A,(DE)		;РўРµРє.СЃС‚СЂР°РЅРёС†Р°
 	OUT	(PAGE1),A
 	RES	7,H
 	SET	6,H
@@ -651,13 +678,13 @@ SrchDE	LD	DE,#0000
 	PUSH	AF
 	PUSH	HL
 	PUSH	DE
-	LD	A,H		;Выделяем номер	страницы
+	LD	A,H		;Р’С‹РґРµР»СЏРµРј РЅРѕРјРµСЂ	СЃС‚СЂР°РЅРёС†С‹
 	RLA 
 	RL	E
 	RLA 
 	RL	E
 	LD	D,high PagesList
-	LD	A,(DE)		;Тек.страница
+	LD	A,(DE)		;РўРµРє.СЃС‚СЂР°РЅРёС†Р°
 	OUT	(PAGE1),A
 	RES	7,H
 	SET	6,H
@@ -731,4 +758,38 @@ SrchEEx	POP	DE
 	OR	A
 	RET 
 
-
+Table866
+	db	3Fh,3Fh,27h,3Fh,22h,3Ah,0C5h,0D8h
+	db	3Fh,25h,3Fh,3Ch,3Fh,3Fh,3Fh,3Fh
+	db	3Fh,27h,27h,22h,22h,07h,2Dh,2Dh
+	db	3Fh,54h,3Fh,3Eh,3Fh,3Fh,3Fh,3Fh
+	db	0FFh,0F6h,0F7h,3Fh,0FDh,3Fh,0B3h,15h
+	db	0F0h,63h,0F2h,3Ch,0BFh,2Dh,52h,0F4h
+	db	0F8h,2Bh,49h,69h,3Fh,0E7h,14h,0FAh
+	db	0F1h,0FCh,0F3h,3Eh,3Fh,3Fh,3Fh,0F5h
+	db	80h,81h,82h,83h,84h,85h,86h,87h
+	db	88h,89h,8Ah,8Bh,8Ch,8Dh,8Eh,8Fh
+	db	90h,91h,92h,93h,94h,95h,96h,97h
+	db	98h,99h,9Ah,9Bh,9Ch,9Dh,9Eh,9Fh
+	db	0A0h,0A1h,0A2h,0A3h,0A4h,0A5h,0A6h,0A7h
+	db	0A8h,0A9h,0AAh,0ABh,0ACh,0ADh,0AEh,0AFh
+	db	0E0h,0E1h,0E2h,0E3h,0E4h,0E5h,0E6h,0E7h
+	db	0E8h,0E9h,0EAh,0EBh,0ECh,0EDh,0EEh,0EFh
+	; koi8-r
+TableKoi
+	db	0C4h,0B3h,0DAh,0BFh,0C0h,0D9h,0C3h,0B4h
+	db	0C2h,0C1h,0C5h,0DFh,0DCh,0DBh,0DDh,0DEh
+	db	0B0h,0B1h,0B2h,0F4h,0FEh,0F9h,0FBh,0F7h
+	db	0F3h,0F2h,0FFh,0F5h,0F8h,0FDh,0FAh,0F6h
+	db	0CDh,0BAh,0D5h,0F1h,0D6h,0C9h,0B8h,0B7h
+	db	0BBh,0D4h,0D3h,0C8h,0BEh,0BDh,0BCh,0C6h
+	db	0C7h,0CCh,0B5h,0F0h,0B6h,0B9h,0D1h,0D2h
+	db	0CBh,0CFh,0D0h,0CAh,0D8h,0D7h,0CEh,0FCh
+	db	0EEh,0A0h,0A1h,0E6h,0A4h,0A5h,0E4h,0A3h
+	db	0E5h,0A8h,0A9h,0AAh,0ABh,0ACh,0ADh,0AEh
+	db	0AFh,0EFh,0E0h,0E1h,0E2h,0E3h,0A6h,0A2h
+	db	0ECh,0EBh,0A7h,0E8h,0EDh,0E9h,0E7h,0EAh
+	db	9Eh,80h,81h,96h,84h,85h,94h,83h
+	db	95h,88h,89h,8Ah,8Bh,8Ch,8Dh,8Eh
+	db	8Fh,9Fh,90h,91h,92h,93h,86h,82h
+	db	9Ch,9Bh,87h,98h,9Dh,99h,97h,9Ah

@@ -101,7 +101,7 @@ InitDrivers
 	JR	NC,InitDrv
 	CALL	ResVMode
 	LD	HL,NoEnMemory
-	LD	C,#5C		;печатаем
+	LD	C,#5C		;РїРµС‡Р°С‚Р°РµРј
 	RST	#10
 	LD	A,(FNIndef)
 	LD	C,#3E
@@ -326,7 +326,7 @@ InitScreen
 	DEFB	#06	;Horizontal line
 	DEFW	#0000,#00E1
 	DEFW	#0280
-	DEFB	#03	;Углубление
+	DEFB	#03	;РЈРіР»СѓР±Р»РµРЅРёРµ
 	DEFW	#00FC,#00E4
 	DEFW	#0180,#000C
 	DEFB	#02	;Head place
@@ -492,25 +492,25 @@ InitPanelE
 	LD	(Nfile+2),HL
 	LD	(IY+PanelFPl),#33
 	LD	(IY+PanelFPh),#00
-;Краткая панель
+;РљСЂР°С‚РєР°СЏ РїР°РЅРµР»СЊ
 	CALL	MakeWindow
 	DEFB	#80
-	DEFB	#03		;Углубл.для файлов
+	DEFB	#03		;РЈРіР»СѓР±Р».РґР»СЏ С„Р°Р№Р»РѕРІ
 PanelN1	DEFW	#0000,#003B
 	DEFW	#0138,#0097
-	DEFB	#02		;Фон для файлов
+	DEFB	#02		;Р¤РѕРЅ РґР»СЏ С„Р°Р№Р»РѕРІ
 PanelN2	DEFW	#0000,#003C
 	DEFW	#0134,#0095
 	DEFB	PanelCol
-	DEFB	#08		;Кнопка	SB левая
+	DEFB	#08		;РљРЅРѕРїРєР°	SB Р»РµРІР°СЏ
 PanelN3	DEFW	#0000,#00C9
 	DEFB	#02
 PanelN4	DEFW	#0000,#00C9
 	DEFW	#0114,#0008
 	DEFB	#08
-	DEFB	#09		;Кнопка	SB правая
+	DEFB	#09		;РљРЅРѕРїРєР°	SB РїСЂР°РІР°СЏ
 PanelN5	DEFW	#0000,#00C9
-	DEFB	#02		;Место для FileInfo
+	DEFB	#02		;РњРµСЃС‚Рѕ РґР»СЏ FileInfo
 PanelN6	DEFW	#0000,#00D5
 	DEFW	#0136,#000C
 	DEFB	#08
@@ -539,7 +539,7 @@ Nbut1	DEFW #0000,#0000,#00C9,#00D1,#03,#0000,ScrollDown,#0000
 Nbut2	DEFW #0000,#0000,#00C9,#00D1,#03,#0000,ScrollUp,#0000
 Nbar1	DEFW #0000,#0000,#00C9,#00D1,#00,#0000,PageUp,#0000
 Nbar2	DEFW #0000,#0000,#00C9,#00D1,#00,#0000,PageDown,#0000
-;Подробная панель и панель с деревом
+;РџРѕРґСЂРѕР±РЅР°СЏ РїР°РЅРµР»СЊ Рё РїР°РЅРµР»СЊ СЃ РґРµСЂРµРІРѕРј
 InitPPanel
 	LD	L,(IY+PanelXl)
 	LD	H,(IY+PanelXh)
@@ -575,22 +575,22 @@ InitPPanel
 	LD	(IY+PanelFPh),#00
 	CALL	MakeWindow
 	DEFB	#80
-	DEFB	#03		;Углубл.для файлов
+	DEFB	#03		;РЈРіР»СѓР±Р».РґР»СЏ С„Р°Р№Р»РѕРІ
 PanelP1	DEFW	#0000,#003B
 	DEFW	#0138,#0097
-	DEFB	#02		;Фон для файлов
+	DEFB	#02		;Р¤РѕРЅ РґР»СЏ С„Р°Р№Р»РѕРІ
 PanelP2	DEFW	#0000,#003C
 	DEFW	#0134,#0095
 	DEFB	PanelCol
-	DEFB	#0A		;Кнопка	SB верхняя
+	DEFB	#0A		;РљРЅРѕРїРєР°	SB РІРµСЂС…РЅСЏСЏ
 PanelP3	DEFW	#0000,#003C
 	DEFB	#02
 PanelP4	DEFW	#0000,#0044
 	DEFW	#0010,#0085
 	DEFB	#08
-	DEFB	#0B		;Кнопка	SB нижняя
+	DEFB	#0B		;РљРЅРѕРїРєР°	SB РЅРёР¶РЅСЏСЏ
 PanelP5	DEFW	#0000,#00C9
-	DEFB	#02		;Место для FileInfo
+	DEFB	#02		;РњРµСЃС‚Рѕ РґР»СЏ FileInfo
 PanelP6	DEFW	#0000,#00D5
 	DEFW	#0136,#000C
 	DEFB	#08

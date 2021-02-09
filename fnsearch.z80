@@ -38,7 +38,7 @@ SrchY1	DEFW	#0000
 	DEFW	#0008,#0007
 	DEFB	#80
 	DEFB	"Search:",0
-	DEFB	#03	;Σγλσαλενθε
+	DEFB	#03	;Π£Π³Π»ΡƒΠ±Π»ΠµΠ½ΠΈΠµ
 	DEFW	#0030,#0004
 	DEFW	#006C,#000C
 	DEFB	#02	;Head place
