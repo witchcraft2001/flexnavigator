@@ -31,9 +31,9 @@ HelpR
 	DEFW	#000A,#0011
 	DEFW	#01DC,#00B9
 	DEFB	#0F
-	DEFB	#0A		;Кнопка	SB верхняя
+	DEFB	#0A		;РљРЅРѕРїРєР°	SB РІРµСЂС…РЅСЏСЏ
 	DEFW	#01E6,#0011
-	DEFB	#0B		;Кнопка	SB нижняя
+	DEFB	#0B		;РљРЅРѕРїРєР°	SB РЅРёР¶РЅСЏСЏ
 	DEFW	#01E6,#00C2
 	DEFB	#00
 	CALL	InitHelpTxt
@@ -48,7 +48,7 @@ HelpLoop
 	LD	A,B
 	OR	A
 	JR	NZ,HelpLoop
-	LD	A,E		;Е-ASCII код
+	LD	A,E		;Р•-ASCII РєРѕРґ
 	CP	#1B		;Esc
 	JP	Z,HelpExit
 	CP	#0D		;Enter
@@ -57,13 +57,13 @@ HelpLoop
 	CP	"O"
 	JP	Z,HelpExit
 	OR	A
-	JR	NZ,HelpLoop    ;Ждем функцион.клавиши
+	JR	NZ,HelpLoop    ;Р–РґРµРј С„СѓРЅРєС†РёРѕРЅ.РєР»Р°РІРёС€Рё
 	LD	HL,HelpLoop
 	PUSH	HL
 	LD	A,D
-	CP	#58		 ;Стрелка вверх
+	CP	#58		 ;РЎС‚СЂРµР»РєР° РІРІРµСЂС…
 	JP	Z,HLineUp
-	CP	#52		 ;Стрелка вниз
+	CP	#52		 ;РЎС‚СЂРµР»РєР° РІРЅРёР·
 	JP	Z,HLineDown
 	CP	#59		 ;PageUp
 	JP	Z,HPageUp
@@ -106,15 +106,15 @@ PageShift
 NextShift
 	DEFW	#0000
 HelpVBar
-	DEFW	#0226	;X позиция скролбара
-	DEFW	#0029	;Y позиция скролбара
-	DEFW	#00A9	;Max длина скролбара
-	DEFW	#0000	;тек.длина скролбара
-	DEFW	HBarUp	;Адрес ячейки BarLeft
-	DEFW	HBarDn	;Адрес ячейки BarRight
-	DEFW	#0017	;Кол-во	строк на странице
-EHLines	DEFW	#0000	;Общее кол-во строк
-CHLine	DEFW	#0000	;Первая	строка на странице
+	DEFW	#0226	;X РїРѕР·РёС†РёСЏ СЃРєСЂРѕР»Р±Р°СЂР°
+	DEFW	#0029	;Y РїРѕР·РёС†РёСЏ СЃРєСЂРѕР»Р±Р°СЂР°
+	DEFW	#00A9	;Max РґР»РёРЅР° СЃРєСЂРѕР»Р±Р°СЂР°
+	DEFW	#0000	;С‚РµРє.РґР»РёРЅР° СЃРєСЂРѕР»Р±Р°СЂР°
+	DEFW	HBarUp	;РђРґСЂРµСЃ СЏС‡РµР№РєРё BarLeft
+	DEFW	HBarDn	;РђРґСЂРµСЃ СЏС‡РµР№РєРё BarRight
+	DEFW	#0017	;РљРѕР»-РІРѕ	СЃС‚СЂРѕРє РЅР° СЃС‚СЂР°РЅРёС†Рµ
+EHLines	DEFW	#0000	;РћР±С‰РµРµ РєРѕР»-РІРѕ СЃС‚СЂРѕРє
+CHLine	DEFW	#0000	;РџРµСЂРІР°СЏ	СЃС‚СЂРѕРєР° РЅР° СЃС‚СЂР°РЅРёС†Рµ
 ;[]----------------------------------------------------------[]
 PrnHelpPg
 	LD	HL,(PageShift)
@@ -310,9 +310,9 @@ HLineDown
 	LD	IX,HelpVBar
 	CALL	PrnVScrBar
 	RET 
-;На вход:
-;	 D  - Y	откуда
-;	 Е  - Y	куда
+;РќР° РІС…РѕРґ:
+;	 D  - Y	РѕС‚РєСѓРґР°
+;	 Р•  - Y	РєСѓРґР°
 ScrHELPDnUp
 	IN	A,(PAGE3)
 	PUSH	AF

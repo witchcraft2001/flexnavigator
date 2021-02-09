@@ -101,7 +101,7 @@ ScrlDn1	BIT	0,(IY+ViewFlg)
 	CALL	InsPrnColor
 	CALL	ResInvert
 	PUSH	IY
-	IN	A,(YPORT)	;Сохраняем Y порт
+	IN	A,(YPORT)	;РЎРѕС…СЂР°РЅСЏРµРј Y РїРѕСЂС‚
 	LD	C,A
 	IN	A,(PAGE1)
 	LD	B,A
@@ -223,7 +223,7 @@ ScrlDnP
 	CALL	InsPrnColor
 	CALL	ResInvert
 	PUSH	IY
-	IN	A,(YPORT)	;Сохраняем Y порт
+	IN	A,(YPORT)	;РЎРѕС…СЂР°РЅСЏРµРј Y РїРѕСЂС‚
 	LD	C,A
 	IN	A,(PAGE1)
 	LD	B,A
@@ -311,7 +311,7 @@ ScrDdn2	LD	DE,WorkBuffer+#100
 	CALL	InsPrnColor
 	CALL	ResInvert
 	PUSH	IY
-	IN	A,(YPORT)	;Сохраняем Y порт
+	IN	A,(YPORT)	;РЎРѕС…СЂР°РЅСЏРµРј Y РїРѕСЂС‚
 	LD	C,A
 	IN	A,(PAGE1)
 	LD	B,A
@@ -443,7 +443,7 @@ ScrlUp1	BIT	0,(IY+ViewFlg)
 	CALL	InsPrnColor
 	CALL	ResInvert
 	PUSH	IY
-	IN	A,(YPORT)	;Сохраняем Y порт
+	IN	A,(YPORT)	;РЎРѕС…СЂР°РЅСЏРµРј Y РїРѕСЂС‚
 	LD	C,A
 	IN	A,(PAGE1)
 	LD	B,A
@@ -566,7 +566,7 @@ ScrlUpP
 	CALL	InsPrnColor
 	CALL	ResInvert
 	PUSH	IY
-	IN	A,(YPORT)	;Сохраняем Y порт
+	IN	A,(YPORT)	;РЎРѕС…СЂР°РЅСЏРµРј Y РїРѕСЂС‚
 	LD	C,A
 	IN	A,(PAGE1)
 	LD	B,A
@@ -654,7 +654,7 @@ ScrDup1	PUSH	BC
 	CALL	InsPrnColor
 	CALL	ResInvert
 	PUSH	IY
-	IN	A,(YPORT)	;Сохраняем Y порт
+	IN	A,(YPORT)	;РЎРѕС…СЂР°РЅСЏРµРј Y РїРѕСЂС‚
 	LD	C,A
 	IN	A,(PAGE1)
 	LD	B,A
@@ -693,11 +693,11 @@ ScrDup1	PUSH	BC
 	ADD	IX,DE
 	CALL	PrnVScrBar
 	RET 
-;На вход:
-;	 HL - X	позиция
-;	 D  - Y	откуда
-;	 Е  - Y	куда
-;	 BC - длина Y,X
+;РќР° РІС…РѕРґ:
+;	 HL - X	РїРѕР·РёС†РёСЏ
+;	 D  - Y	РѕС‚РєСѓРґР°
+;	 Р•  - Y	РєСѓРґР°
+;	 BC - РґР»РёРЅР° Y,X
 ScrDIRDnUp
 	SRL	H
 	RR	L
@@ -1565,7 +1565,7 @@ LoadTR1	LD	A,D
 	OR	E
 	LD	A,#1E
 	PUSH	AF
-	CALL	NZ,DOSError	;!!!!!!!!!!!! Нет памяти
+	CALL	NZ,DOSError	;!!!!!!!!!!!! РќРµС‚ РїР°РјСЏС‚Рё
 	POP	AF
 	SCF 
 	RET	NZ
@@ -1580,7 +1580,7 @@ LoadTR1	LD	A,D
 	LD	A,#1E
 	PUSH	DE
 	PUSH	AF
-	CALL	C,DOSError	;!!!!!!!!!!!! Нет памяти
+	CALL	C,DOSError	;!!!!!!!!!!!! РќРµС‚ РїР°РјСЏС‚Рё
 	POP	AF
 	POP	DE
 	RET	C
@@ -1616,7 +1616,7 @@ LoadTR1	LD	A,D
 	DEFW	#0008,#0010
 	DEFB	#80
 	DEFB	"Reading:",0
-	DEFB	#03	;Углубление
+	DEFB	#03	;РЈРіР»СѓР±Р»РµРЅРёРµ
 	DEFW	#0010,#001C
 	DEFW	#0120,#000C
 	DEFB	#02	;Head place
@@ -2196,7 +2196,7 @@ ViewFileSH
 	DEFW	#000C,#0019
 	DEFB	#80
 	DEFB	"View the file:",0
-	DEFB	#03	;Углубление
+	DEFB	#03	;РЈРіР»СѓР±Р»РµРЅРёРµ
 	DEFW	#0056,#0016
 	DEFW	#0086,#000C
 	DEFB	#02	;Head place
@@ -2354,7 +2354,7 @@ EditFileSH
 	DEFW	#000C,#0019
 	DEFB	#80
 	DEFB	"Edit the file:",0
-	DEFB	#03	;Углубление
+	DEFB	#03	;РЈРіР»СѓР±Р»РµРЅРёРµ
 	DEFW	#0056,#0016
 	DEFW	#0086,#000C
 	DEFB	#02	;Head place

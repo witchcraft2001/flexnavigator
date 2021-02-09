@@ -8,9 +8,9 @@ PrnASCIIpage
 	LD	B,#1C
 PrnASCIIlp
 	PUSH	BC
-	CALL	PrnASCIIline   ;Выводим	строку в буф и на экран
+	CALL	PrnASCIIline   ;Р’С‹РІРѕРґРёРј	СЃС‚СЂРѕРєСѓ РІ Р±СѓС„ Рё РЅР° СЌРєСЂР°РЅ
 	POP	BC
-	JR	C,FillASCII    ;CY-Закончились байты для печати
+	JR	C,FillASCII    ;CY-Р—Р°РєРѕРЅС‡РёР»РёСЃСЊ Р±Р°Р№С‚С‹ РґР»СЏ РїРµС‡Р°С‚Рё
 	LD	A,B
 	ADD	A,#08
 	LD	B,A
@@ -23,12 +23,12 @@ PrnASCIIlp
 	CALL	SetCursor
 	CALL	GetString
 	RET 
-;Процедура отчистки нижней области экрана
+;РџСЂРѕС†РµРґСѓСЂР° РѕС‚С‡РёСЃС‚РєРё РЅРёР¶РЅРµР№ РѕР±Р»Р°СЃС‚Рё СЌРєСЂР°РЅР°
 FillASCII
 	LD	A,#E4
 	SUB	B
 	LD	(FLenASC),A
-	JR	Z,FASCIIe	;Z-нет отчистки
+	JR	Z,FASCIIe	;Z-РЅРµС‚ РѕС‚С‡РёСЃС‚РєРё
 	LD	A,B
 	LD	(FPosASC),A
 	CALL	MakeWindow
@@ -69,9 +69,9 @@ RefrASCIIlp
 	CALL	SearchDown
 	LD	(TempShift),HL
 	JR	$+5
-RfASCII	CALL	PrnASCIIline   ;Выводим	строку в буф и на экран
+RfASCII	CALL	PrnASCIIline   ;Р’С‹РІРѕРґРёРј	СЃС‚СЂРѕРєСѓ РІ Р±СѓС„ Рё РЅР° СЌРєСЂР°РЅ
 	POP	BC
-	RET	C	       ;CY-Закончились байты для печати
+	RET	C	       ;CY-Р—Р°РєРѕРЅС‡РёР»РёСЃСЊ Р±Р°Р№С‚С‹ РґР»СЏ РїРµС‡Р°С‚Рё
 	DEC	C
 	LD	A,B
 	ADD	A,#08
@@ -80,7 +80,7 @@ RfASCII	CALL	PrnASCIIline   ;Выводим	строку в буф и на экран
 	JR	NZ,RefrASCIIlp
 	RET 
 ;[]----------------------------------------------------------[]
-;Процедура печати тек.строки в буфер и на экран
+;РџСЂРѕС†РµРґСѓСЂР° РїРµС‡Р°С‚Рё С‚РµРє.СЃС‚СЂРѕРєРё РІ Р±СѓС„РµСЂ Рё РЅР° СЌРєСЂР°РЅ
 PrnASCIIline
 	LD	HX,B
 	LD	C,#F0
@@ -102,17 +102,17 @@ PutASCIIln
 	IN	A,(PAGE1)
 	PUSH	AF
 	LD	DE,(TempShift)
-	LD	A,D		;Выделяем номер	страницы
+	LD	A,D		;Р’С‹РґРµР»СЏРµРј РЅРѕРјРµСЂ	СЃС‚СЂР°РЅРёС†С‹
 	AND	#C0
 	RLCA 
 	RLCA 
 	EXX 
-	LD	E,A		;DE - Адрес страницы в списке
+	LD	E,A		;DE - РђРґСЂРµСЃ СЃС‚СЂР°РЅРёС†С‹ РІ СЃРїРёСЃРєРµ
 	LD	D,high PagesList
-	LD	A,(DE)		;Тек.страница
+	LD	A,(DE)		;РўРµРє.СЃС‚СЂР°РЅРёС†Р°
 	OUT	(PAGE1),A
 	EXX 
-	RES	7,D		;Вкл.с #4000
+	RES	7,D		;Р’РєР».СЃ #4000
 	SET	6,D
 PutASCIIlnLp
 	BIT	7,D
@@ -120,8 +120,8 @@ PutASCIIlnLp
 	RES	7,D
 	SET	6,D
 	EXX 
-	INC	E		;DE - Адрес страницы в списке
-	LD	A,(DE)		;Тек.страница
+	INC	E		;DE - РђРґСЂРµСЃ СЃС‚СЂР°РЅРёС†С‹ РІ СЃРїРёСЃРєРµ
+	LD	A,(DE)		;РўРµРє.СЃС‚СЂР°РЅРёС†Р°
 	OUT	(PAGE1),A
 	EXX 
 PutLnA1	LD	A,(DE)
@@ -133,8 +133,8 @@ PutLnA1	LD	A,(DE)
 	RES	7,D
 	SET	6,D
 	EXX 
-	INC	E		;DE - Адрес страницы в списке
-	LD	A,(DE)		;Тек.страница
+	INC	E		;DE - РђРґСЂРµСЃ СЃС‚СЂР°РЅРёС†С‹ РІ СЃРїРёСЃРєРµ
+	LD	A,(DE)		;РўРµРє.СЃС‚СЂР°РЅРёС†Р°
 	OUT	(PAGE1),A
 	EXX 
 PutLnA2	LD	A,(DE)
@@ -161,8 +161,8 @@ PutLnEA0
 	RES	7,D
 	SET	6,D
 	EXX 
-	INC	E		;DE - Адрес страницы в списке
-	LD	A,(DE)		;Тек.страница
+	INC	E		;DE - РђРґСЂРµСЃ СЃС‚СЂР°РЅРёС†С‹ РІ СЃРїРёСЃРєРµ
+	LD	A,(DE)		;РўРµРє.СЃС‚СЂР°РЅРёС†Р°
 	OUT	(PAGE1),A
 	EXX 
 PutLEA1	LD	A,(DE)
@@ -187,8 +187,8 @@ PutLineA3
 	RES	7,D
 	SET	6,D
 	EXX 
-	INC	E		;DE - Адрес страницы в списке
-	LD	A,(DE)		;Тек.страница
+	INC	E		;DE - РђРґСЂРµСЃ СЃС‚СЂР°РЅРёС†С‹ РІ СЃРїРёСЃРєРµ
+	LD	A,(DE)		;РўРµРє.СЃС‚СЂР°РЅРёС†Р°
 	OUT	(PAGE1),A
 	EXX 
 PutLnA3	LD	A,(DE)
@@ -200,8 +200,8 @@ PutLnA3	LD	A,(DE)
 	RES	7,D
 	SET	6,D
 	EXX 
-	INC	E		;DE - Адрес страницы в списке
-	LD	A,(DE)		;Тек.страница
+	INC	E		;DE - РђРґСЂРµСЃ СЃС‚СЂР°РЅРёС†С‹ РІ СЃРїРёСЃРєРµ
+	LD	A,(DE)		;РўРµРє.СЃС‚СЂР°РЅРёС†Р°
 	OUT	(PAGE1),A
 	EXX 
 PutLnA4	LD	A,(DE)
@@ -315,13 +315,13 @@ SearchUpBeg
 	PUSH	HL
 	IN	A,(PAGE1)
 	PUSH	AF
-	LD	A,H		;Выделяем номер	страницы
+	LD	A,H		;Р’С‹РґРµР»СЏРµРј РЅРѕРјРµСЂ	СЃС‚СЂР°РЅРёС†С‹
 	AND	#C0
 	RLCA 
 	RLCA 
 	LD	E,A
 	LD	D,high PagesList
-	LD	A,(DE)		;Тек.страница
+	LD	A,(DE)		;РўРµРє.СЃС‚СЂР°РЅРёС†Р°
 	OUT	(PAGE1),A
 	RES	7,H
 	SET	6,H
@@ -414,13 +414,13 @@ SearchDnBeg
 	PUSH	HL
 	IN	A,(PAGE1)
 	PUSH	AF
-	LD	A,H		;Выделяем номер	страницы
+	LD	A,H		;Р’С‹РґРµР»СЏРµРј РЅРѕРјРµСЂ	СЃС‚СЂР°РЅРёС†С‹
 	AND	#C0
 	RLCA 
 	RLCA 
 	LD	E,A
 	LD	D,high PagesList
-	LD	A,(DE)		;Тек.страница
+	LD	A,(DE)		;РўРµРє.СЃС‚СЂР°РЅРёС†Р°
 	OUT	(PAGE1),A
 	RES	7,H
 	SET	6,H
@@ -508,17 +508,17 @@ GetLine	LD	HL,LineBuffer
 	IN	A,(PAGE1)
 	PUSH	AF
 	LD	DE,(LineShift)
-	LD	A,D		;Выделяем номер	страницы
+	LD	A,D		;Р’С‹РґРµР»СЏРµРј РЅРѕРјРµСЂ	СЃС‚СЂР°РЅРёС†С‹
 	AND	#C0
 	RLCA 
 	RLCA 
 	EXX 
-	LD	E,A		;DE - Адрес страницы в списке
+	LD	E,A		;DE - РђРґСЂРµСЃ СЃС‚СЂР°РЅРёС†С‹ РІ СЃРїРёСЃРєРµ
 	LD	D,high PagesList
-	LD	A,(DE)		;Тек.страница
+	LD	A,(DE)		;РўРµРє.СЃС‚СЂР°РЅРёС†Р°
 	OUT	(PAGE1),A
 	EXX 
-	RES	7,D		;Вкл.с #4000
+	RES	7,D		;Р’РєР».СЃ #4000
 	SET	6,D
 GetLnLoop
 	BIT	7,D
@@ -526,8 +526,8 @@ GetLnLoop
 	RES	7,D
 	SET	6,D
 	EXX 
-	INC	E		;DE - Адрес страницы в списке
-	LD	A,(DE)		;Тек.страница
+	INC	E		;DE - РђРґСЂРµСЃ СЃС‚СЂР°РЅРёС†С‹ РІ СЃРїРёСЃРєРµ
+	LD	A,(DE)		;РўРµРє.СЃС‚СЂР°РЅРёС†Р°
 	OUT	(PAGE1),A
 	EXX 
 GetLn1	LD	A,(DE)
@@ -592,17 +592,17 @@ PutStrN	SUB	A
 	IN	A,(PAGE1)
 	PUSH	AF
 	LD	DE,(LineShift)
-	LD	A,D		;Выделяем номер	страницы
+	LD	A,D		;Р’С‹РґРµР»СЏРµРј РЅРѕРјРµСЂ	СЃС‚СЂР°РЅРёС†С‹
 	AND	#C0
 	RLCA 
 	RLCA 
 	EXX 
-	LD	E,A		;DE - Адрес страницы в списке
+	LD	E,A		;DE - РђРґСЂРµСЃ СЃС‚СЂР°РЅРёС†С‹ РІ СЃРїРёСЃРєРµ
 	LD	D,high PagesList
-	LD	A,(DE)		;Тек.страница
+	LD	A,(DE)		;РўРµРє.СЃС‚СЂР°РЅРёС†Р°
 	OUT	(PAGE1),A
 	EXX 
-	RES	7,D		;Вкл.с #4000
+	RES	7,D		;Р’РєР».СЃ #4000
 	SET	6,D
 PutStringLp
 	BIT	7,D
@@ -610,8 +610,8 @@ PutStringLp
 	RES	7,D
 	SET	6,D
 	EXX 
-	INC	E		;DE - Адрес страницы в списке
-	LD	A,(DE)		;Тек.страница
+	INC	E		;DE - РђРґСЂРµСЃ СЃС‚СЂР°РЅРёС†С‹ РІ СЃРїРёСЃРєРµ
+	LD	A,(DE)		;РўРµРє.СЃС‚СЂР°РЅРёС†Р°
 	OUT	(PAGE1),A
 	EXX 
 PutStr3	LD	A,(HL)
@@ -897,7 +897,7 @@ InsSymbol
 	RET	Z
 	SUB	(IY+StringX)
 	JR	Z,NotInsert
-;Ввод в	середину текста
+;Р’РІРѕРґ РІ	СЃРµСЂРµРґРёРЅСѓ С‚РµРєСЃС‚Р°
 	LD	C,A
 	LD	B,#00
 	LD	L,(IY+LenString)
@@ -1014,13 +1014,13 @@ AddString
 	ADD	HL,DE
 	IN	A,(PAGE1)
 	PUSH	AF
-	LD	A,H		;Выделяем номер	страницы
+	LD	A,H		;Р’С‹РґРµР»СЏРµРј РЅРѕРјРµСЂ	СЃС‚СЂР°РЅРёС†С‹
 	AND	#C0
 	RLCA 
 	RLCA 
 	LD	E,A
 	LD	D,high PagesList
-	LD	A,(DE)		;Тек.страница
+	LD	A,(DE)		;РўРµРє.СЃС‚СЂР°РЅРёС†Р°
 	OUT	(PAGE1),A
 	RES	7,H
 	SET	6,H
@@ -1147,7 +1147,7 @@ DWord2	LD	A,(IY+StringX)
 	INC	(IY+StringX)
 	JP	TCursorLeft
 ;[]----------------------------------------------------------[]
-;Курсор	влево на одно место
+;РљСѓСЂСЃРѕСЂ	РІР»РµРІРѕ РЅР° РѕРґРЅРѕ РјРµСЃС‚Рѕ
 TCursorLeft
 	LD	A,(IY+StringX)
 	OR	A
@@ -1202,7 +1202,7 @@ CursLf6	DEC	HL
 	DJNZ	CursLf6
 	RET 
 ;[]----------------------------------------------------------[]
-;Курсор	вправо на одно место
+;РљСѓСЂСЃРѕСЂ	РІРїСЂР°РІРѕ РЅР° РѕРґРЅРѕ РјРµСЃС‚Рѕ
 TCursorRight
 	LD	A,(IY+CursorX)
 	ADD	A,(IY+CursAddX)

@@ -1,4 +1,4 @@
-echo OFF
+rem echo OFF
 echo Compiling all modules...
 cd editor
 call MAKE_feditor.bat
@@ -28,12 +28,13 @@ call make_test.bat
 cd ..\cdplayer
 call make_cdp.bat
 if errorlevel 1 goto ERR
+cd ..\..
 goto END
 :ERR
 rem pause
 echo Compilation ERRORs!!!
 pause 0
-exit
+rem exit
 :END
 echo Done!
-pause 0
+rem pause 0

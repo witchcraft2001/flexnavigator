@@ -74,7 +74,7 @@ ScanTree
 	LD	HL,#0001
 	LD	(TreeDIRS),HL
 	CALL	LoadDIR
-	JR	NC,TreeExit	;NC - нет директорий
+	JR	NC,TreeExit	;NC - РЅРµС‚ РґРёСЂРµРєС‚РѕСЂРёР№
 TreeLoop
 	PUSH	HL
 	LD	C,#31
@@ -99,7 +99,7 @@ TreeLoop
 	LD	C,#1D
 	RST	#10
 	CALL	LoadDIR
-	JR	C,TreeLoop	;C - есть директории
+	JR	C,TreeLoop	;C - РµСЃС‚СЊ РґРёСЂРµРєС‚РѕСЂРёРё
 DIRSend
 	LD	C,#31
 	RST	#10

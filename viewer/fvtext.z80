@@ -10,9 +10,9 @@ PrnASCIIpage
 	LD	B,#1C
 PrnASCIIlp
 	PUSH	BC
-	CALL	PutASCIIline   ;Выводим	строку в буф и на экран
+	CALL	PutASCIIline   ;Р’С‹РІРѕРґРёРј	СЃС‚СЂРѕРєСѓ РІ Р±СѓС„ Рё РЅР° СЌРєСЂР°РЅ
 	POP	BC
-	JR	C,FillASCIIdn  ;CY-Закончились байты для печати
+	JR	C,FillASCIIdn  ;CY-Р—Р°РєРѕРЅС‡РёР»РёСЃСЊ Р±Р°Р№С‚С‹ РґР»СЏ РїРµС‡Р°С‚Рё
 	LD	A,B
 	ADD	A,#08
 	LD	B,A
@@ -25,12 +25,12 @@ PrnASCIIlp
 	SUB	A
 	LD	(EmptyLines),A
 	RET 
-;Процедура отчистки нижней области экрана
+;РџСЂРѕС†РµРґСѓСЂР° РѕС‚С‡РёСЃС‚РєРё РЅРёР¶РЅРµР№ РѕР±Р»Р°СЃС‚Рё СЌРєСЂР°РЅР°
 FillASCIIdn
 	LD	A,#E4
 	SUB	B
 	LD	(FLenASC),A
-	JR	Z,FASCIIe	;Z-нет отчистки
+	JR	Z,FASCIIe	;Z-РЅРµС‚ РѕС‚С‡РёСЃС‚РєРё
 	LD	A,B
 	LD	(FPosASC),A
 	CALL	MakeWindow
@@ -52,7 +52,7 @@ FASCIIe	LD	HL,(TempShift)
 	SRL	A
 	LD	(EmptyLines),A
 	RET 
-;Процедура печати тек.строки в буфер и на экран
+;РџСЂРѕС†РµРґСѓСЂР° РїРµС‡Р°С‚Рё С‚РµРє.СЃС‚СЂРѕРєРё РІ Р±СѓС„РµСЂ Рё РЅР° СЌРєСЂР°РЅ
 PutASCIIline
 	LD	HX,B
 	LD	A,(ASCIImode)
@@ -172,7 +172,7 @@ PutLnUW1
 	LD	B,#50
 	LD	H,high LineBuffer
 	LD	A,(ASCIIaddX)
-	LD	L,A		;смещение от начала строки
+	LD	L,A		;СЃРјРµС‰РµРЅРёРµ РѕС‚ РЅР°С‡Р°Р»Р° СЃС‚СЂРѕРєРё
 	OR	A
 	JR	Z,PutLnUW2
 	PUSH	HL
@@ -217,6 +217,17 @@ SpaceLeft
 	DEFB	#1B
 SpaceRight
 	DEFB	#1A
+;[]==========================================================[]
+ChCodePage
+	LD	HL,ViewerBegin
+	EX	(SP),HL
+        LD      A,(CodePage)
+        INC     A
+        CP      3
+        JR      C,.no
+        XOR     A
+.no     LD      (CodePage), A
+	RET
 ;[]==========================================================[]
 ChASCIImode
 	LD	HL,ViewerBegin
@@ -323,7 +334,7 @@ TLineUp
 	LD	(NextShift+2),DE
 TLineU1	CALL	ScrollSCRdown
 	LD	B,#1C
-	CALL	PutASCIIline	    ;Создаем и печатаем	строку
+	CALL	PutASCIIline	    ;РЎРѕР·РґР°РµРј Рё РїРµС‡Р°С‚Р°РµРј	СЃС‚СЂРѕРєСѓ
 	CALL	PrintVProc
 	OR	A
 	RET 
@@ -369,7 +380,7 @@ TLineDwn
 	LD	(TempShift+2),DE
 	CALL	ScrollSCRup
 	LD	B,#DC
-	CALL	PutASCIIline	    ;Создаем и печатаем	строку
+	CALL	PutASCIIline	    ;РЎРѕР·РґР°РµРј Рё РїРµС‡Р°С‚Р°РµРј	СЃС‚СЂРѕРєСѓ
 	LD	HL,(TempShift)
 	LD	DE,(TempShift+2)
 	LD	(NextShift),HL
@@ -514,13 +525,13 @@ SearchUpBeg
 	PUSH	AF
 	PUSH	HL
 	PUSH	DE
-	LD	A,H		;Выделяем номер	страницы
+	LD	A,H		;Р’С‹РґРµР»СЏРµРј РЅРѕРјРµСЂ	СЃС‚СЂР°РЅРёС†С‹
 	RLA 
 	RL	E
 	RLA 
 	RL	E
 	LD	D,high PagesList
-	LD	A,(DE)		;Тек.страница
+	LD	A,(DE)		;РўРµРє.СЃС‚СЂР°РЅРёС†Р°
 	OUT	(PAGE1),A
 	RES	7,H
 	SET	6,H
@@ -651,13 +662,13 @@ SrchDE	LD	DE,#0000
 	PUSH	AF
 	PUSH	HL
 	PUSH	DE
-	LD	A,H		;Выделяем номер	страницы
+	LD	A,H		;Р’С‹РґРµР»СЏРµРј РЅРѕРјРµСЂ	СЃС‚СЂР°РЅРёС†С‹
 	RLA 
 	RL	E
 	RLA 
 	RL	E
 	LD	D,high PagesList
-	LD	A,(DE)		;Тек.страница
+	LD	A,(DE)		;РўРµРє.СЃС‚СЂР°РЅРёС†Р°
 	OUT	(PAGE1),A
 	RES	7,H
 	SET	6,H
