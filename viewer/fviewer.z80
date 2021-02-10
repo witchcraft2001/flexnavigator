@@ -867,13 +867,11 @@ About
 	DEFB	#01	;Text Line
 	DEFW	#0012,#0028
 	DEFB	#80
-	DEFB	"Programming:  Enin Anton      "
-	DEFB	"Release data:  03/02/2000",0
+	DEFB	"Programming:  (C)2000 Enin Anton",0
 	DEFB	#01	;Text Line
-	DEFW	#0044,#0035
+	DEFW	#005C,#0032
 	DEFB	#80
-	DEFB	"All right reserved. "
-	DEFB	"Copyright (C)2000",0
+	DEFB	"(C)2021 Mihaltchenkov Dmitry",0
 	DEFB	#04	;UpRectan
 	DEFW	#007C,#0042
 	DEFW	#0048,#000E
