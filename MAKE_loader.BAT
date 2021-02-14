@@ -27,6 +27,8 @@ cd plugins\test
 call make_test.bat
 cd ..\cdplayer
 call make_cdp.bat
+cd ..\flx_date
+call make_date.bat
 if errorlevel 1 goto ERR
 cd ..\..
 goto END
