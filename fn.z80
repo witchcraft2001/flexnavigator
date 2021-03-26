@@ -72,6 +72,13 @@ BEGCOM	SUB	A
 	OUT	(BORDER),A
 	LD	A,0xC0
 	OUT	(YPORT),A
+	LD	HL, FnHomeDir
+	LD	A,(HL)
+	AND	A
+	JR	Z,ContinueInit
+	LD	C,CHDIR			;Chdir to fn-dir
+	RST	0X10
+ContinueInit:
 	CALL	InitVMode
 	CALL	InitDrivers
 BEGCOMv	CALL	InitScreen
@@ -263,6 +270,9 @@ BuffPg3	DB	0x00
 BuffPg4	DB	0x00
 	DB	0x00
 
+;directory of fn.exe
+FnHomeDir:
+	ds	0x100
 ;[]=======================================================================[]
 
 	include "fnsort.z80"
@@ -332,4 +342,5 @@ end4:
 	savebin	"bin\fnfont.bin",IFFFont,end4-IFFFont
 	export	FNIndef
 	export	FunctPg
+	export	FnHomeDir
 	export	EntryPoint

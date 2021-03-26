@@ -273,7 +273,7 @@ PrintFileR
 	DEFW	#0010,#0010
 	DEFB	#80
 	DEFB	"Printing file:",0
-	DEFB	#03	;Углубление
+	DEFB	#03	;пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	DEFW	#0010,#001C
 	DEFW	#0110,#000C
 	DEFB	#02	;Head place
@@ -645,7 +645,7 @@ SystemInfoR
 	DEFB	#01	;Text Line
 	DEFW	#000A,#0014
 	DEFB	#80
-	DEFB	"FN version:  1.10",0
+	DEFB	"FN version:  1.11",0
 	DEFB	#01	;Text Line
 	DEFW	#000A,#0020
 	DEFB	#80
@@ -965,19 +965,19 @@ VersionR
 	DEFB	#01	;Text Line
 	DEFW	#005E,#0026
 	DEFB	#80
-	DEFB	"Version 1.10",0
+	DEFB	"Version 1.11",0
 	DEFB	#01	;Text Line
-	DEFW	#0054,#0030
+	DEFW	#0057,#0030
 	DEFB	#80
-	DEFB	"Februar, 3 2000",0
+	DEFB	"March, 27 2021",0
 	DEFB	#01	;Text Line
-	DEFW	#0050,#0042
+	DEFW	#004F,#0042
 	DEFB	#80
-	DEFB	"Copyright (C) 2000",0
+	DEFB	"(C) 2000 Enin Anton",0
 	DEFB	#01	;Text Line
-	DEFW	#003C,#004C
+	DEFW	#0032,#004C
 	DEFB	#80
-	DEFB	"Enin Anton, St-Petersburg",0
+	DEFB	"(C) 2021 Mikhaltchenkov Dmitry",0
 	DEFB	#04	;UpRectan
 	DEFW	#005C,#005D
 	DEFW	#0048,#000E

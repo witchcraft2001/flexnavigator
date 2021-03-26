@@ -87,4 +87,76 @@ ProcCURh1 EQU	 +#0F
 ProcCURl2 EQU	 +#10
 ProcCURh2 EQU	 +#11
 ProcCOLOR EQU	 +#12
+;[]----------------------------------------------------------[]
+
+VERSION         EQU	#00
+CHDISK	        EQU	#01
+CURDISK	        EQU	#02
+DSKINFO	        EQU	#03
+G_ENTRY	        EQU	#04
+
+BOOTDSK	        EQU	#09
+CREATE	        EQU	#0A
+CREAT_N	        EQU	#0B
+ERASE	        EQU	#0D
+DELETE	        EQU	#0E
+MOVE	        EQU	#0F
+RENAME	        EQU	#10
+OPEN	        EQU	#11
+CLOSE	        EQU	#12
+READ	        EQU	#13
+WRITE	        EQU	#14
+MOVE_FP	        EQU	#15
+ATTRIB	        EQU	#16
+GET_D_T	        EQU	#17
+PUT_D_T	        EQU	#18
+F_FIRST	        EQU	#19
+F_NEXT	        EQU	#1A
+MKDIR	        EQU	#1B
+RMDIR	        EQU	#1C
+CHDIR	        EQU	#1D
+CURDIR	        EQU	#1E
+SYSTIME	        EQU	#21
+SETTIME	        EQU	#22
+
+WAITKEY	        EQU	#30
+SCANKEY 	EQU	#31
+ECHOKEY	        EQU	#32
+CTRLKEY 	EQU	#33
+EDIT	        EQU	#34
+K_CLEAR 	EQU	#35
+
+SETWIN	        EQU	#38
+SETWIN1 	EQU	#39
+SETWIN2	        EQU	#3A
+SETWIN3 	EQU	#3B
+FREEMEM	        EQU	#3C
+GETMEM  	EQU	#3D
+RETMEM	        EQU	#3E
+SETMEM  	EQU	#3F
+
+EXEC	        EQU	#40
+EXIT    	EQU	#41
+WAIT	        EQU	#42
+
+GSWITCH 	EQU	#43
+DOSNAME	        EQU	#44
+
+SETVMOD 	EQU	#50
+GETVMOD	        EQU	#51
+LOCATE  	EQU	#52
+CURSOR	        EQU	#53
+SELPAGE 	EQU	#54
+SCROLL	        EQU	#55
+CLEAR   	EQU	#56
+RDCHAR	        EQU	#57
+WRCHAR  	EQU	#58
+WINCOPY	        EQU	#59
+WINREST 	EQU	#5A
+PUTCHAR	        EQU	#5B
+PCHARS  	EQU	#5C
+RES_PRN        	EQU	#5D
+CTRLPRN	        EQU	#5E
+PRINT   	EQU	#5F
+
 

@@ -871,7 +871,7 @@ About
 	DEFB	#01	;Text Line
 	DEFW	#005C,#0032
 	DEFB	#80
-	DEFB	"(C)2021 Mihaltchenkov Dmitry",0
+	DEFB	"(C)2021 Mikhaltchenkov Dmitry",0
 	DEFB	#04	;UpRectan
 	DEFW	#007C,#0042
 	DEFW	#0048,#000E

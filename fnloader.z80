@@ -13,7 +13,7 @@ EXEhead:	db	"EXE"
 		dw	EntryExec		; +16
 		dw	EntryExec
 		dw	0x80FF
-
+Args:		EQU	$-0x80
 EntryExec:	DI
 		LD	A, (IX-0x03)		; file handle
 		LD	(.hFile), A		; save
@@ -127,6 +127,37 @@ EntryExec:	DI
 		LD	DE, FunctPg
 		LD	BC, 0x0005
 		LDIR
+;On execute at address EntryPoint - 0x80 located structure with arguments:
+;Args		DB	ArgsLen			;Lenght in bytes of the string with command line arguments
+;		DB	"/?",0			;ASCIIZ string with arguments
+;		DB	0
+;		DB	"C:\FN\FN.EXE",0	;ASCIIZ string with path to exe-file. The extension ".exe" is optional
+
+		LD	A, (Args)		; get fn.exe folder
+		LD	HL, Args + 3		
+		LD	C, A
+		LD	B, 0
+		ADD	HL, BC
+		PUSH	HL
+		LD	C, B
+.loop:		LD	A, (HL)
+		INC	HL
+		INC	C
+		AND	A
+		JR	NZ, .loop
+.foundZ:	LD	A, (HL)
+		CP	'\\'
+		JR	Z,.foundSlash
+		DEC	HL
+		DEC	C
+		JR	.foundZ
+.foundSlash:	POP	HL
+		INC	C
+		LD	A,C
+		AND	A
+		JP	Z,EntryPoint
+		LD	DE, FnHomeDir
+		LDIR
 		JP	EntryPoint
 .disk_error:
 		LD	A, (.hMem)		; free memory
@@ -153,8 +184,9 @@ EntryExec:	DI
 		db	0x00
 
 .copyright_str:	db	0x0D, 0x0A
-		db	"The Flex Navigator, ver 1.10, Copyright (C) 1999 by Enin Anton, St-Petersburg.", 0x0D, 0x0A
-		db	"All rights reserved.", 0x0D, 0x0A, 0x00
+		db	"The Flex Navigator, ver 1.11", 0x0D, 0x0A
+		db	"Original version (C) 2000, Enin Anton, St-Petersburg.", 0x0D, 0x0A
+		db	"Modified version (C) 2021, Mikhaltchenkov Dmitry, Rostov-on-Don.", 0x0D, 0x0A, 0x00
 .incor_dos_str:	db	"Incorrect DOS version, need DOS 1.00 or high.", 0x0D, 0x0A, 0x00
 .no_memory_str:	db	"Not enough memory to load program.", 0x0D, 0x0A, 0x00
 .load_err_str:	db	"Disk loading error.", 0x0D, 0x0A, 0x00

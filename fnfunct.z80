@@ -463,10 +463,10 @@ WriteEnd
 
 CloseFiles
 	LD	A,(FHandle1)
-	LD	C,#17
+	LD	C,#17			; <- Читаем дату создания файла источника
 	RST	#10
 	LD	A,(FHandle2)
-	LD	C,#18
+	LD	C,#18			; <- устанавливаем для файла назначения
 	RST	#10
 
 	LD	A,(FHandle2)

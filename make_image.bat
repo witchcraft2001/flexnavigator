@@ -21,10 +21,10 @@ copy /Y bin\plugins\*.* /B X:\FN\PLUGINGS\ /B
 copy /Y examples\*.* /B X:\FN\EXAMPLES\ /B
 rem copy /Y gifview.txt /A X:\GIFVIEW\ /A
 if errorlevel 1 goto ERR
+rem Delay before unmount image
+timeout 2 > nul
 echo Unmounting image ...
 osfmount.com -d -m X:
-rem Delay before copy image
-timeout 2 > nul
 goto SUCCESS
 :ERR
 rem pause

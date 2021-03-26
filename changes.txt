@@ -1,0 +1,8 @@
+FN - FlexNavigator
+FV - FileViewer
+
+FN v.1.11 27.03.2021 (Mikhaltchenkov Dmitry aka Hard/WCG)
+* Исправлено определение каталога в котором располагаются файлы FlexNavigator-а.
+
+FV v.1.03 10.02.2021 (Mikhaltchenkov Dmitry aka Hard/WCG)
++ Добавлено переключение кодировки текста WIN/DOS/KOI
