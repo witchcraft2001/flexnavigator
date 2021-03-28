@@ -181,10 +181,17 @@ FirstInit
 	PUSH	AF
 	LD	A,(FunctPg)
 	OUT	(PAGE1),A
+	LD	A,(FlexDIRECTORY)
+	AND	A
+	JR	NZ, .next
 	LD	HL,LeftPanel+BegPath
 	LD	DE,FlexDIRECTORY
 	LD	BC,#0100
-	LDIR 
+	LDIR
+.next:	LD	HL,FlexDIRECTORY
+	LD	C,#1D
+	RST	#10
+	JR	C,InDrv3
 	LD	HL,SetupName
 	LD	C,#11
 	LD	A,#01
@@ -197,6 +204,9 @@ FirstInit
 	RST	#10
 	POP	AF
 	LD	C,#12
+	RST	#10
+	LD	HL,LeftPanel+BegPath
+	LD	C,#1D
 	RST	#10
 	LD	HL,WorkBuffer
 	LD	DE,SetupHead
