@@ -46,31 +46,6 @@ EntryExec:	DI
 		RST	0x08			; get memory pages list
 		LD	A, (.MPg)		; set pages from 0xC000
 		OUT	(0xE2), A
-		;On execute at address EntryPoint - 0x80 located structure with arguments:
-;Args		DB	ArgsLen			;Lenght in bytes of the string with command line arguments
-;		DB	"/?",0			;ASCIIZ string with arguments
-;		DB	0
-;		DB	"C:\FN\FN.EXE",0	;ASCIIZ string with path to exe-file. The extension ".exe" is optional
-
-		LD	A, (Args)		; get fn.exe folder
-		LD	HL, Args + 3		
-		LD	C, A
-		LD	B, 0
-		ADD	HL, BC
-		LD	(.homeDirBuf), HL
-		PUSH	HL
-.loop:		LD	A, (HL)
-		INC	HL
-		AND	A
-		JR	NZ, .loop
-.foundZ:	LD	A, (HL)
-		CP	'\\'
-		JR	Z,.foundSlash
-		DEC	HL
-		JR	.foundZ
-.foundSlash:	INC	HL
-		LD	(HL), 0
-
 		LD	HL, 0xffff-(FNMainEnd-FNMain)		;FNMAIN
 		LD	DE, FNMainEnd-FNMain
 		LD	A, (.hFile)
@@ -93,18 +68,7 @@ EntryExec:	DI
 		LD	DE, 0xC000
 		call	UnHrust
 
-		LD	HL, 0
-.homeDirBuf	EQU	$-2
-		LD	DE, FlexDIRECTORY + 0x8000
-.loopCopy	LD	A, (HL)
-		LD	(DE), A
-		AND	A
-		JR	Z, .nextPart
-		INC	HL
-		INC	DE
-		JR	.loopCopy
-
-.nextPart:	LD	A, (.VPg)		;FNVIEW
+		LD	A, (.VPg)		;FNVIEW
 		OUT	(0xE2), A
 		LD	HL, 0xffff-(FNViewEnd-FNView)
 		LD	DE, FNViewEnd-FNView
