@@ -204,13 +204,67 @@ RunDE1	INC	HL
 	CALL	C,DOSError
 	RET 
 RunDOSexe1
+	ld	hl,WorkBuffer
+	ld	d,h
+	ld	e,l
+	inc	de
+	ld	bc,0100h
+	ld	(hl),0
+	ldir
+	bit	0,(iy+PanelFlg)
+	ld	hl,RightPanel
+	jr	nz,.next
+	ld	hl,LeftPanel
+.next:	ld	de,BegPath
+	add	hl,de
+	ld	(.curPath),hl
+	ld	de,WorkBuffer		; куда
+	push	de
+	call	CopyString
+	dec	de
+	ld	a,"\\"
+	ld	(de),a
+	inc	de
+; Выделить имя файла из строки
+	ld	hl,DOSinp		; откуда
+;	ld	de,WorkBuffer		; куда
+	ld	bc,0345h		; формат "file.ext"
+	rst	10h
+	pop	hl
+	ld	de,WorkBuffer+0100h	
+	ld	bc,0119h
+	ld	a,FA_ARCH + FA_RDONLY
+	rst	10h
+	ld	a,1
+	jr	c,.notFound
+	sub	a
+.notFound:
+	LD	HL,ShellFile
+	LD	DE,WorkBuffer
+	LD	BC,ShellFileEnd-ShellFile
+	LDIR
+	and	a
+	jr	nz,.skipPanelPath
+	LD	A,(DOSinp + 1)
+	CP	":"
+	JR	Z,.skipPanelPath
+	ld	hl,0
+.curPath: equ	$-2
+	call	CopyString
+	dec	de
+	ld	a,"\\"
+	ld	(de),a
+	inc	de
+.skipPanelPath:
+	LD	HL,DOSinp
+	call	CopyString
 	CALL	ResDrivers
 	SUB	A
 	CALL	ClearScreen
 	CALL	ResVModeE
 	LD	HL,BEGCOM
 	EX	(SP),HL
-	LD	HL,DOSinp
+	LD	HL,WorkBuffer
 	LD	BC,#0040
 	RST	#10
 	RET	NC
@@ -227,7 +281,7 @@ RunDOSexe1
 	CALL	DOSError
 	LD	HL,ComLoop
 	EX	(SP),HL
-	RET 
+	RET
 ;[]----------------------------------------------------------[]
 SaveDOSline
 	IN	A,(PAGE1)
@@ -554,7 +608,7 @@ InsertWord
 	LD	A,(IX+#04)
 	SUB	(IX+#02)
 	JR	Z,NotInsWord
-;���� �	�������� ������
+;Ввод в	середину текста
 	PUSH	IX
 	POP	HL
 	LD	DE,LenInpData
@@ -598,6 +652,9 @@ InsHistory
 	CALL	PrintInpLn
 	RET 
 ;[]----------------------------------------------------------[]
+ShellFile:
+	db	"X:\\SYSTEM.EXE /C "	; шелл
+ShellFileEnd:
 DOSstr
 	DEFB	#80,#00
 DOSposX	DEFB	#00
@@ -615,5 +672,4 @@ HistCount
 HistCurrent
 	DEFB	#00
 ;[]----------------------------------------------------------[]
-
 

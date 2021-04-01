@@ -162,6 +162,10 @@ InitFlg	LD	A,#00
 	RST	#30
 	RET 
 FirstInit
+	LD	BC,0009h			; узнать boot-диск системы
+	RST	10h
+	ADD	A,"A"
+	LD	(ShellFile),a			; fndosln.z80
 	LD	C,#02
 	RST	#10
 	LD	HL,LeftPanel+BegPath

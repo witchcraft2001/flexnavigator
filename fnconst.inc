@@ -159,4 +159,10 @@ RES_PRN        	EQU	#5D
 CTRLPRN	        EQU	#5E
 PRINT   	EQU	#5F
 
-
+FA_NORMAL       EQU     0x00    ; Normal file, no attributes
+FA_RDONLY       EQU     0x01    ; Read only attribute
+FA_HIDDEN       EQU     0x02    ; Hidden file 
+FA_SYSTEM       EQU     0x04    ; System file 
+FA_LABEL        EQU     0x08    ; Volume label 
+FA_DIREC        EQU     0x10    ; Directory
+FA_ARCH         EQU     0x20    ; Archive 

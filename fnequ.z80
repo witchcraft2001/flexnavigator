@@ -100,4 +100,3 @@ ConvTxtNum32	EQU	#8693
 ConvTxtNum16	EQU	#8696
 
 DOSError	EQU	#86A8
-
