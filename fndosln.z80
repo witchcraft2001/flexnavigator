@@ -205,66 +205,59 @@ RunDE1	INC	HL
 	RET 
 RunDOSexe1
 	ld	hl,WorkBuffer
-	ld	d,h
-	ld	e,l
+	push	hl
+	push	hl
+	pop	de
 	inc	de
 	ld	bc,0100h
 	ld	(hl),0
 	ldir
-	bit	0,(iy+PanelFlg)
-	ld	hl,RightPanel
-	jr	nz,.next
-	ld	hl,LeftPanel
-.next:	ld	de,BegPath
-	add	hl,de
-	ld	(.curPath),hl
-	ld	de,WorkBuffer		; куда
-	push	de
-	call	CopyString
-	dec	de
-	ld	a,"\\"
-	ld	(de),a
-	inc	de
-; Выделить имя файла из строки
-	ld	hl,DOSinp		; откуда
-;	ld	de,WorkBuffer		; куда
-	ld	bc,0345h		; формат "file.ext"
-	rst	10h
-	pop	hl
-	ld	de,WorkBuffer+0100h	
-	ld	bc,0119h
-	ld	a,FA_ARCH + FA_RDONLY
-	rst	10h
-	ld	a,1
-	jr	c,.notFound
-	sub	a
-.notFound:
-	LD	HL,ShellFile
-	LD	DE,WorkBuffer
-	LD	BC,ShellFileEnd-ShellFile
-	LDIR
+	pop	de
+	call	GetFileName
+	jp	c,.error
+	ld	hl,DOSinp
+	call	SkipWord
+	ld	a,(hl)
 	and	a
-	jr	nz,.skipPanelPath
-	LD	A,(DOSinp + 1)
-	CP	":"
-	JR	Z,.skipPanelPath
-	ld	hl,0
-.curPath: equ	$-2
+	jr	z,.endOfLine
+	dec	hl
+	ld	de,WorkBuffer
+	call	ConcatString
+.endOfLine:
+	ld	hl,WorkBuffer
+	ld	de,WorkBuffer + 0100h
+	ld	bc,0445h
+	rst	10h
+	jr	c,.error
+	and	1
+	jr	z,.noExe
+	ld	hl,(WorkBuffer + 0100h)
+	ld	de,5845h		;"EX"
+	sbc	hl,de	
+	jr	nz,.noExe
+	ld	a,(WorkBuffer + 0102h)
+	cp	"E"
+	jr	nz,.noExe
+	ld	hl,WorkBuffer
+	ld	de,WorkBuffer + 0100h
+	ld	bc,0100h
+	ldir
+	jr	.noBatch
+
+.noExe:	ld	hl,ShellFile		;копируем путь к шеллу
+	ld	de,WorkBuffer + 0100h
 	call	CopyString
 	dec	de
-	ld	a,"\\"
-	ld	(de),a
-	inc	de
-.skipPanelPath:
-	LD	HL,DOSinp
-	call	CopyString
+	ld	hl,WorkBuffer
+	call	ConcatString
+.noBatch:
 	CALL	ResDrivers
 	SUB	A
 	CALL	ClearScreen
 	CALL	ResVModeE
 	LD	HL,BEGCOM
 	EX	(SP),HL
-	LD	HL,WorkBuffer
+	LD	HL,WorkBuffer + 0100h
 	LD	BC,#0040
 	RST	#10
 	RET	NC
@@ -278,10 +271,80 @@ RunDOSexe1
 	SUB	A
 	CALL	InitPanels
 	POP	AF
-	CALL	DOSError
+.error:	CALL	DOSError
 	LD	HL,ComLoop
 	EX	(SP),HL
 	RET
+;вставка из буфера ввода ком.строки имени исполняемого файла
+;если указан абсолютный путь к файлу с именем диска, то он копируется целиком
+;если просто имя файла, то производится попытка поиска файла в каталоге текущей панели и подставляется его абсолютный путь, если нет, то просто имя файла
+;de - буфер для имени файла
+GetFileName:
+	LD	A,(DOSinp + 1)		; в ком.строке указан абсолютный путь к файлу (с диском)
+	CP	":"
+	JR	nz,.panelSearch
+.notFound:
+	ld	hl,DOSinp		;копируем буфер ком.строки в буфер
+	jp	CopyWord
+
+.panelSearch:
+	ex	hl,de
+	ld	(.str),hl
+	bit	0,(iy+PanelFlg)
+	ld	hl,RightPanel + BegPath
+	jr	nz,.next
+	ld	hl,LeftPanel + BegPath
+.next:	ld	de,WorkBuffer + 0100h
+	call	CopyString
+	dec	de
+	ld	a,"\\"
+	ld	(de),a
+	inc	de
+; Выделить имя файла из строки
+	ld	hl,DOSinp		; откуда
+;	ld	de,WorkBuffer		; куда
+	ld	bc,0345h		; формат "file.ext"
+	rst	10h
+	ret	c			;имя файла не найдено
+	bit	1,a
+	jr	z,.noExt		;имя исполняемого файла указано с расширением, искать не нужно
+	ld	hl,WorkBuffer+0100h
+	jr	.found1
+
+.noExt:	ld	hl,BATExtension
+	call	PrepareFilename
+	call	SearchFilename
+	jr	nc,.found
+	ld	hl,EXEExtension
+	call	PrepareFilename
+	call	SearchFilename
+	jr	c,.notFound
+
+.found:	ld	hl,WorkBuffer+0200h
+.found1:
+	ld	de,0
+.str:	equ	$-2
+	jp	CopyString
+
+;Подготовка имени файла для поиска
+PrepareFilename:
+	ld	de,WorkBuffer+0200h
+	push	hl
+	ld	hl,WorkBuffer + 0100h
+	call	CopyString
+	dec	de
+	pop	hl
+	jp	ConcatString
+
+;поиск файла
+SearchFilename:
+	ld	hl,WorkBuffer+0200h	;поиск файла в каталоге текущей панели
+	ld	de,WorkBuffer+0300h	
+	ld	bc,0119h
+	ld	a,FA_ARCH + FA_RDONLY
+	rst	10h
+	ret
+
 ;[]----------------------------------------------------------[]
 SaveDOSline
 	IN	A,(PAGE1)
@@ -653,8 +716,11 @@ InsHistory
 	RET 
 ;[]----------------------------------------------------------[]
 ShellFile:
-	db	"X:\\SYSTEM.EXE /C "	; шелл
-ShellFileEnd:
+	db	"X:\\SYSTEM.EXE /C ",0	; шелл
+BATExtension:
+	db	".BAT",0
+EXEExtension:
+	db	".EXE",0
 DOSstr
 	DEFB	#80,#00
 DOSposX	DEFB	#00

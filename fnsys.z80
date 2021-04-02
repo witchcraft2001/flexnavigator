@@ -531,12 +531,37 @@ ResCall	CALL	#0000
 	OUT	(C),B
 	RET 
 ;[]----------------------------------------------------------[]
+; Конкатенация строки. Добавляется строка из hl в конец строки в de. Нуль копируется тоже.
+; (hl) -> (de)
+ConcatString:	ex	hl,de
+.loop:		ld	a,(hl)
+		or	a
+		jr	z,.end
+		inc	hl
+		jr	.loop
+.end:		ex	hl,de			;Внимание!!! ожидается, что дальше идет CopyString, поэтому если между этими п/п добавили что-то - добавь вызов CopyString!
+;[]----------------------------------------------------------[]
 ; Копирование строки до нуля. Нуль копируется тоже.
 ; (hl) -> (de)
 CopyString:	ld	a,(hl)
 		ldi
 		or	a
 		jr	nz,$-4
+		ret
+
+;[]----------------------------------------------------------[]
+; Копирование строки до нуля или пробела. В конец добавляется нуль.
+; (hl) -> (de)
+CopyWord:	ld	bc, 20ffh
+.loop:		ld	a,(hl)
+		ldi
+		or	a
+		ret	z
+		cp	b
+		jr	nz,.loop
+		dec	de
+		xor	a
+		ld	(de),a
 		ret
 
 
@@ -561,3 +586,22 @@ CompareStrings: ld	a,(de)
 		cp	(hl)
 		ret
 
+;Поиск конца слова или строки
+;> hl - строка
+;< hl - конец строки или 
+SkipWord:
+		ld	b,20h
+.loop:		ld	a,(hl)
+		inc	hl
+		cp	b
+		jr	z,.skipSpace
+		and	a
+		jr	nz,.loop
+.end:		dec	hl
+		ret
+.skipSpace:
+		ld	a,(hl)
+		cp	b
+		ret	nz
+		inc	hl
+		jr	.skipSpace
