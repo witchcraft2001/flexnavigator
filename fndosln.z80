@@ -247,7 +247,6 @@ RunDOSexe1
 .noExe:	ld	hl,ShellFile		;копируем путь к шеллу
 	ld	de,WorkBuffer + 0100h
 	call	CopyString
-	dec	de
 	ld	hl,WorkBuffer
 	call	ConcatString
 .noBatch:
@@ -296,7 +295,6 @@ GetFileName:
 	ld	hl,LeftPanel + BegPath
 .next:	ld	de,WorkBuffer + 0100h
 	call	CopyString
-	dec	de
 	ld	a,"\\"
 	ld	(de),a
 	inc	de
@@ -332,7 +330,6 @@ PrepareFilename:
 	push	hl
 	ld	hl,WorkBuffer + 0100h
 	call	CopyString
-	dec	de
 	pop	hl
 	jp	ConcatString
 

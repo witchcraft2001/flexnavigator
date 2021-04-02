@@ -1391,6 +1391,8 @@ RunEXEfile
 	LD	A,(HL)
 	INC	HL
 	RES	5,A
+	cp	"B"
+	jp	z,RunBATfile
 	CP	"F"
 	JP	Z,RunFLXfile
 	CP	"T"
@@ -1406,7 +1408,7 @@ RunEXEfile
 	RES	5,A
 	CP	"E"
 	JP	NZ,TestEXT
-	PUSH	DE
+RunFile	PUSH	DE
 	CALL	ResDrivers
 	SUB	A
 	CALL	ClearScreen
@@ -1427,7 +1429,42 @@ RunEXEfile
 	CALL	InitPanels
 	POP	AF
 	CALL	C,DOSError
-	RET 
+	RET
+;[]----------------------------------------------------------[]
+RunBATfile
+	LD	A,(HL)
+	INC	HL
+	RES	5,A
+	CP	"A"
+	JP	NZ,TestEXT
+	LD	A,(HL)
+	RES	5,A
+	CP	"T"
+	JP	NZ,TestEXT
+	PUSH	DE
+	ld	hl,ShellFile
+	ld	de,WorkBuffer
+	call	CopyString
+	bit	0,(iy+PanelFlg)
+	ld	hl,RightPanel + BegPath
+	jr	nz,.next
+	ld	hl,LeftPanel + BegPath
+.next:	call	ConcatString
+	dec	de
+	ex	hl,de
+	ld	a,"\\"
+	cp	(hl)
+	jr	z,.skipSlash
+	inc	hl
+	ld	(hl),a
+.skipSlash:
+	inc	hl
+	ex	hl,de
+	pop	hl	
+	call	CopyString
+	ld	de,WorkBuffer
+	jr	RunFile
+
 ;[]----------------------------------------------------------[]
 RunFLXfile
 	LD	A,(HL)
