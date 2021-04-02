@@ -229,8 +229,8 @@ RunDOSexe1
 	ld	bc,0445h
 	rst	10h
 	jr	c,.error
-	and	1
-	jr	z,.noExe
+	and	2
+	jr	z,.unknown
 	ld	hl,(WorkBuffer + 0100h)
 	ld	de,5845h		;"EX"
 	sbc	hl,de	
@@ -238,6 +238,7 @@ RunDOSexe1
 	ld	a,(WorkBuffer + 0102h)
 	cp	"E"
 	jr	nz,.noExe
+.unknown:
 	ld	hl,WorkBuffer
 	ld	de,WorkBuffer + 0100h
 	ld	bc,0100h
@@ -283,7 +284,9 @@ GetFileName:
 	CP	":"
 	JR	nz,.panelSearch
 .notFound:
-	ld	hl,DOSinp		;копируем буфер ком.строки в буфер
+	ld	de,DOSinp		;копируем буфер ком.строки в буфер
+	ld	hl,(.str)
+	ex	hl,de
 	jp	CopyWord
 
 .panelSearch:
@@ -306,14 +309,15 @@ GetFileName:
 	ret	c			;имя файла не найдено
 	bit	1,a
 	jr	z,.noExt		;имя исполняемого файла указано с расширением, искать не нужно
-	ld	hl,WorkBuffer+0100h
-	jr	.found1
+	ld	hl,EndOfString
+	jr	.found2
 
 .noExt:	ld	hl,BATExtension
 	call	PrepareFilename
 	call	SearchFilename
 	jr	nc,.found
 	ld	hl,EXEExtension
+.found2:
 	call	PrepareFilename
 	call	SearchFilename
 	jr	c,.notFound
@@ -717,7 +721,9 @@ ShellFile:
 BATExtension:
 	db	".BAT",0
 EXEExtension:
-	db	".EXE",0
+	db	".EXE"
+EndOfString:
+	db	0
 DOSstr
 	DEFB	#80,#00
 DOSposX	DEFB	#00
