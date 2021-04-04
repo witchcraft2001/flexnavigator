@@ -745,11 +745,17 @@ SetClock
 	PUSH	HL
 	PUSH	DE
 	PUSH	BC
+	in	a,(PAGE3)
+	push	af
+	ld	a,(FONTpage)
+	out	(PAGE3),a
 	LD	IX,ClockBMP
 	LD	HL,#0E09
 	LD	DE,#0704
 	LD	C,#09
 	RST	#30
+	pop	af
+	out	(PAGE3),a
 	POP	BC
 	POP	DE
 	POP	HL
@@ -757,21 +763,7 @@ SetClock
 	POP	IY
 	HALT 
 	RET 
-ClockBMP
-	DEFB	#00,#00,#00,#00,#00,#00,#00,#00,#00
-	DEFB	#00,#FE,#FE,#FE,#FE,#FE,#FE,#FE,#00
-	DEFB	#00,#00,#00,#00,#00,#00,#00,#00,#00
-	DEFB	#FF,#00,#FE,#FE,#FE,#FE,#FE,#00,#FF
-	DEFB	#FF,#00,#FE,#FE,#FE,#00,#FE,#00,#FF
-	DEFB	#FF,#FF,#00,#FE,#F0,#FE,#00,#FF,#FF
-	DEFB	#FF,#FF,#FF,#00,#FE,#00,#FF,#FF,#FF
-	DEFB	#FF,#FF,#FF,#00,#FE,#00,#FF,#FF,#FF
-	DEFB	#FF,#FF,#00,#FE,#F0,#FE,#00,#FF,#FF
-	DEFB	#FF,#00,#FE,#FE,#FE,#00,#FE,#00,#FF
-	DEFB	#FF,#00,#FE,#FE,#FE,#FE,#FE,#00,#FF
-	DEFB	#00,#00,#00,#00,#00,#00,#00,#00,#00
-	DEFB	#00,#FE,#FE,#FE,#FE,#FE,#FE,#FE,#00
-	DEFB	#00,#00,#00,#00,#00,#00,#00,#00,#00
+
 SetMouse
 	LD	A,(MouseFlag)
 	OR	A
@@ -781,11 +773,17 @@ SetMouse
 	PUSH	HL
 	PUSH	DE
 	PUSH	BC
+	in	a,(PAGE3)
+	push	af
+	ld	a,(FONTpage)
+	out	(PAGE3),a
 	LD	IX,MouseBMP
 	LD	HL,#0D09
 	LD	DE,#0000
 	LD	C,#09
 	RST	#30
+	pop	af
+	out	(PAGE3),a
 	POP	BC
 	POP	DE
 	POP	HL
@@ -793,19 +791,6 @@ SetMouse
 	POP	IY
 	HALT 
 	RET 
-MouseBMP
-	DEFB	#00,#00,#FF,#FF,#FF,#FF,#FF,#FF,#FF
-	DEFB	#00,#FE,#00,#FF,#FF,#FF,#FF,#FF,#FF
-	DEFB	#00,#FE,#FE,#00,#FF,#FF,#FF,#FF,#FF
-	DEFB	#00,#FE,#FE,#FE,#00,#FF,#FF,#FF,#FF
-	DEFB	#00,#FE,#FE,#FE,#FE,#00,#FF,#FF,#FF
-	DEFB	#00,#FE,#FE,#FE,#FE,#FE,#00,#FF,#FF
-	DEFB	#00,#FE,#FE,#FE,#FE,#FE,#FE,#00,#FF
-	DEFB	#00,#FE,#FE,#FE,#FE,#00,#00,#00,#00
-	DEFB	#00,#FE,#FE,#00,#FE,#00,#FF,#FF,#FF
-	DEFB	#00,#FE,#00,#00,#FE,#FE,#00,#FF,#FF
-	DEFB	#00,#00,#FF,#FF,#00,#FE,#00,#FF,#FF
-	DEFB	#00,#FF,#FF,#FF,#00,#FE,#FE,#00,#FF
-	DEFB	#FF,#FF,#FF,#FF,#FF,#00,#00,#FF,#FF
+
 
 

@@ -328,6 +328,38 @@ Font	equ 0xdb00
 ;	ds	0xDB00-$
 ;Font
 ;	insert "font.raw"
+ClockBMP
+	DEFB	#00,#00,#00,#00,#00,#00,#00,#00,#00
+	DEFB	#00,#FE,#FE,#FE,#FE,#FE,#FE,#FE,#00
+	DEFB	#00,#00,#00,#00,#00,#00,#00,#00,#00
+	DEFB	#FF,#00,#FE,#FE,#FE,#FE,#FE,#00,#FF
+	DEFB	#FF,#00,#FE,#FE,#FE,#00,#FE,#00,#FF
+	DEFB	#FF,#FF,#00,#FE,#F0,#FE,#00,#FF,#FF
+	DEFB	#FF,#FF,#FF,#00,#FE,#00,#FF,#FF,#FF
+	DEFB	#FF,#FF,#FF,#00,#FE,#00,#FF,#FF,#FF
+	DEFB	#FF,#FF,#00,#FE,#F0,#FE,#00,#FF,#FF
+	DEFB	#FF,#00,#FE,#FE,#FE,#00,#FE,#00,#FF
+	DEFB	#FF,#00,#FE,#FE,#FE,#FE,#FE,#00,#FF
+	DEFB	#00,#00,#00,#00,#00,#00,#00,#00,#00
+	DEFB	#00,#FE,#FE,#FE,#FE,#FE,#FE,#FE,#00
+	DEFB	#00,#00,#00,#00,#00,#00,#00,#00,#00
+	
+	ORG $/256*256+256
+	
+MouseBMP
+	DEFB	#00,#00,#FF,#FF,#FF,#FF,#FF,#FF,#FF
+	DEFB	#00,#FE,#00,#FF,#FF,#FF,#FF,#FF,#FF
+	DEFB	#00,#FE,#FE,#00,#FF,#FF,#FF,#FF,#FF
+	DEFB	#00,#FE,#FE,#FE,#00,#FF,#FF,#FF,#FF
+	DEFB	#00,#FE,#FE,#FE,#FE,#00,#FF,#FF,#FF
+	DEFB	#00,#FE,#FE,#FE,#FE,#FE,#00,#FF,#FF
+	DEFB	#00,#FE,#FE,#FE,#FE,#FE,#FE,#00,#FF
+	DEFB	#00,#FE,#FE,#FE,#FE,#00,#00,#00,#00
+	DEFB	#00,#FE,#FE,#00,#FE,#00,#FF,#FF,#FF
+	DEFB	#00,#FE,#00,#00,#FE,#FE,#00,#FF,#FF
+	DEFB	#00,#00,#FF,#FF,#00,#FE,#00,#FF,#FF
+	DEFB	#00,#FF,#FF,#FF,#00,#FE,#FE,#00,#FF
+	DEFB	#FF,#FF,#FF,#FF,#FF,#00,#00,#FF,#FF
 end4:
 
 	savebin	"bin\fnfont.bin",IFFFont,end4-IFFFont
