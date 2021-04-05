@@ -1,18 +1,18 @@
 
 ;[]==========================================================[]
-MarkFile
+MarkFileR
 	LD	A,(IY+PanelEFl)
 	OR	(IY+PanelEFh)
 	RET	Z
 	BIT	1,(IY+ViewFlg)
 	RET	NZ
-	IN	A,(PAGE1)
+	IN	A,(PAGE3)
 	PUSH	AF
 	BIT	0,(IY+PanelFlg)
 	LD	A,(DIRpage1)
 	JR	Z,$+5
 	LD	A,(DIRpage2)
-	OUT	(PAGE1),A
+	OUT	(PAGE3),A
 	LD	L,(IY+PanelFFl)
 	LD	H,(IY+PanelFFh)
 	LD	E,(IY+PanelCFl)
@@ -26,9 +26,10 @@ MarkFile
 	ADD	HL,HL
 	ADD	HL,DE
 	SET	6,H
+	SET	7,H
 	LD	E,(HL)
 	POP	AF
-	OUT	(PAGE1),A
+	OUT	(PAGE3),A
 	BIT	0,E
 	PUSH	AF
 	CALL	Z,SelectFile
@@ -52,13 +53,13 @@ SelectFile
 	JR	$+5
 UnSelectFile
 	LD	LX,#00
-	IN	A,(PAGE1)
+	IN	A,(PAGE3)
 	PUSH	AF
 	BIT	0,(IY+PanelFlg)
 	LD	A,(DIRpage1)
 	JR	Z,$+5
 	LD	A,(DIRpage2)
-	OUT	(PAGE1),A
+	OUT	(PAGE3),A
 	LD	A,#C0
 	OUT	(YPORT),A
 	LD	L,(IY+PanelFFl)
@@ -74,6 +75,7 @@ UnSelectFile
 	ADD	HL,HL
 	ADD	HL,DE
 	SET	6,H
+	SET	7,H
 	PUSH	HL
 	LD	DE,#000E
 	ADD	HL,DE
@@ -90,7 +92,7 @@ UnSelectFile
 	LDIR 
 	POP	BC
 MrFile1	POP	AF
-	OUT	(PAGE1),A
+	OUT	(PAGE3),A
 	BIT	4,C
 	RET	NZ
 	LD	A,B
@@ -205,14 +207,16 @@ MarkExit2
 	LD	(IY+PanelMBh2),H
 	RET 
 ;[]==========================================================[]
-UnMarkGroup
+UnMarkGroupR
 	CALL	ResInvert
+UnMarkGroupRN
 	LD	HL,SetInvert
 	PUSH	HL
 	SUB	A
 	JR	SelectGroup
-MarkGroup
+MarkGroupR
 	CALL	ResInvert
+MarkGroupRN
 	LD	HL,SetInvert
 	PUSH	HL
 	LD	A,#01
@@ -291,17 +295,17 @@ CorMask	LD	A,(HL)
 	CALL	MakeMask
 	RET 
 MarkGNext
-	IN	A,(PAGE1)
+	IN	A,(PAGE3)
 	PUSH	AF
 	BIT	0,(IY+PanelFlg)
 	LD	A,(DIRpage1)
 	JR	Z,$+5
 	LD	A,(DIRpage2)
-	OUT	(PAGE1),A
+	OUT	(PAGE3),A
 	LD	A,#C0
 	OUT	(YPORT),A
-	LD	IX,#4000
-	LD	HL,#4000
+	LD	IX,#C000
+	LD	HL,#C000
 	LD	DE,SelMask
 	EXX 
 	LD	L,(IY+PanelMBl1)
@@ -387,7 +391,7 @@ Select8	LD	DE,#0018
 	EX	AF,AF'
 	POP	IY
 	POP	AF
-	OUT	(PAGE1),A
+	OUT	(PAGE3),A
 	EXX 
 	LD	(IY+PanelMBl1),L
 	LD	(IY+PanelMBh1),H
@@ -485,8 +489,9 @@ SMask21
 	AND	A
 	RET 
 ;[]==========================================================[]
-SelectAll
+SelectAllR
 	CALL	ResInvert
+SelectAllRN
 	LD	HL,SetInvert
 	PUSH	HL
 	LD	A,(IY+PanelEFl)
@@ -494,16 +499,16 @@ SelectAll
 	RET	Z
 	BIT	1,(IY+ViewFlg)
 	RET	NZ
-	IN	A,(PAGE1)
+	IN	A,(PAGE3)
 	PUSH	AF
 	BIT	0,(IY+PanelFlg)
 	LD	A,(DIRpage1)
 	JR	Z,$+5
 	LD	A,(DIRpage2)
-	OUT	(PAGE1),A
+	OUT	(PAGE3),A
 	LD	A,#C0
 	OUT	(YPORT),A
-	LD	IX,#4000
+	LD	IX,#C000
 	LD	BC,#0018
 	SUB	A
 	LD	L,A
@@ -534,7 +539,7 @@ SelAll1	ADD	IX,BC
 	OR	A
 	JR	NZ,SelAll0
 	POP	AF
-	OUT	(PAGE1),A
+	OUT	(PAGE3),A
 	EXX 
 	LD	E,(IY+PanelMFl)
 	LD	D,(IY+PanelMFh)
@@ -553,8 +558,9 @@ SelAll1	ADD	IX,BC
 	CALL	PrnFileInfo
 	RET 
 ;[]==========================================================[]
-UnSelectAll
+UnSelectAllR
 	CALL	ResInvert
+UnSelectAllRN
 	LD	HL,SetInvert
 	PUSH	HL
 	LD	A,(IY+PanelEFl)
@@ -572,16 +578,16 @@ UnSelectAll
 	LD	(IY+PanelMBh1),A
 	LD	(IY+PanelMBl2),A      ;Equip mark bytes
 	LD	(IY+PanelMBh2),A
-	IN	A,(PAGE1)
+	IN	A,(PAGE3)
 	PUSH	AF
 	BIT	0,(IY+PanelFlg)
 	LD	A,(DIRpage1)
 	JR	Z,$+5
 	LD	A,(DIRpage2)
-	OUT	(PAGE1),A
+	OUT	(PAGE3),A
 	LD	A,#C0
 	OUT	(YPORT),A
-	LD	HL,#4000
+	LD	HL,#C000
 	LD	BC,#0019
 UnSelA1	RES	0,(HL)
 	ADD	HL,BC
@@ -590,13 +596,14 @@ UnSelA1	RES	0,(HL)
 	OR	A
 	JR	NZ,UnSelA1
 	POP	AF
-	OUT	(PAGE1),A
+	OUT	(PAGE3),A
 	CALL	PrintDIR
 	CALL	PrnFileInfo
 	RET 
 ;[]==========================================================[]
-InvertSelect
+InvertSelectR
 	CALL	ResInvert
+InvertSelectRN
 	LD	HL,SetInvert
 	PUSH	HL
 	LD	A,(IY+PanelEFl)
@@ -604,16 +611,16 @@ InvertSelect
 	RET	Z
 	BIT	1,(IY+ViewFlg)
 	RET	NZ
-	IN	A,(PAGE1)
+	IN	A,(PAGE3)
 	PUSH	AF
 	BIT	0,(IY+PanelFlg)
 	LD	A,(DIRpage1)
 	JR	Z,$+5
 	LD	A,(DIRpage2)
-	OUT	(PAGE1),A
+	OUT	(PAGE3),A
 	LD	A,#C0
 	OUT	(YPORT),A
-	LD	IX,#4000
+	LD	IX,#C000
 	LD	DE,#0018
 	LD	B,#00
 	EXX 
@@ -664,7 +671,7 @@ InvSel3	ADD	IX,DE
 	OR	A
 	JR	NZ,InvSel1
 	POP	AF
-	OUT	(PAGE1),A
+	OUT	(PAGE3),A
 	EXX 
 	LD	(IY+PanelMBl1),L
 	LD	(IY+PanelMBh1),H

@@ -2515,6 +2515,7 @@ Edit1	CALL	ResInvert
 ;[]----------------------------------------------------------[]
 CopyFiles
 	LD	DE,CopyFilesR
+FunctResident
 	LD	A,(FunctPg)
 	LD	C,PAGE1
 	CALL	Resident
@@ -2522,24 +2523,15 @@ CopyFiles
 ;[]----------------------------------------------------------[]
 ReName
 	LD	DE,ReNameR
-	LD	A,(FunctPg)
-	LD	C,PAGE1
-	CALL	Resident
-	RET 
+	jr	FunctResident
 ;[]----------------------------------------------------------[]
 MakeDIR
 	LD	DE,MakeDIRR
-	LD	A,(FunctPg)
-	LD	C,PAGE1
-	CALL	Resident
-	RET 
+	jr	FunctResident
 ;[]----------------------------------------------------------[]
 DeleteFiles
 	LD	DE,DeleteFilesR
-	LD	A,(FunctPg)
-	LD	C,PAGE1
-	CALL	Resident
-	RET 
+	jr	FunctResident
 ;[]----------------------------------------------------------[]
 Quit
 	CALL	ResInvert
@@ -2554,58 +2546,74 @@ Quit
 ;[]==========================================================[]
 Setup
 	LD	DE,SetupR
-	LD	A,(FunctPg)
-	LD	C,PAGE1
-	CALL	Resident
-	RET 
+	jr	FunctResident
 ;[]----------------------------------------------------------[]
 FileInfo
 	CALL	ResInvert
 	LD	HL,SetInvert
 	PUSH	HL
 	LD	DE,FileInfoR
-	LD	A,(FunctPg)
-	LD	C,PAGE1
-	CALL	Resident
-	RET 
+	jr	FunctResident
 ;[]----------------------------------------------------------[]
 PrintFile
 	CALL	ResInvert
 	LD	HL,SetInvert
 	PUSH	HL
 	LD	DE,PrintFileR
-	LD	A,(FunctPg)
-	LD	C,PAGE1
-	CALL	Resident
-	RET 
+	jr	FunctResident
 ;[]----------------------------------------------------------[]
 DiskInfo
 	CALL	ResInvert
 	LD	DE,DiskInfoR
-	LD	A,(FunctPg)
-	LD	C,PAGE1
-	CALL	Resident
-	RET 
+	jr	FunctResident
 ;[]----------------------------------------------------------[]
 SystemInfo
 	LD	DE,SystemInfoR
-	LD	A,(FunctPg)
-	LD	C,PAGE1
-	CALL	Resident
-	RET 
+	jr	FunctResident
 ;[]----------------------------------------------------------[]
 Version
 	LD	DE,VersionR
-	LD	A,(FunctPg)
-	LD	C,PAGE1
-	CALL	Resident
-	RET 
+	jr	FunctResident
 ;[]----------------------------------------------------------[]
 QSearch
 	LD	DE,QSearchR
-	LD	A,(FunctPg)
+	jr	FunctResident
+;[]==========================================================[]
+MarkFile
+	LD	DE,MarkFileR
+HelpResident
+	LD	A,(HelpPg)
 	LD	C,PAGE1
-	CALL	Resident
-	RET 
+	JP	Resident
+UnMarkGroup
+	LD	DE,UnMarkGroupR
+	jr	HelpResident
+UnMarkGroupN
+	LD	DE,UnMarkGroupRN
+	jr	HelpResident
+MarkGroup
+	LD	DE,MarkGroupR
+	jr	HelpResident
+MarkGroupN
+	LD	DE,MarkGroupRN
+	jr	HelpResident
+SelectAll
+	LD	DE,SelectAllR
+	jr	HelpResident
+SelectAllN
+	LD	DE,SelectAllRN
+	jr	HelpResident
+UnSelectAll
+	LD	DE,UnSelectAllR
+	jr	HelpResident
+UnSelectAllN
+	LD	DE,UnSelectAllRN
+	jr	HelpResident
 
+InvertSelect
+	LD	DE,InvertSelectR
+	jr	HelpResident
+InvertSelectN
+	LD	DE,InvertSelectRN
+	jr	HelpResident
 

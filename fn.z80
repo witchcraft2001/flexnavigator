@@ -271,7 +271,6 @@ BuffPg4	DB	0x00
 	include "fndos.z80"
 	include "fnwork.z80"
 	include "fnmenu.z80"
-	include "fnmark.z80"
 	include "fninit.z80"
 	include "fndosln.z80"
 	include "fntab.z80"
@@ -308,6 +307,7 @@ fnview_ext:
 fnedit_ext:
 	ds	0x400
 	include "fnext.z80"
+	include "fnmark.z80"
 	include "fnhelp.z80"
 HelpText:
 	insert "fnhelp_t.bin"
