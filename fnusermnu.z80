@@ -1,0 +1,37 @@
+UserMenuR:
+                in	a,(PAGE3)
+                push    af
+                call    OpenUserMenu
+                pop     af
+                out     (PAGE3),a
+                ret
+OpenUserMenu:
+                ld      bc,GET_APP_PATH * 256 + APPINFO
+                ld      hl,WorkBuffer
+                push    hl
+                rst     #10
+                pop     de
+                ret     c
+                push    de
+                ld      hl, UserMenuFileName
+                call    ConcatString
+                pop     hl
+                ld      c,OPEN
+                ld      a,F_READ
+                rst     #10
+                ret     c                       ;Файла нет или ошибка открытия
+                ld      (.userMenuFile),a
+                ld      de,#0400
+                ld      hl,WorkBuffer
+                ld      c,READ
+                rst     #10
+                jr      nc,.next
+                ld      a,0
+.userMenuFile:  equ     $-1
+                ld      c,CLOSE
+                rst     #10
+                ret
+
+
+UserMenuFileName:
+                db      "fn.mnu",0

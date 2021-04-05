@@ -309,6 +309,7 @@ fnedit_ext:
 	include "fnext.z80"
 	include "fnmark.z80"
 	include "fnhelp.z80"
+	include	"fnusermnu.z80"
 HelpText:
 	insert "fnhelp_t.bin"
 HelpTextEnd:
@@ -345,7 +346,7 @@ ClockBMP
 	DEFB	#00,#00,#00,#00,#00,#00,#00,#00,#00
 	
 	ORG $/256*256+256
-	
+
 MouseBMP
 	DEFB	#00,#00,#FF,#FF,#FF,#FF,#FF,#FF,#FF
 	DEFB	#00,#FE,#00,#FF,#FF,#FF,#FF,#FF,#FF

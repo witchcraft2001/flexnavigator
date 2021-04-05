@@ -2616,4 +2616,7 @@ InvertSelect
 InvertSelectN
 	LD	DE,InvertSelectRN
 	jr	HelpResident
-
+;[]==========================================================[]
+UserMenu
+	LD	DE,UserMenuR
+	jr	HelpResident

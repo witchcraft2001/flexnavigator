@@ -141,6 +141,8 @@ WAIT	        EQU	#42
 
 GSWITCH 	EQU	#43
 DOSNAME	        EQU	#44
+ENVIRON         EQU     #46
+APPINFO         EQU     #47
 
 SETVMOD 	EQU	#50
 GETVMOD	        EQU	#51
@@ -166,3 +168,11 @@ FA_SYSTEM       EQU     0x04    ; System file
 FA_LABEL        EQU     0x08    ; Volume label 
 FA_DIREC        EQU     0x10    ; Directory
 FA_ARCH         EQU     0x20    ; Archive 
+
+F_READ          EQU     #01
+F_WRITE         EQU     #02
+F_RW            EQU     #00
+
+GET_ARGS        EQU     #00
+GET_APP_PATH    EQU     #01
+GET_APP_FILE    EQU     #02

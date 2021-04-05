@@ -1,0 +1,14 @@
+&GoldED
+    c:\mail\golded\gedw32.exe -f
+;Second comment
+Тосс&ить почту
+    c:\mail\utils\inar.bat
+&T-Mail
+    c:\mail\t-mail\t-mailnt.exe
+П&уржить почту
+    c:\mail\utils\purge.bat
+-  Это разделитель пунктов
+&FFormat
+    c:\nc\fformat.exe
+&Rar 2.50
+    c:\nc\rar.exe
