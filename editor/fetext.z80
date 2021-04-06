@@ -1337,15 +1337,58 @@ WordRg2	LD	(IY+StringX),C
 	JP	TCursorRight
 ;[]----------------------------------------------------------[]
 THomeString
+	ld	a,(OnHomeSmartPosition)
+	and	a
+	jr	z,.toZero
 	LD	A,(IY+StringX)
-	OR	A
-	RET	Z
+	; OR	A
+	; RET	Z
+	ld	e,a
+	ld	l,0
+	ld	d,l
+	ld	bc,#2009
+	ld	h,high LineBuffer
+.loop	ld	a,(hl)
+	or	a
+	jr	z,.toFirst
+	cp	b
+	jr	z,.next
+	cp	c
+	jr	nz,.firstSym
+	ld	a,7
+	add	a,d
+	ld	d,a
+.next	inc	l
+	inc	d
+	jr	.loop
+
+.firstSym
+	ld	a,l
+	cp	e
+	jr	c,.skipTabs
+	jr	nz,.skipTabs
+.toFirst
+	and	a
+	jr	z,.skipTabs
+.toZero
+	sub	a
+	ld	l,a
+	ld	d,a
+.skipTabs
 	LD	B,(IY+CursAddX)
-	SUB	A
+	ld	a,l
 	LD	(IY+StringX),A
-	LD	(IY+CursorX),A
+	LD	(IY+CursorX),d
+	and	a
+	jr	nz,.notZero
 	LD	(IY+CursAddX),A
-	LD	A,B
+	jr	.skip
+.notZero
+	cp	b
+	jr	nc,.skip
+	SUB	A
+	LD	(IY+CursAddX),A
+.skip	LD	A,B
 	CP	(IY+CursAddX)
 	CALL	NZ,RefrASCIIpage
 	CALL	ResCursor

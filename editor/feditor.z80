@@ -352,7 +352,7 @@ InitScreen
 	DEFB	#01	;Text Line
 	DEFW	#0010,#0003
 	DEFB	#0F
-	DEFB	"FN File Editor v1.00",0
+	DEFB	"FN File Editor v1.01",0
 	DEFB	#06	;Horizontal line
 	DEFW	#0000,#000D
 	DEFW	#0280
@@ -851,17 +851,15 @@ About
 	DEFB	#01	;Text Line
 	DEFW	#0090,#001C
 	DEFB	#80
-	DEFB	"v1.00",0
+	DEFB	"v1.01",0
 	DEFB	#01	;Text Line
 	DEFW	#0012,#0028
 	DEFB	#80
-	DEFB	"Programming:  Enin Anton      "
-	DEFB	"Release data:  25/08/1999",0
+	DEFB	"Programming:  (C)2000 Enin Anton",0
 	DEFB	#01	;Text Line
-	DEFW	#0044,#0035
+	DEFW	#005C,#0032
 	DEFB	#80
-	DEFB	"All right reserved. "
-	DEFB	"Copyright (C)1999",0
+	DEFB	"(C)2021 Mikhaltchenkov Dmitry",0
 	DEFB	#04	;UpRectan
 	DEFW	#007C,#0042
 	DEFW	#0048,#000E
@@ -1002,7 +1000,12 @@ NewFileTab
 	DEFW #0000,#0280,#0094,#0100,#020,#0000,NewFExitC,#0000
 	DEFW #8000
 ;[]==========================================================[]
+;Editor Settings
+OnHomeSmartPosition
+	db	1		;Если ==0, то по кнопке Home курсор устанавливается всегда в 0ю позицию, иначе применяется умное позиционирование
+;[]==========================================================[]
 end
+
 	savebin	"..\bin\fnedit.bin",StartOfEditor,end-StartOfEditor
        ORG     #7F00
 
