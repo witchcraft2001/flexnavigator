@@ -978,6 +978,15 @@ BackSp1	LD	(DE),A
 	CALL	PrnASCIIstring
 	JP	TCursorLeft
 ;[]----------------------------------------------------------[]
+TDeleteString
+	sub	a
+	ld	(IY+LenString),a
+	ld	l,a
+	ld	h,high LineBuffer
+	ld	(hl),a
+	call	PutString
+	jp	PrnASCIIpage
+;[]----------------------------------------------------------[]
 TDeleteSymbol
 	LD	A,(IY+LenString)
 	SUB	(IY+StringX)

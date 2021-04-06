@@ -89,6 +89,8 @@ TEditLoop
 	JP	Z,TPageUp
 	CP	#53		;PageDown
 	JP	Z,TPageDown
+	CP	#95		;Ctrl+Y - Delete String
+	JP	Z,TDeleteString
 	LD	A,B
 	AND	#30
 	CP	#30
@@ -195,9 +197,9 @@ CurLine
 EquipLines
 	DEFW	#0000
 LineShift
-	DEFW	#0000
+	DEFW	#0000	;Смещение от начала файла до текущей строки
 PageShift
-	DEFW	#0000
+	DEFW	#0000	;Смещение от начала файла до текущей страницы
 TempShift
 	DEFW	#0000
 FileLenght
@@ -290,7 +292,7 @@ EditorExit
 	DEFB	#01	;Text Line
 	DEFW	#0040,#0013
 	DEFB	#80
-	DEFB	"File has been modifi.",0
+	DEFB	"File has been modified.",0
 	DEFB	#01	;Text Line
 	DEFW	#0060,#001D
 	DEFB	#80
