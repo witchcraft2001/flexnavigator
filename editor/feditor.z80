@@ -65,6 +65,8 @@ TEditLoop
 	JP	Z,About
 	CP	#3C
 	JP	Z,SaveFile
+	CP	#9E		;Ctrl+S
+	JP	Z,SaveFile
 	CP	#3E
 	JP	Z,ChEditor	;Просмотр в HEX
 	CP	#43
@@ -130,6 +132,8 @@ HEditLoop
 	CP	#3B
 	JP	Z,About
 	CP	#3C
+	JP	Z,SaveFile
+	CP	#9E		;Ctrl+S
 	JP	Z,SaveFile
 	CP	#3E		;F4
 	JP	Z,ChEditor	;Просмотр в тексте
