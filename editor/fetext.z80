@@ -981,11 +981,14 @@ BackSp1	LD	(DE),A
 TDeleteString
 	sub	a
 	ld	(IY+LenString),a
+	ld	(IY+StringX),a
 	ld	l,a
 	ld	h,high LineBuffer
 	ld	(hl),a
-	call	PutString
-	jp	PrnASCIIpage
+	inc	a
+	ld	(IY+ReadyStr),A
+	ld	(IY+ReadyFile),A
+	jr	AddString	
 ;[]----------------------------------------------------------[]
 TDeleteSymbol
 	LD	A,(IY+LenString)
