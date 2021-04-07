@@ -276,7 +276,7 @@ EditorExit
 	CALL	ResCursor
 	LD	A,(IY+ReadyFile)
 	OR	A
-	JP	Z,EditorE
+	JP	Z,QuitAsk
 	CALL	MakeWindow
 	DEFB	#01
 	DEFW	#00D0,#0050
@@ -344,7 +344,62 @@ EditorE	LD	A,(MemIndef)
 	LD	C,#3E
 	RST	#10
 	OR	A
-	RET 
+	RET
+;[]==========================================================[]
+QuitAsk
+	CALL	MakeWindow
+	DEFB	#01
+	DEFW	#00D0,#0058
+	DEFW	#00E0,#0032
+	DEFB	#02	;Head place
+	DEFW	#0004,#0002
+	DEFW	#00D8,#000A
+	DEFB	#00
+	DEFB	#01	;Text Line
+	DEFW	#0068,#0003
+	DEFB	#0F
+	DEFB	"Quit",0
+	DEFB	#01	;Text Line
+	DEFW	#001C,#0013
+	DEFB	#80
+	DEFB	"Do you want to close the editor?",0
+	DEFB	#04	;UpRectan
+	DEFW	#0020,#0020
+	DEFW	#0048,#000E
+	DEFB	#01	;Text Line
+	DEFW	#003A,#0023
+	DEFB	#80
+	DEFB	"Yes",0
+	DEFB	#04	;UpRectan
+	DEFW	#0078,#0020
+	DEFW	#0048,#000E
+	DEFB	#01	;Text Line
+	DEFW	#0096,#0023
+	DEFB	#80
+	DEFB	"No",0
+	DEFB	#00
+QuitLoop
+	LD	IX,QuitTab
+	CALL	TestCoords
+	LD	C,#31
+	RST	#10
+	JR	Z,QuitLoop
+	LD	A,B
+	OR	A
+	JR	NZ,QuitLoop
+	LD	A,E
+	CP	#1B
+	JP	Z,QuitAbort
+	CP	#0D
+	JP	Z,EditorE
+	RES	5,A
+	CP	"Y"
+	JP	Z,EditorE
+	CP	"N"
+	JR	NZ,QuitLoop
+QuitAbort
+	SCF
+	JP	SureExit
 ;[]==========================================================[]
 InitScreen
 	CALL	MakeWindow
@@ -1004,6 +1059,14 @@ NewFileTab
 	DEFW #01C0,#0280,#0000,#0100,#020,#0000,NewFExitC,#0000
 	DEFW #0000,#0280,#0000,#0058,#020,#0000,NewFExitC,#0000
 	DEFW #0000,#0280,#0094,#0100,#020,#0000,NewFExitC,#0000
+	DEFW #8000
+QuitTab
+	DEFW #00F0,#0138,#0078,#0086,#21,#0000,EditorE,#0000
+	DEFW #0148,#0190,#0078,#0086,#21,#0000,QuitAbort,#0000
+	DEFW #0000,#00D0,#0000,#0100,#20,#0000,QuitAbort,#0000
+	DEFW #01B0,#0280,#0000,#0100,#20,#0000,QuitAbort,#0000
+	DEFW #0000,#0280,#0000,#0058,#20,#0000,QuitAbort,#0000
+	DEFW #0000,#0280,#008A,#0100,#20,#0000,QuitAbort,#0000
 	DEFW #8000
 ;[]==========================================================[]
 ;Editor Settings
