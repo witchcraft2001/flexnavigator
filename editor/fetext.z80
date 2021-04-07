@@ -1547,6 +1547,11 @@ CursEx1	LD	A,(HL)
 	AND	#F8
 	ADD	A,#08
 	LD	C,A
+	AND	A
+	LD	A,B
+	SBC	A,7
+	LD	B,A
+	JR	C,CursEx3
 	DEC	C
 CursEx2	INC	C
 	DJNZ	CursEx1
