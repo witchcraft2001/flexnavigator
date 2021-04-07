@@ -507,7 +507,7 @@ GetLine	LD	HL,LineBuffer
 	JR	Z,GetLnE1
 	IN	A,(PAGE1)
 	PUSH	AF
-	LD	DE,(LineShift)
+	;LD	DE,(LineShift)
 	LD	A,D		;Выделяем номер	страницы
 	AND	#C0
 	RLCA 
@@ -557,7 +557,13 @@ GetLnE1	SUB	A
 	DJNZ	$-2
 	LD	A,(IY+StringX)
 	LD	(IY+LenString),A
-	RET 
+	ld	b,0
+.clear	ld	a,l
+	or	a
+	ret	z
+	ld	(hl),b
+	inc	l
+	jr	.clear
 ;[]----------------------------------------------------------[]
 PutString
 	LD	A,(IY+ReadyStr)
@@ -988,6 +994,7 @@ TDeleteString
 	inc	a
 	ld	(IY+ReadyStr),A
 	ld	(IY+ReadyFile),A
+	call	PutString
 	jr	AddString	
 ;[]----------------------------------------------------------[]
 TDeleteSymbol
