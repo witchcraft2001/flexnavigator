@@ -602,7 +602,7 @@ CurMLine
 	DEFB	#00
 MaxLines
 	DEFB	#00
-MenuKExt		;Выход по Esc
+MenuKExt		;Р’С‹С…РѕРґ РїРѕ Esc
 	POP	DE
 	CALL	MakeWindow
 	DEFB	#7F
@@ -728,12 +728,12 @@ ChangeSet
 	ADD	HL,BC
 	PUSH	HL
 	POP	IX
-	LD	C,(IX+#0C)	;запуск	по левой кнопке
+	LD	C,(IX+#0C)	;Р·Р°РїСѓСЃРє	РїРѕ Р»РµРІРѕР№ РєРЅРѕРїРєРµ
 	LD	B,(IX+#0D)
 	LD	A,B
 	OR	C
 	RET	Z
-	BIT	5,(IX+#08)	;запуск	без возврата
+	BIT	5,(IX+#08)	;Р·Р°РїСѓСЃРє	Р±РµР· РІРѕР·РІСЂР°С‚Р°
 	JR	Z,$+3
 	POP	AF
 	PUSH	BC
@@ -976,7 +976,7 @@ NewFilter
 	DEFW	#0010,#0019
 	DEFB	#80
 	DEFB	"New filter:",0
-	DEFB	#03	;Углубление
+	DEFB	#03	;РЈРіР»СѓР±Р»РµРЅРёРµ
 	DEFW	#0046,#0016
 	DEFW	#0086,#000C
 	DEFB	#02	;Head place
@@ -1254,16 +1254,20 @@ SetDrive
 	CALL	MakeWindow
 	DEFB	#7F
 	DEFB	#00
-	EX	(SP),IY
-	CALL	SetInvert
-	EX	(SP),IY
 	LD	HL,NewDrive
 	CALL	NewDIRECTORY
-	LD	HL,LeftPanel
+	bit 	7,(IY+#00)
+	jp	z,ChPanel
+	; EX	(SP),IY
+	; CALL	SetInvert
+	; EX	(SP),IY
+	push	ix
+	pop	hl
+	; LD	HL,LeftPanel
 	LD	DE,BegPath
-	BIT	7,(HL)
-	JR	NZ,$+5
-	LD	HL,RightPanel
+	; BIT	7,(HL)
+	; JR	NZ,$+5
+	; LD	HL,RightPanel
 	ADD	HL,DE
 	LD	C,#1D
 	RST	#10
