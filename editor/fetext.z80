@@ -548,7 +548,7 @@ GetLnE1	SUB	A
 	LD	(IY+LenString),A
 	LD	(IY+PrvLenStr),A
 	SUB	(IY+StringX)
-	RET	NC
+	jr	NC,.next
 	NEG 
 	LD	B,A
 	LD	A,#20
@@ -557,7 +557,7 @@ GetLnE1	SUB	A
 	DJNZ	$-2
 	LD	A,(IY+StringX)
 	LD	(IY+LenString),A
-	ld	b,0
+.next	ld	b,0
 .clear	ld	a,l
 	or	a
 	ret	z
@@ -925,27 +925,50 @@ NotInsert
 	JP	TCursorRight
 ;[]----------------------------------------------------------[]
 ;Enter
-Enter
-	LD	A,(IY+LenString)
+Enter	LD	A,(IY+LenString)
 	SUB	(IY+StringX)
-	JR	Z,EnterEnd
+	; add	a,2
 	LD	C,A
-	LD	B,#00
+	call	CalcStartTabs
+	ld	a,l
+	ld	(.tabs),a
+	push	af
+	inc	a
+	; add	a,c
 	LD	L,(IY+LenString)
+	add	a,l
+	ld	e,a
+	ld	d,h
+	xor	a
+	cp	c
+	jr	z,.endLine
+	LD	B,#00
 	LD	H,high LineBuffer
-	LD	E,L
-	LD	D,H
-	DEC	HL
-	INC	DE
-	LDDR 
-EnterEnd
-	LD	H,high LineBuffer
-	LD	L,(IY+StringX)
-	LD	(HL),#0D
-	INC	HL
-	LD	(HL),#0A
-	INC	(IY+LenString)
-	INC	(IY+LenString)
+;	LD	E,L
+	dec	l
+	LDDR
+.endLine
+	pop	af
+	and	a
+	jr	z,.skip
+	ld	c,a
+	ld	b,#00
+	ld	h,high LineBuffer
+	ld	l,a
+	dec	l
+	lddr
+.skip	ex	hl,de
+	ld	(hl),#0A
+	dec	hl
+	ld	(hl),#0D
+	; LD	H,high LineBuffer
+	; LD	L,(IY+StringX)
+	; LD	(HL),#0D
+	; INC	HL
+	; LD	(HL),#0A
+	add	a,(IY+LenString)
+	add	a,2
+	ld	(IY+LenString),a
 	LD	A,#01
 	LD	(IY+ReadyStr),A
 	LD	(IY+ReadyFile),A
@@ -954,10 +977,44 @@ EnterEnd
 	INC	HL
 	LD	(EquipLines),HL
 	CALL	PrnASCIIpage
-	SUB	A
-	LD	(IY+CursorX),A
+	ld	a,0
+.tabs	equ	$-1
 	LD	(IY+StringX),A
+	call	StringXToCursorX
+	LD	(IY+CursorX),C
 	JP	TCursorDown
+
+StringXToCursorX
+	ld	b,a
+	ld	c,#00
+	ld	hl,LineBuffer
+.loop	ld	A,(HL)
+	INC	HL
+	CP	#09
+	JR	NZ,.skip
+	LD	A,C
+	AND	#F8
+	ADD	A,#08
+	LD	C,A
+	DEC	C
+.skip	INC	C
+	DJNZ	.loop
+	ret
+
+CalcStartTabs
+	ld	hl,LineBuffer
+	ld	a,(OnEnterCopyParagraph)
+	and	a
+	ret	z
+	ld	b,(iy+StringX)
+.loop	ld 	a,(hl)
+	cp	#20
+	jr	z,.next
+	cp	#09
+	ret	nz
+.next	inc	l
+	djnz	.loop
+	ret
 ;[]----------------------------------------------------------[]
 ;BackSpace
 BackSpace
