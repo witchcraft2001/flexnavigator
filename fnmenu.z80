@@ -1254,20 +1254,29 @@ SetDrive
 	CALL	MakeWindow
 	DEFB	#7F
 	DEFB	#00
+	ld	a,0
+AutoActivatePanel equ	$-1
+	and	a
+	jr	nz,.old
 	LD	HL,NewDrive
 	CALL	NewDIRECTORY
 	bit 	7,(IY+#00)
 	jp	z,ChPanel
-	; EX	(SP),IY
-	; CALL	SetInvert
-	; EX	(SP),IY
 	push	ix
 	pop	hl
-	; LD	HL,LeftPanel
+	jr	.readDir
+.old
+	EX	(SP),IY
+	CALL	SetInvert
+	EX	(SP),IY
+	LD	HL,NewDrive
+	CALL	NewDIRECTORY
+	LD	HL,LeftPanel
+	BIT	7,(HL)
+	JR	NZ,.readDir
+	LD	HL,RightPanel
+.readDir
 	LD	DE,BegPath
-	; BIT	7,(HL)
-	; JR	NZ,$+5
-	; LD	HL,RightPanel
 	ADD	HL,DE
 	LD	C,#1D
 	RST	#10

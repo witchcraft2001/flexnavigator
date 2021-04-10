@@ -19,10 +19,17 @@ SetupR
 	LD	(SaveFlg),A
 	SUB	A
 	LD	(SaveFlag),A
+	LD	A,(AutoActivatePanel)
+	LD	(AutoActivatePanelFlag),A
+	OR	A
+	LD	A,#FF
+	JR	Z,$+3
+	DEC	A
+	LD	(ActivateFlg),A
 	CALL	MakeWindow
 	DEFB	#01
 	DEFW	#0060,#0040
-	DEFW	#01C0,#0078
+	DEFW	#01C0,#008E
 	DEFB	#02	;Head place
 	DEFW	#0004,#0002
 	DEFW	#01B8,#000A
@@ -111,33 +118,49 @@ SetupR
 	DEFB	#01	;Text Line
 	DEFW	#0014,#0053
 	DEFB	#F0
-SaveFlg	DEFB	#00,#00
+ActivateFlg
+	DEFB	#00,#00
 	DEFB	#01	;Text Line
 	DEFW	#0028,#0054
 	DEFB	#80
+	DEFB	"activate panel in which changed drive",0
+	DEFB	#03		;Углубл
+	DEFW	#0010,#0063
+	DEFW	#0014,#000B
+	DEFB	#02	;Head place
+	DEFW	#0012,#0064
+	DEFW	#0010,#0009
+	DEFB	#0F
+	DEFB	#01	;Text Line
+	DEFW	#0014,#0065
+	DEFB	#F0
+SaveFlg	DEFB	#00,#00
+	DEFB	#01	;Text Line
+	DEFW	#0028,#0066
+	DEFB	#80
 	DEFB	"save Information about panels",0
 	DEFB	#04	;UpRectan
-	DEFW	#0168,#0050
+	DEFW	#0168,#0062
 	DEFW	#0048,#000E
 	DEFB	#01	;Text Line
-	DEFW	#0180,#0053
+	DEFW	#0180,#0065
 	DEFB	#80
 	DEFB	"Save",0
 	DEFB	#06	;Horizontal line
-	DEFW	#0004,#0061
+	DEFW	#0004,#0073
 	DEFW	#01B8
 	DEFB	#04	;UpRectan
-	DEFW	#0110,#0066
+	DEFW	#0110,#0078
 	DEFW	#0048,#000E
 	DEFB	#01	;Text Line
-	DEFW	#0124,#0069
+	DEFW	#0124,#007B
 	DEFB	#80
 	DEFB	"Cancel",0
 	DEFB	#04	;UpRectan
-	DEFW	#0168,#0066
+	DEFW	#0168,#0078
 	DEFW	#0048,#000E
 	DEFB	#01	;Text Line
-	DEFW	#0186,#0069
+	DEFW	#0186,#007B
 	DEFB	#80
 	DEFB	"Ok",0
 	DEFB	#00
@@ -213,6 +236,8 @@ SetupLoop1
 	JP	Z,IncBLUE
 	CP	"I"
 	JP	Z,ChSavePan
+	CP	"A"
+	JP	Z,ChActivatePan
 	OR	A
 	RET	NZ
 	LD	A,D
@@ -254,7 +279,7 @@ SaveSetup
 	PUSH	AF
 	CALL	C,DOSError
 	POP	AF
-	JR	C,SetupSaveEx
+	JP	C,SetupSaveEx
 	LD	HL,SetupName
 	SUB	A
 	LD	C,#0A
@@ -309,7 +334,10 @@ SaveSetup
 	JR	NZ,$-3
 	LD	(DE),A
 	INC	DE
-SvSetup	LD	HL,WorkBuffer+#100
+SvSetup	ld	a,(AutoActivatePanelFlag)
+	ld	(de),a
+	inc	de
+	LD	HL,WorkBuffer+#100
 	OR	A
 	EX	DE,HL
 	SBC	HL,DE
@@ -359,6 +387,8 @@ SetupOkey
 	LD	BC,#FFA4
 	SUB	A
 	RST	#08
+	LD	A,(AutoActivatePanelFlag)
+	LD	(AutoActivatePanel),A
 SetupExit
 	LD	A,(SaveFlag)
 	OR	A
@@ -484,13 +514,29 @@ ChSavePan
 	NEG 
 	LD	(HL),A
 	LD	DE,#0074
-	LD	BC,#0093
+	LD	BC,#00A5
 	LD	A,#F0
 	CALL	PrnTxtLnIFF
 	CALL	ResFire
 	RET 
 SavePanTxt
 	DEFB	#00,#00
+;--------------------------------------------------------------
+ChActivatePan
+	LD	HL,SavePanTxt
+	LD	A,0
+AutoActivatePanelFlag	EQU	$-1	
+	XOR	#01
+	LD	(AutoActivatePanelFlag),A
+	INC	A
+	NEG 
+	LD	(HL),A
+	LD	DE,#0074
+	LD	BC,#0093
+	LD	A,#F0
+	CALL	PrnTxtLnIFF
+	CALL	ResFire
+	RET 
 ;--------------------------------------------------------------
 DecRED
 	LD	HL,TempColor+2

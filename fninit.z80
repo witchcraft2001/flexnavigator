@@ -188,18 +188,26 @@ FirstInit
 	LD	HL,FlexDIRECTORY
 	LD	BC,#0147			;GETAPPFOLDER, APPINFO
 	RST	#10
-	JR	C,InDrv3
+	JP	C,InDrv3
 	LD	HL,FlexDIRECTORY
 	LD	C,#1D
 	RST	#10
-	JR	C,InDrv3
+	JP	C,InDrv3
 	LD	HL,SetupName
 	LD	C,#11
 	LD	A,#01
 	RST	#10
 	JR	C,InDrv3
 	PUSH	AF
-	LD	HL,WorkBuffer
+	LD	HL,WorkBuffer			;Очистка буфера перед чтением конфига
+	push	hl
+	push	hl
+	ld	(hl),0
+	pop	de
+	ld	bc,#00ff
+	inc	de
+	ldir
+	pop	hl
 	LD	DE,#0100
 	LD	C,#13
 	RST	#10
@@ -260,7 +268,11 @@ InDrv2	LD	A,(DE)
 	CP	(HL)
 	JR	NZ,$-3
 	LD	(DE),A
-InDrvPL	CALL	InitPAL
+InDrvPL	inc	hl
+	ld	a,(hl)			;параметр - авто смена панели при смене диска на ней
+	ld	(AutoActivatePanel),a
+	inc	hl
+	CALL	InitPAL
 InDrv3	POP	AF
 	OUT	(PAGE1),A
 	LD	HL,BgDISKl

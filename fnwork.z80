@@ -1301,7 +1301,14 @@ ChangeDrive
 	LD	HL,NewDrive
 	LD	(HL),A
 	CALL	NewDIRECTORY
+	ld	a,(AutoActivatePanel)
+	and	a
+	jr	nz,.old
 	BIT	7,(IY+PanelFlg)
+	POP	IY
+	jp	z,ChPanel
+	ret
+.old	BIT	7,(IY+PanelFlg)
 	POP	IY
 	RET	NZ
 	PUSH	IY
