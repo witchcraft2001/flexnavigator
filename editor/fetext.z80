@@ -1639,7 +1639,8 @@ CursorExit
 	CALL	GetString
 	LD	HL,LineBuffer
 	LD	C,#00
-	LD	A,(IY+StringX)
+	LD	A,(IY+CursorX)
+	add	a,(iy+CursAddX)
 	OR	A
 	JR	Z,CursEx3
 	LD	B,A
@@ -1659,7 +1660,8 @@ CursEx1	LD	A,(HL)
 	DEC	C
 CursEx2	INC	C
 	DJNZ	CursEx1
-CursEx3	LD	B,(IY+CursAddX)
+CursEx3	ld	(iy+StringX),l
+	LD	B,(IY+CursAddX)
 	LD	(IY+CursAddX),#00
 CursEx4	LD	A,C
 	SUB	(IY+CursAddX)
