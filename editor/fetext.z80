@@ -557,7 +557,7 @@ GetLnE1	SUB	A
 	DJNZ	$-2
 	LD	A,(IY+StringX)
 	LD	(IY+LenString),A
-.next	ld	b,0
+.next	ld	b,#20
 .clear	ld	a,l
 	or	a
 	ret	z
@@ -902,6 +902,7 @@ InsSymbol
 	CP	240			;Max len
 	RET	Z
 	SUB	(IY+StringX)
+	JR	C,NotInsert
 	JR	Z,NotInsert
 ;Ввод в	середину текста
 	LD	C,A
@@ -917,7 +918,13 @@ NotInsert
 	LD	L,(IY+StringX)
 	EX	AF,AF'
 	LD	(HL),A
-	INC	(IY+LenString)
+	ld	a,(IY+LenString)
+	inc	a
+	cp	l
+	jr	nc,.set
+	ld	a,l
+	inc	a
+.set	ld	(IY+LenString),a
 	LD	A,#01
 	LD	(IY+ReadyStr),A
 	LD	(IY+ReadyFile),A
