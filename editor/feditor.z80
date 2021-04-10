@@ -91,6 +91,8 @@ TEditLoop
 	JP	Z,TPageDown
 	CP	#95		;Ctrl+Y - Delete String
 	JP	Z,TDeleteString
+	CP	#9F		;Ctrl+D
+	JP	Z,TDoubleString
 	LD	A,B
 	AND	#30
 	CP	#30

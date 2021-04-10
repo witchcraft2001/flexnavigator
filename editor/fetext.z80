@@ -924,6 +924,46 @@ NotInsert
 	CALL	PrnASCIIstring
 	JP	TCursorRight
 ;[]----------------------------------------------------------[]
+;DoubleString
+TDoubleString
+	ld	l,(iy+LenString)
+	ld	a,l
+	and	a
+	adc	a,a		;будет превышен буфер в 256 символов
+	ret	c
+	adc	a,2
+	ret	c
+	ld	h,#00
+	push	hl
+	push	hl
+	pop	bc
+	ld	de,LineBuffer
+	add	hl,de
+	ld	(hl),#0D
+	inc	hl
+	ld	(hl),#0A
+	inc	hl
+	ex	hl,de
+	ld	a,c
+	or	a
+	jr	z,.skip
+	ldir
+.skip	pop	hl
+	add	hl,hl
+	inc	hl
+	inc	hl
+	ld	(iy+LenString),l
+	ld	a,#01
+	ld	(iy+ReadyStr),a
+	ld	(iy+ReadyFile),a
+	call	PutString
+	ld	hl,(EquipLines)
+	inc	hl
+	ld	(EquipLines),hl
+	call	PrnASCIIpage
+	jp	TCursorDown
+
+;[]----------------------------------------------------------[]
 ;Enter
 Enter	LD	A,(IY+LenString)
 	SUB	(IY+StringX)
