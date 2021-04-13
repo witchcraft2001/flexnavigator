@@ -2,6 +2,11 @@ FN - FlexNavigator
 FV - FileViewer
 FE - FileEditor
 
+FN v.1.12.1 13.04.2021 (Mikhaltchenkov Dmitry aka Hard/WCG)
+* Исправлен баг при автоматической смене панели
++ Добавлена настройка в SetUp для отключения автоматической активации панели при
+  смене диска
+
 FE v.1.02 10.04.2021 (Mikhaltchenkov Dmitry aka Hard/WCG)
 + Добавлена горячая кнопка Ctrl+D для дублирования строки (работает
   только для строк до 127 символов)
