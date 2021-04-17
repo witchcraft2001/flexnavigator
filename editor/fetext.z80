@@ -1657,16 +1657,13 @@ CursEx1	LD	A,(HL)
 	LD	A,C
 	AND	#F8
 	ADD	A,#08
-	LD	C,A
-	AND	A
-	LD	A,B
-	SBC	A,7
-	LD	B,A
-	jr	z,CursEx3
-	JR	C,CursEx3
-	DEC	C
-CursEx2	INC	C
-	DJNZ	CursEx1
+	ld	c,a
+	dec	c
+CursEx2	inc	c
+	LD	a,c
+	cp	b
+	jr	nc,CursEx3
+	jr	CursEx1
 CursEx3	ld	(iy+StringX),l
 	LD	B,(IY+CursAddX)
 	LD	(IY+CursAddX),#00
