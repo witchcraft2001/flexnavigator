@@ -1469,12 +1469,13 @@ THomeString
 	ld	e,a
 	ld	l,0
 	ld	d,l
-	ld	bc,#2009
+	ld	c,#09
+	ld	b,(iy+LenString)
 	ld	h,high LineBuffer
 .loop	ld	a,(hl)
 	or	a
 	jr	z,.toFirst
-	cp	b
+	cp	#20
 	jr	z,.next
 	cp	c
 	jr	nz,.firstSym
@@ -1483,8 +1484,8 @@ THomeString
 	ld	d,a
 .next	inc	l
 	inc	d
-	jr	.loop
-
+	djnz	.loop
+	jr	.toZero
 .firstSym
 	ld	a,l
 	cp	e
@@ -1554,7 +1555,7 @@ EndStr2	LD	(IY+LenString),B
 	CP	(IY+StringX)
 	RET	Z
 	OR	A
-	JP	Z,THomeString
+	JP	Z,THomeString.toZero
 	DEC	A
 	LD	(IY+StringX),A
 	JP	TCursorRight

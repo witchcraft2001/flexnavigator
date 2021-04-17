@@ -2,6 +2,11 @@ FN - FlexNavigator
 FV - FileViewer
 FE - FileEditor
 
+FE v.1.03 17.04.2021 (Mikhaltchenkov Dmitry aka Hard/WCG)
++ Добавлены кнопки управления Alt+CursorLeft(Home) и Alt+CursorRight(End)
+* Исправлен баг в подпрограмме THomeString - на пустой строке могла зациклиться
+* Исправлен баг в TEndString, аналогично - на пустой строке могла зациклиться
+
 FN v.1.12.1 13.04.2021 (Mikhaltchenkov Dmitry aka Hard/WCG)
 * Исправлен баг при автоматической смене панели
 + Добавлена настройка в SetUp для отключения автоматической активации панели при

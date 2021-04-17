@@ -97,7 +97,16 @@ TEditLoop
 	AND	#30
 	CP	#30
 	RET	Z
-	BIT	5,B
+	bit	4,b
+	jr	z,.ctrl
+	ld	a,d
+	and	#7f
+	CP	#54		;Alt+<
+	JP	Z,THomeString
+	CP	#56		;Alt+>
+	JP	Z,TEndString
+	ret
+.ctrl:	BIT	5,B
 	RET	Z
 	LD	A,D
 	AND	#7F
@@ -415,7 +424,7 @@ InitScreen
 	DEFB	#01	;Text Line
 	DEFW	#0010,#0003
 	DEFB	#0F
-	DEFB	"FN File Editor v1.02",0
+	DEFB	"FN File Editor v1.03",0
 	DEFB	#06	;Horizontal line
 	DEFW	#0000,#000D
 	DEFW	#0280
@@ -914,7 +923,7 @@ About
 	DEFB	#01	;Text Line
 	DEFW	#0090,#001C
 	DEFB	#80
-	DEFB	"v1.02",0
+	DEFB	"v1.03",0
 	DEFB	#01	;Text Line
 	DEFW	#0012,#0028
 	DEFB	#80
