@@ -547,23 +547,19 @@ GetLnE1	SUB	A
 	LD	A,L
 	LD	(IY+LenString),A
 	LD	(IY+PrvLenStr),A
-	SUB	(IY+StringX)
-	jr	NC,.next
-	NEG 
-	LD	B,A
+	push	af
+	neg
+	ld	b,a
 	LD	A,#20
 	LD	(HL),A
 	INC	L
 	DJNZ	$-2
+	pop	af
+	SUB	(IY+StringX)
+	ret	nc
 	LD	A,(IY+StringX)
 	LD	(IY+LenString),A
-.next	ld	b,#20
-.clear	ld	a,l
-	or	a
-	ret	z
-	ld	(hl),b
-	inc	l
-	jr	.clear
+	ret
 ;[]----------------------------------------------------------[]
 PutString
 	LD	A,(IY+ReadyStr)
@@ -1027,8 +1023,9 @@ Enter	LD	A,(IY+LenString)
 	ld	a,0
 .tabs	equ	$-1
 	LD	(IY+StringX),A
-	call	StringXToCursorX
-	LD	(IY+CursorX),C
+	and	a
+	call	nz,StringXToCursorX
+	LD	(IY+CursorX),a
 	JP	TCursorDown
 
 StringXToCursorX
@@ -1046,6 +1043,7 @@ StringXToCursorX
 	DEC	C
 .skip	INC	C
 	DJNZ	.loop
+	ld	a,c
 	ret
 
 CalcStartTabs
@@ -1664,6 +1662,7 @@ CursEx1	LD	A,(HL)
 	LD	A,B
 	SBC	A,7
 	LD	B,A
+	jr	z,CursEx3
 	JR	C,CursEx3
 	DEC	C
 CursEx2	INC	C
