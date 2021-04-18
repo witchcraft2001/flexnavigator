@@ -1061,6 +1061,13 @@ CalcStartTabs
 	djnz	.loop
 	ret
 ;[]----------------------------------------------------------[]
+Undo	xor	a
+	LD	(IY+ReadyStr),A
+	LD	(IY+ReadyFile),A
+	call	GetString
+	CALL	PrnASCIIstring
+	jp	PrnASCIIinfo
+;[]----------------------------------------------------------[]
 ;BackSpace
 BackSpace
 	LD	A,(IY+StringX)

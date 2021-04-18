@@ -65,8 +65,6 @@ TEditLoop
 	JP	Z,About
 	CP	#3C
 	JP	Z,SaveFile
-	CP	#9E		;Ctrl+S
-	JP	Z,SaveFile
 	CP	#3E
 	JP	Z,ChEditor	;Просмотр в HEX
 	CP	#43
@@ -89,15 +87,11 @@ TEditLoop
 	JP	Z,TPageUp
 	CP	#53		;PageDown
 	JP	Z,TPageDown
-	CP	#95		;Ctrl+Y - Delete String
-	JP	Z,TDeleteString
-	CP	#9F		;Ctrl+D
-	JP	Z,TDoubleString
 	LD	A,B
 	AND	#30
 	CP	#30
 	RET	Z
-	bit	4,b
+	bit	4,b		;При нажатом Alt
 	jr	z,.ctrl
 	ld	a,d
 	and	#7f
@@ -106,12 +100,22 @@ TEditLoop
 	CP	#56		;Alt+>
 	JP	Z,TEndString
 	ret
-.ctrl:	BIT	5,B
+.ctrl:	BIT	5,B		;При нажатом Ctrl
 	RET	Z
 	LD	A,D
 	AND	#7F
 	CP	#0E
 	JP	Z,TDeleteWord
+	CP	#15		;Ctrl+Y - Delete String
+	JP	Z,TDeleteString
+	CP	#1E		;Ctrl+S
+	JP	Z,SaveFile
+	CP	#1F		;Ctrl+D
+	JP	Z,TDoubleString
+	CP	#19		;Ctrl+P
+	JP	Z,PrintFile
+	cp	#2a		;Ctrl+Z
+	jp	z,Undo
 	CP	#54
 	JP	Z,TWordLeft
 	CP	#56
@@ -124,6 +128,7 @@ TEditLoop
 	JP	Z,TBegFile	;в начало файла
 	CP	#51		;Ctrl+PageEnd
 	JP	Z,TEndFile	;в конец файла
+
 	RET 
 HEditLoop
 	LD	IX,HEXtab
@@ -424,7 +429,7 @@ InitScreen
 	DEFB	#01	;Text Line
 	DEFW	#0010,#0003
 	DEFB	#0F
-	DEFB	"FN File Editor v1.03",0
+	DEFB	"FN File Editor v1.04",0
 	DEFB	#06	;Horizontal line
 	DEFW	#0000,#000D
 	DEFW	#0280
@@ -923,7 +928,7 @@ About
 	DEFB	#01	;Text Line
 	DEFW	#0090,#001C
 	DEFB	#80
-	DEFB	"v1.03",0
+	DEFB	"v1.04",0
 	DEFB	#01	;Text Line
 	DEFW	#0012,#0028
 	DEFB	#80
