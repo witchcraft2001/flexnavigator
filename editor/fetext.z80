@@ -970,7 +970,9 @@ TDoubleString
 ;Enter
 Enter	LD	A,(IY+LenString)
 	SUB	(IY+StringX)
-	; add	a,2
+	jr	nc,.less
+	xor	a
+.less	; add	a,2
 	LD	C,A
 	call	CalcStartTabs
 	ld	a,l
