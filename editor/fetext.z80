@@ -893,7 +893,32 @@ TInsertSymbol
 	CP	#09
 	RET	NZ
 InsSymbol
-	EX	AF,AF'
+	push	af
+	call	Insert
+	call	TCursorRight
+	pop	bc
+	call 	AutoBracket
+	LD	A,#01
+	LD	(IY+ReadyStr),A
+	LD	(IY+ReadyFile),A
+	jp	PrnASCIIstring	
+
+AutoBracket
+        ld	a,1
+AutoBrackets equ $-1
+        and	a
+        ret	z 
+        ld	a,b
+        call	Subst
+        db	4
+        db	"(){}[]<>"
+        cp	b
+        jr	nz,$+5
+        cp	34	;'"'
+        ret	nz 
+        jp	Insert
+
+Insert	EX	AF,AF'
 	LD	A,(IY+LenString)	;InpytSymb
 	CP	240			;Max len
 	RET	Z
@@ -921,11 +946,29 @@ NotInsert
 	ld	a,l
 	inc	a
 .set	ld	(IY+LenString),a
-	LD	A,#01
-	LD	(IY+ReadyStr),A
-	LD	(IY+ReadyFile),A
-	CALL	PrnASCIIstring
-	JP	TCursorRight
+	ret
+;[]----------------------------------------------------------[]
+;Подстановка a по списку за call.
+;первый байт списка содержит число
+;следующих далее пар образец-заменитель.
+;Вход:  a.  Выход: a
+; BXOД:  A,List
+; BЫXOД: A
+Subst   ex	(sp),hl
+        push	bc
+        ld	b,(hl)
+        inc	hl
+        ld	c,a
+Subst1  cp	(hl)
+        inc	hl
+        jr	nz,Subst2
+        ld	c,(hl)
+Subst2  inc	hl
+        djnz	Subst1
+        ld	a,c
+        pop	bc
+        ex	(sp),hl
+        ret
 ;[]----------------------------------------------------------[]
 ;DoubleString
 TDoubleString
