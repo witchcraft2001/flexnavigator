@@ -1110,7 +1110,8 @@ StringXToCursorX
 
 CalcStartTabs
 	ld	hl,LineBuffer
-	ld	a,(OnEnterCopyParagraph)
+	ld	a,0
+.param	equ	$-1
 	and	a
 	ret	z
 	ld	b,(iy+StringX)
@@ -1527,7 +1528,8 @@ WordRg2	LD	(IY+StringX),C
 	JP	TCursorRight
 ;[]----------------------------------------------------------[]
 THomeString
-	ld	a,(OnHomeSmartPosition)
+	ld	a,0
+.param	equ	$-1
 	and	a
 	jr	z,.toZero
 	LD	A,(IY+StringX)

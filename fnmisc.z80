@@ -645,7 +645,7 @@ SystemInfoR
 	DEFB	#01	;Text Line
 	DEFW	#000A,#0014
 	DEFB	#80
-	DEFB	"FN version:  1.12",0
+	DEFB	"FN version:  1.13",0
 	DEFB	#01	;Text Line
 	DEFW	#000A,#0020
 	DEFB	#80
@@ -965,7 +965,7 @@ VersionR
 	DEFB	#01	;Text Line
 	DEFW	#005E,#0026
 	DEFB	#80
-	DEFB	"Version 1.12",0
+	DEFB	"Version 1.13",0
 	DEFB	#01	;Text Line
 	DEFW	#005F,#0030
 	DEFB	#80

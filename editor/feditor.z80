@@ -1,5 +1,7 @@
 	device zxspectrum128
 	INCLUDE	"..\FNEQU.z80";,#0B
+	INCLUDE	"..\fn_export.inc"
+	INCLUDE	"..\dss_equ.z80"
 	ORG	#C000;,EDITpg
 StartOfEditor
 CursorX	  EQU	#00
@@ -18,6 +20,7 @@ CursTimer EQU	#0E
 FileEditor
 	CALL	LoadFile
 	RET	C
+	call	ReadEditorIni
 	LD	IY,EditData
 	SUB	A
 	LD	(EditMode),A
@@ -192,6 +195,82 @@ HEditLoop
 	CP	#51		;Ctrl+PageDown
 	JP	Z,HEndFile	;в конец файла
 	RET 
+;[]==========================================================[]
+ReadEditorIni
+	ld	a,0
+.iniReaded	equ	$-1
+	and	a
+	ret	nz
+	inc	a
+	ld	(.iniReaded),a
+	LD	C,#02
+	PUSH	IY
+	RST	#10
+	POP	IY
+	LD	HL,WorkBuffer
+	ADD	A,"A"
+	LD	(HL),A
+	INC	HL
+	LD	(HL),":"
+	INC	HL
+	LD	C,Dss.CurDir
+	PUSH	IY
+	RST	#10
+	POP	IY
+	LD	HL,FlexDIRECTORY
+	LD	C,Dss.ChDir
+	PUSH	IY
+	RST	#10
+	POP	IY
+	PUSH	AF
+	CALL	C,DOSError
+	POP	AF
+	JP	C,.exit
+	LD	HL,SettingsFileName
+	ld	c,Dss.Open
+        ld	a,1
+	PUSH	IY
+        rst	10h
+	pop	iy
+        jr	c,.exit
+        ld	(.file),a
+        ld	hl,LineBuffer
+        ld	de,6
+        ld	c,Dss.Read
+	PUSH	IY
+        rst	10h
+	pop	iy
+        jr	c,.close
+        ld	hl,(LineBuffer)
+        ld	de,"F" + "E" * 256
+        and	a
+        sbc	hl,de
+        jr	nz,.close
+        ld	hl,LineBuffer+2
+        ld	a,(hl)
+        cp	"C"
+        jr	nz,.close
+	inc	hl
+	ld	a,(hl)
+	ld	(THomeString.param),a
+	inc	hl
+	ld	a,(hl)
+	ld	(CalcStartTabs.param),a
+	inc	hl
+	ld	a,(hl)
+	ld	(AutoBrackets),a
+.close	ld	a,0
+.file	equ	$-1
+	ld	c,Dss.Close
+	PUSH	IY
+	rst	#10
+	pop	IY
+.exit	LD	HL,WorkBuffer
+	LD	C,#1D
+	PUSH	IY
+	RST	#10
+	POP	IY
+	ret
 ;[]==========================================================[]
 EditingFile
 	DEFS	#30,0
@@ -430,7 +509,7 @@ InitScreen
 	DEFB	#01	;Text Line
 	DEFW	#0010,#0003
 	DEFB	#0F
-	DEFB	"FN File Editor v1.04",0
+	DEFB	"FN File Editor v1.05",0
 	DEFB	#06	;Horizontal line
 	DEFW	#0000,#000D
 	DEFW	#0280
@@ -1086,15 +1165,21 @@ QuitTab
 	DEFW #0000,#0280,#008A,#0100,#20,#0000,QuitAbort,#0000
 	DEFW #8000
 ;[]==========================================================[]
-;Editor Settings
-OnHomeSmartPosition
-	db	1		;Если ==0, то по кнопке Home курсор устанавливается всегда в 0ю позицию, иначе применяется умное позиционирование
-OnEnterCopyParagraph
-	db	1		;Если ==0, то при нажатии Enter строка переносится в 0ю позицию, иначе - копируется отступ с исходной строчки
+SettingsFileName
+        db	"FNEDIT.INI",0
 ;[]==========================================================[]
 end
 
 	savebin	"..\bin\fnedit.bin",StartOfEditor,end-StartOfEditor
+
+; 	Editor Settings
+; 	db	"FEC"
+; OnHomeSmartPosition
+;  	db	1		;Если ==0, то по кнопке Home курсор устанавливается всегда в 0ю позицию, иначе применяется умное позиционирование
+; OnEnterCopyParagraph
+;  	db	1		;Если ==0, то при нажатии Enter строка переносится в 0ю позицию, иначе - копируется отступ с исходной строчки
+; 	db	1		;Если ==0, то не будут автоматически закрываться скобочки и кавычки
+
        ORG     #7F00
 
 

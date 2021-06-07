@@ -320,7 +320,7 @@ InitScreen
 	DEFB	#01	;Text Line
 	DEFW	#0010,#0003
 	DEFB	#0F
-	DEFB	"Flex Navigator v1.12",0
+	DEFB	"Flex Navigator v1.13",0
 	DEFB	#06	;Horizontal line
 	DEFW	#0000,#000D
 	DEFW	#0280
