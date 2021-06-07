@@ -405,12 +405,13 @@ QuitLoop
 	JR	NZ,QuitLoop
 	LD	A,E
 	CP	#1B
-	JP	Z,QuitAbort
+	scf
+	JP	Z,SureExit
 	CP	#0D
-	JP	Z,EditorE
+	JP	Z,SureExit
 	RES	5,A
 	CP	"Y"
-	JP	Z,EditorE
+	JP	Z,SureExit
 	CP	"N"
 	JR	NZ,QuitLoop
 QuitAbort
