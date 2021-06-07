@@ -907,7 +907,9 @@ AutoBracket
         ld	a,1
 AutoBrackets equ $-1
         and	a
-        ret	z 
+        ret	z
+	call	CanInsertBrackets
+	ret	c
         ld	a,b
         call	Subst
         db	4
@@ -917,6 +919,21 @@ AutoBrackets equ $-1
         cp	34	;'"'
         ret	nz 
         jp	Insert
+CanInsertBrackets
+	LD	A,(IY+LenString)	;InpytSymb
+	CP	240			;Max len
+	RET	Z
+	LD	H,high LineBuffer
+	LD	L,(IY+StringX)
+	ld	a,(hl)
+	and	a
+	ret	z
+	cp	32
+	ret	z
+	cp	9
+	ret	z
+	scf
+	ret
 
 Insert	EX	AF,AF'
 	LD	A,(IY+LenString)	;InpytSymb
