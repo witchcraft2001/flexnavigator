@@ -222,9 +222,6 @@ ReadEditorIni
 	PUSH	IY
 	RST	#10
 	POP	IY
-	PUSH	AF
-	CALL	C,DOSError
-	POP	AF
 	JP	C,.exit
 	LD	HL,SettingsFileName
 	ld	c,Dss.Open

@@ -1110,7 +1110,7 @@ StringXToCursorX
 
 CalcStartTabs
 	ld	hl,LineBuffer
-	ld	a,0
+	ld	a,1
 .param	equ	$-1
 	and	a
 	ret	z
@@ -1528,7 +1528,7 @@ WordRg2	LD	(IY+StringX),C
 	JP	TCursorRight
 ;[]----------------------------------------------------------[]
 THomeString
-	ld	a,0
+	ld	a,1
 .param	equ	$-1
 	and	a
 	jr	z,.toZero
