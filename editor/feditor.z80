@@ -17,6 +17,9 @@ TempBuffer=WorkBuffer+#300
 Step	  EQU	#08
 CursTimer EQU	#0E
 ;[]==========================================================[]
+	JP	FileEditor
+	include	"version.inc"
+	db	0
 FileEditor
 	CALL	LoadFile
 	RET	C
@@ -506,7 +509,9 @@ InitScreen
 	DEFB	#01	;Text Line
 	DEFW	#0010,#0003
 	DEFB	#0F
-	DEFB	"FN File Editor v1.05",0
+	DEFB	"FN File Editor v"
+	include	"version.inc"
+	DEFB	0
 	DEFB	#06	;Horizontal line
 	DEFW	#0000,#000D
 	DEFW	#0280
@@ -1005,7 +1010,9 @@ About
 	DEFB	#01	;Text Line
 	DEFW	#0090,#001C
 	DEFB	#80
-	DEFB	"v1.04",0
+	DEFB	"v"
+	include	"version.inc"
+	DEFB	0
 	DEFB	#01	;Text Line
 	DEFW	#0012,#0028
 	DEFB	#80

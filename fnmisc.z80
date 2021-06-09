@@ -949,7 +949,7 @@ VersionR
 	CALL	MakeWindow
 	DEFB	#01
 	DEFW	#00C0,#0040
-	DEFW	#0100,#0070
+	DEFW	#0100,#0084
 	DEFB	#02	;Head place
 	DEFW	#0004,#0002
 	DEFW	#00F8,#000A
@@ -959,32 +959,55 @@ VersionR
 	DEFB	#0F
 	DEFB	"Version",0
 	DEFB	#01	;Text Line
-	DEFW	#005A,#0014
+	DEFW	#005D,#0014
 	DEFB	#80
 	DEFB	"Flex Navigator",0
 	DEFB	#01	;Text Line
-	DEFW	#005E,#0026
+	DEFW	#004C,#0026
 	DEFB	#80
-	DEFB	"Version 1.13",0
+	DEFB	"Component versions:",0
 	DEFB	#01	;Text Line
-	DEFW	#005F,#0030
+	DEFW	#0046,#0030
 	DEFB	#80
-	DEFB	"April, 2 2021",0
+	DEFB	"Manager:",0
 	DEFB	#01	;Text Line
-	DEFW	#004F,#0042
+	DEFW	#0080,#0030
 	DEFB	#80
-	DEFB	"(C) 2000 Enin Anton",0
+	include	"version.inc"		;Manager version text resource
+	DEFB	0
 	DEFB	#01	;Text Line
-	DEFW	#0032,#004C
+	DEFW	#0041,#003A
 	DEFB	#80
-	DEFB	"(C) 2021 Mikhaltchenkov Dmitry",0
+	DEFB	"File Editor:",0
+	DEFB	#01	;Text Line
+	DEFW	#0080,#003A
+	DEFB	#80
+	include	"editor\version.inc"		;File editor version text resource
+	DEFB	0
+	DEFB	#01	;Text Line
+	DEFW	#003D,#0044
+	DEFB	#80
+	DEFB	"File Viewer:",0
+	DEFB	#01	;Text Line
+	DEFW	#0080,#0044
+	DEFB	#80
+	include	"viewer\version.inc"		;File editor version text resource
+	DEFB	0
+	DEFB	#01	;Text Line
+	DEFW	#0032,#0056
+	DEFB	#80
+	DEFB	"(C) 2000, Enin Anton",0
+	DEFB	#01	;Text Line
+	DEFW	#0032,#0060
+	DEFB	#80
+	DEFB	"(C) 2021, Mikhaltchenkov Dmitry",0
 	DEFB	#04	;UpRectan
-	DEFW	#005C,#005D
+	DEFW	#005C,#0071
 	DEFW	#0048,#000E
 	DEFB	#01	;Text Line
-	DEFW	#0078,#0060
+	DEFW	#0078,#0074
 	DEFB	#80
-	DEFB	"Ok",0
+	DEFB	"OK",0
 	DEFB	#00
 	CALL	ResFire
 VersionLoop

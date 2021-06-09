@@ -4,6 +4,9 @@
 StartOfViewer
 LineBuffer=WorkBuffer+#300
 ;[]==========================================================[]
+	JP	FileViewer
+	include	"version.inc"
+	db	0		;File viewer version
 FileViewer
 	CALL	LoadFile
 	RET	C
@@ -281,7 +284,9 @@ LoadFl1	LD	A,D
 	DEFB	#01	;Text Line
 	DEFW	#0070,#0003
 	DEFB	#0F
-	DEFB	"FN File Viewer v1.03",0
+	DEFB	"FN File Viewer v"
+	include	"version.inc"
+	DEFB	0
 	DEFB	#01	;Text Line
 	DEFW	#0008,#0010
 	DEFB	#80
@@ -528,7 +533,9 @@ InitVS0	RL	C
 	DEFB	#01	;Text Line
 	DEFW	#0008,#0003
 	DEFB	#0F
-	DEFB	"  FN File Viewer v1.03",0
+	DEFB	"  FN File Viewer v"
+	include	"version.inc"
+	DEFB	0
 	DEFB	#06	;Horizontal line
 	DEFW	#0000,#000D
 	DEFW	#0280
@@ -863,7 +870,9 @@ About
 	DEFB	#01	;Text Line
 	DEFW	#0090,#001C
 	DEFB	#80
-	DEFB	"v1.03",0
+	DEFB	"v"
+	include	"version.inc"
+	DEFB	0
 	DEFB	#01	;Text Line
 	DEFW	#0012,#0028
 	DEFB	#80

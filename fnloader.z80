@@ -153,7 +153,9 @@ EntryExec:	DI
 		db	0x00
 
 .copyright_str:	db	0x0D, 0x0A
-		db	"The Flex Navigator, ver 1.13", 0x0D, 0x0A
+		db	"The Flex Navigator, ver."
+		include "version.inc"		;Manager version
+		db	0x0D, 0x0A
 		db	"Original version (C) 2000, Enin Anton, St-Petersburg.", 0x0D, 0x0A
 		db	"Modified version (C) 2021, Mikhaltchenkov Dmitry, Rostov-on-Don.", 0x0D, 0x0A, 0x00
 .incor_dos_str:	db	"Incorrect DOS version, need DOS 1.00 or high.", 0x0D, 0x0A, 0x00
