@@ -29,6 +29,8 @@ ViewerBegin
 	CALL	InitVProc
 	CALL	PrintVPage
 ViewerLoop
+	LD	BC,#3531	;Сбрасываем буфер клавиатуры
+	RST	#10
 	LD	A,(ViewMode)
 	OR	A
 	JR	NZ,HViewLoop

@@ -94,7 +94,7 @@ ComNext	LD	A,(TreeFlag)
 
 ;[]-----------------------------------------------------------------------[]
 TestKeys
-	LD	C,0x37
+	LD	C,0x31
 	RST	0x10
 	JR	Z,KeyExit
 	RES	7,D
