@@ -645,7 +645,9 @@ SystemInfoR
 	DEFB	#01	;Text Line
 	DEFW	#000A,#0014
 	DEFB	#80
-	DEFB	"FN version:  1.13",0
+	DEFB	"FN version:  "
+	include	"version.inc"
+	DEFB 	0
 	DEFB	#01	;Text Line
 	DEFW	#000A,#0020
 	DEFB	#80

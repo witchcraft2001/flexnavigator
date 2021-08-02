@@ -46,75 +46,75 @@ EntryExec:	DI
 		RST	0x08			; get memory pages list
 		LD	A, (.MPg)		; set pages from 0xC000
 		OUT	(0xE2), A
-		LD	HL, 0xffff-(FNMainEnd-FNMain)		;FNMAIN
+		LD	HL, FNMain	;0xffff-(FNMainEnd-FNMain)		;FNMAIN
 		LD	DE, FNMainEnd-FNMain
 		LD	A, (.hFile)
 		LD	C, 0x13
 		RST	0x10
 		JP	C, .disk_error
-		LD	HL, 0xffff-(FNMainEnd-FNMain)		;Распаковка FNMAIN
-		LD	DE, 0x8500
-		call	UnHrust
+		; LD	HL, 0xffff-(FNMainEnd-FNMain)		;Распаковка FNMAIN
+		; LD	DE, 0x8500
+		; call	UnHrust
 
 		LD	A, (.FPg)
 		OUT	(0xE2), A
-		LD	HL, 0xffff-(FNFuncEnd-FNFunc)		;FNFUNCT
+		LD	HL, FNFunc	;0xffff-(FNFuncEnd-FNFunc)		;FNFUNCT
 		LD	DE, FNFuncEnd-FNFunc
 		LD	A, (.hFile)
 		LD	C, 0x13
 		RST	0x10
 		JP	C, .disk_error
-		LD	HL, 0xffff-(FNFuncEnd-FNFunc)		;Распаковка FNFUNCT
-		LD	DE, 0xC000
-		call	UnHrust
+		; LD	HL, 0xffff-(FNFuncEnd-FNFunc)		;Распаковка FNFUNCT
+		; LD	DE, 0xC000
+		; call	UnHrust
 
 		LD	A, (.VPg)		;FNVIEW
 		OUT	(0xE2), A
-		LD	HL, 0xffff-(FNViewEnd-FNView)
+		LD	HL, FNView	;0xffff-(FNViewEnd-FNView)
 		LD	DE, FNViewEnd-FNView
 		LD	A, (.hFile)
 		LD	C, 0x13
 		RST	0x10
 		JP	C, .disk_error
-		LD	HL, 0xffff-(FNViewEnd-FNView)		;Распаковка FNVIEW
-		LD	DE, 0xC000
-		call	UnHrust
+		; LD	HL, 0xffff-(FNViewEnd-FNView)		;Распаковка FNVIEW
+		; LD	DE, 0xC000
+		; call	UnHrust
 
 		LD	A, (.EPg)		;FNEDIT
 		OUT	(0xE2), A
-		LD	HL, 0xffff-(FNEditEnd-FNEdit)
+		LD	HL, FNEdit	;0xffff-(FNEditEnd-FNEdit)
 		LD	DE, FNEditEnd-FNEdit
 		LD	A, (.hFile)
 		LD	C, 0x13
 		RST	0x10
 		JP	C, .disk_error
-		LD	HL, 0xffff-(FNEditEnd-FNEdit)		;Распаковка FNEDIT
-		LD	DE, 0xC000
-		call	UnHrust
+		; LD	HL, 0xffff-(FNEditEnd-FNEdit)		;Распаковка FNEDIT
+		; LD	DE, 0xC000
+		; call	UnHrust
 
 		LD	A, (.HPg)		;FNHELP
 		OUT	(0xE2), A
-		LD	HL, 0xffff-(FNHelpEnd-FNHelp)
+		LD	HL, FNHelp	;0xffff-(FNHelpEnd-FNHelp)
 		LD	DE, FNHelpEnd-FNHelp
 		LD	A, (.hFile)
 		LD	C, 0x13
 		RST	0x10
 		JP	C, .disk_error
-		LD	HL, 0xffff-(FNHelpEnd-FNHelp)		;Распаковка FNHELP
-		LD	DE, 0xC000
-		call	UnHrust
+		; LD	HL, 0xffff-(FNHelpEnd-FNHelp)		;Распаковка FNHELP
+		; LD	DE, 0xC000
+		; call	UnHrust
 
 		LD	A, (.FNPg)		;FNFONT
 		OUT	(0xE2), A
-		LD	HL, 0xffff-(FNFontEnd-FNFont)
+		LD	HL, FNFont	;0xffff-(FNFontEnd-FNFont)
 		LD	DE, FNFontEnd-FNFont
 		LD	A, (.hFile)
 		LD	C, 0x13
 		RST	0x10
 		JP	C, .disk_error
-		LD	HL, 0xffff-(FNFontEnd-FNFont)		;Распаковка FNFONT
-		LD	DE, 0xC000
-		call	UnHrust
+		; LD	HL, 0xffff-(FNFontEnd-FNFont)		;Распаковка FNFONT
+		; LD	DE, 0xC000
+		; call	UnHrust
 
 		LD	A, (.hFile)
 		LD	C, 0x12
@@ -162,215 +162,31 @@ EntryExec:	DI
 .no_memory_str:	db	"Not enough memory to load program.", 0x0D, 0x0A, 0x00
 .load_err_str:	db	"Disk loading error.", 0x0D, 0x0A, 0x00
 
-; Распаковщик (DeHrust)
-
-UnHrust		di
-		ld	ix,-12
-		add	ix,sp
-		push	de
-		ld	sp,hl
-		pop	bc
-		ex	de,hl
-		pop	bc
-		dec	bc
-		add	hl,bc
-		ex	de,hl
-		pop	bc
-		dec	bc
-		add	hl,bc
-		sbc	hl,de
-		add	hl,de
-		jr	c,loc1
-		ld	d,h
-		ld	e,l
-loc1:		lddr
-		ex	de,hl
-		ld	d,(ix+11)
-		ld	e,(ix+10)
-		ld	sp,hl
-		pop	hl
-		pop	hl
-		pop	hl
-		ld	b,6
-loc2:		dec	sp
-		pop	af
-		ld	(ix+6),a
-		inc	ix
-		djnz	loc2
-		exx
-		ld	d,0BFh
-		ld	bc,1010h
-		pop	hl
-loc3:		dec	sp
-		pop	af
-		exx
-loc4:		ld	(de),a
-		inc	de
-loc5:		exx
-loc6:		add	hl,hl
-		djnz	loc7
-		pop	hl
-		ld	b,c
-loc7:		jr	c,loc3
-		ld	e,1
-loc8:		ld	a,80h
-loc9:		add	hl,hl
-		djnz	loc10
-		pop	hl
-		ld	b,c
-loc10:		rla
-		jr	c,loc9
-		cp	3
-		jr	c,loc11
-		add	a,e
-		ld	e,a
-		xor	c
-		jr	nz,loc8
-loc11:		add	a,e
-		cp	4
-		jr	z,loc26
-		adc	a,0FFh
-		cp	2
-		exx
-loc12:		ld	c,a
-loc13:		exx
-		ld	a,0BFh
-		jr	c,loc17
-loc14:		add	hl,hl
-		djnz	loc15
-		pop	hl
-		ld	b,c
-loc15:		rla
-		jr	c,loc14
-		jr	z,loc16
-		inc	a
-		add	a,d
-		jr	nc,loc18
-		sub	d
-loc16:		inc	a
-		jr	nz,loc20
-		ld	a,0EFh
-loc17:		rrca
-		cp	a
-loc18:		add	hl,hl
-		djnz	loc19
-		pop	hl
-		ld	b,c
-loc19:		rla
-		jr	c,loc18
-loc20:		exx
-		ld	h,0FFh
-		jr	z,loc21
-		ld	h,a
-		dec	sp
-		inc	a
-		jr	z,loc24
-		pop	af
-loc21:		ld	l,a
-		add	hl,de
-		ldir
-loc22:		jr	loc5
-		;
-loc23:		exx
-		rrc	d
-		jr	loc6
-		;
-loc24:		pop	af
-		cp	0E0h
-		jr	c,loc21
-		rlca
-		xor	c
-		inc	a
-		jr	z,loc23
-		sub	10h
-loc25:		ld	l,a
-		ld	c,a
-		ld	h,0FFh
-		add	hl,de
-		ldi
-		dec	sp
-		pop	af
-		ld	(de),a
-		inc	hl
-		inc	de
-		ld	a,(hl)
-		jr	loc4
-		;
-loc26:		ld	a,80h
-loc27:		add	hl,hl
-		djnz	loc28
-		pop	hl
-		ld	b,c
-loc28:		adc	a,a
-		jr	nz,loc31
-		jr	c,loc27
-		ld	a,0FCh
-		jr	loc32
-		;
-loc29:		dec	sp
-		pop	bc
-		ld	c,b
-		ld	b,a
-		ccf
-		jr	loc13
-		;
-loc30:		cp	0Fh
-		jr	c,loc29
-		jr	nz,loc12
-		add	a,0F4h
-		ld	sp,ix
-		jr	loc34
-		;
-loc31:		sbc	a,a
-		ld	a,0EFh
-loc32:		add	hl,hl
-		djnz	loc33
-		pop	hl
-		ld	b,c
-loc33:		rla
-		jr	c,loc32
-		exx
-		jr	nz,loc25
-		bit	7,a
-		jr	z,loc30
-		sub	0EAh
-loc34:		ex	de,hl
-loc35:		pop	de
-		ld	(hl),e
-		inc	hl
-		ld	(hl),d
-		inc	hl
-		dec	a
-		jr	nz,loc35
-		ex	de,hl
-		jr	nc,loc22
-		ret
-
 EXEend:
 
 		org #8500
 FNMain
-		insert	"bin\fnmain.hst"
+		insert	"bin\fnmain.bin"
 FNMainEnd
 		org #c000
 FNFunc
-		insert	"bin\fnfunc.hst"
+		insert	"bin\fnfunc.bin"
 FNFuncEnd
 		org #c000
 FNView
-		insert	"bin\fnview.hst"
+		insert	"bin\fnview.bin"
 FNViewEnd
 		org #c000
 FNEdit
-		insert	"bin\fnedit.hst"
+		insert	"bin\fnedit.bin"
 FNEditEnd
 		org #c000
 FNHelp
-		insert	"bin\fnhelp.hst"
+		insert	"bin\fnhelp.bin"
 FNHelpEnd
 		org #c000
 FNFont
-		insert	"bin\fnfont.hst"
+		insert	"bin\fnfont.bin"
 FNFontEnd
 
 
