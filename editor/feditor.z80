@@ -233,9 +233,15 @@ ReadEditorIni
         rst	10h
 	pop	iy
         jr	c,.exit
-        ld	(.file),a
+        ld	(.file),a	
         ld	hl,LineBuffer
-        ld	de,6
+	push	hl
+	ld	de,LineBuffer+1
+	ld	(hl),0
+	ld	bc,7
+	ldir
+	pop	hl
+        ld	de,7
         ld	c,Dss.Read
 	PUSH	IY
         rst	10h
@@ -259,6 +265,10 @@ ReadEditorIni
 	inc	hl
 	ld	a,(hl)
 	ld	(AutoBrackets),a
+	inc	hl
+	ld	a,(hl)
+	ld	(QuitAsk.param),a
+
 .close	ld	a,0
 .file	equ	$-1
 	ld	c,Dss.Close
@@ -442,6 +452,10 @@ EditorE	LD	A,(MemIndef)
 	RET
 ;[]==========================================================[]
 QuitAsk
+	ld	a,0
+.param	equ	$-1
+	and	a
+	jr	z,EditorE
 	CALL	MakeWindow
 	DEFB	#01
 	DEFW	#00D0,#0058
