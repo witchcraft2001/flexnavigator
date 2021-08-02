@@ -74,7 +74,7 @@ TEditLoop
 	CP	#3E
 	JP	Z,ChEditor	;Просмотр в HEX
 	CP	#43
-	JP	Z,PrintFile
+	JP	Z,EditorSetup
 	CP	#4F
 	JP	Z,TDeleteSymbol
 	CP	#54
@@ -1114,6 +1114,7 @@ ScSCRN1	LD	A,D
 ;	INCLUDE	"FETEXT.1",#0E
 	INCLUDE	"FEHEX.z80";,#0F
 	INCLUDE	"FEPRN.z80";,#10
+	INCLUDE "FESETUP.z80"
 ;[]==========================================================[]
 ASCIItab
     DEFW #0000,#0270,#001C,#00E4,#00,#0000,TNewCrPos,#0000

@@ -1,0 +1,150 @@
+EditorSetup
+	CALL	PutString
+	CALL	ResCursor
+	CALL	MakeWindow
+	DEFB	#01
+	DEFW	#00C8,#0050
+	DEFW	#00F0,#005C
+	DEFB	FW_RECT	;Head place
+	DEFW	#0004,#0002
+	DEFW	#00E8,#000A
+	DEFB	#00
+	DEFB	FW_LABEL	;Text Line
+	DEFW	#0058,#0003
+	DEFB	#0F
+	DEFB	"Editor settings",0
+
+	DEFB	FW_RECT_DEEP	;Углубл
+	DEFW	#0010,#0013
+	DEFW	#0014,#000B
+	DEFB	FW_RECT	        ;Head place
+	DEFW	#0012,#0014
+	DEFW	#0010,#0009
+	DEFB	#0F
+	DEFB	FW_LABEL	;Text Line
+	DEFW	#0014,#0015
+	DEFB	#F0
+HomeKeyFlg
+	DEFB	#FF,#00
+	DEFB	FW_LABEL	;Text Line
+	DEFW	#0028,#0016
+	DEFB	#80
+	DEFB	"Find first symbol on Home key",0
+
+	DEFB	FW_RECT_DEEP	;Углубл
+	DEFW	#0010,#0023
+	DEFW	#0014,#000B
+	DEFB	FW_RECT	        ;Head place
+	DEFW	#0012,#0024
+	DEFW	#0010,#0009
+	DEFB	#0F
+	DEFB	FW_LABEL	;Text Line
+	DEFW	#0014,#0025
+	DEFB	#F0
+IndentFlg
+	DEFB	#FF,#00
+	DEFB	FW_LABEL	;Text Line
+	DEFW	#0028,#0026
+	DEFB	#80
+	DEFB	"Auto indent",0
+
+
+	DEFB	FW_RECT_DEEP	;Углубл
+	DEFW	#0010,#0033
+	DEFW	#0014,#000B
+	DEFB	FW_RECT	        ;Head place
+	DEFW	#0012,#0034
+	DEFW	#0010,#0009
+	DEFB	#0F
+	DEFB	FW_LABEL	;Text Line
+	DEFW	#0014,#0035
+	DEFB	#F0
+BracketsFlg
+	DEFB	#FF,#00
+	DEFB	FW_LABEL	;Text Line
+	DEFW	#0028,#0036
+	DEFB	#80
+	DEFB	"Autobrackets",0
+
+	DEFB	FW_H_LINE	;Horizontal line
+	DEFW	#0004,#0042
+	DEFW	#00E8
+	DEFB	FW_RECT_CONVEX	;UpRectan
+	DEFW	#004D,#0048
+	DEFW	#0048,#000E
+	DEFB	FW_LABEL	;Text Line
+	DEFW	#0060,#004B
+	DEFB	#80
+	DEFB	"Cancel",0
+	DEFB	FW_RECT_CONVEX	;UpRectan
+	DEFW	#00A0,#0048
+	DEFW	#0040,#000E
+	DEFB	FW_LABEL	;Text Line
+	DEFW	#00BC,#004B
+	DEFB	#80
+	DEFB	"Ok",0
+	DEFB	FW_END
+SetupLoop
+	LD	IX,SetupTab
+	CALL	TestCoords
+	LD	C,#31
+	RST	#10
+	JR	Z,SetupLoop
+	LD	A,E
+	RES	5,A
+	CP	#1B
+	JP	Z,SetupCancel
+	CP	#0D
+	JP	Z,SetupOkey
+	CP	"C"
+	JP	Z,SetupCancel
+	CP	"O"
+	JP	Z,SetupOkey
+        jr      SetupLoop
+SaveSetup
+SetupOkey
+SetupCancel
+	CALL	MakeWindow
+	DEFB	#7F
+	DEFB	#00
+	JP	EditorLoop
+;[]==========================================================[]
+;Формат	таблицы
+;	+00  2	Xmin
+;	+02  2	Xmax
+;	+04  2	Ymin
+;	+06  2	Ymax
+;	+08  2	0 - простой об'ект
+;		бит 0 -	кнопка
+;		бит 1 -	рабочая	кнопка
+;		бит 2 -	инверт 1
+;		бит 3 -	статичный инверт
+;		бит 4 -	программа запускается без адреса возвр.
+;			и без огня
+;		бит 5 -	программа запускается без адреса возвр.
+;			по левой кнопке	огня
+;		бит 6 -	программа запускается без адреса возвр.
+;			по правой кнопке огня
+;		бит 7 -	вызвать	функцию	закрытия окна перед
+;			запуском программы без огня
+;		бит 8 -	вызвать	функцию	закрытия окна перед
+;			запуском программы по левой кнопке
+;		бит 9 -	вызвать	функцию	закрытия окна перед
+;			запуском программы по правой кнопке
+;		бит15 -	это переключатель (инверт при огне не
+;			убирать)
+;	+0A  2	Адрес обработчика при не нажатом огне
+;	+0C  2	Адрес обработчика при нажатом огне (лев)
+;	+0E  2	Адрес обработчика при нажатом огне (прав)
+
+;[]==========================================================[]
+SetupTab
+     DEFW #01C8,#0210,#00A2,#00B0,#0001,#0000,SaveSetup,#0000
+     DEFW #0170,#01B8,#00B8,#00C6,#0021,#0000,SetupCancel,#0000
+     DEFW #01C8,#0210,#00B8,#00C6,#0021,#0000,SetupOkey,#0000
+
+     DEFW #0000,#0060,#0000,#0100,#0020,#0000,SetupCancel,#0000
+     DEFW #0220,#0280,#0000,#0100,#0020,#0000,SetupCancel,#0000
+     DEFW #0000,#0280,#0000,#0040,#0020,#0000,SetupCancel,#0000
+     DEFW #0000,#0280,#00B8,#0100,#0020,#0000,SetupCancel,#0000
+     DEFW #8000

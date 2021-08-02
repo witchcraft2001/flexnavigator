@@ -166,3 +166,28 @@ FA_SYSTEM       EQU     0x04    ; System file
 FA_LABEL        EQU     0x08    ; Volume label 
 FA_DIREC        EQU     0x10    ; Directory
 FA_ARCH         EQU     0x20    ; Archive 
+
+;конец списка об'ектов. после этого оконная функция возвращает управление.
+FW_END          EQU     0x00
+;надпись
+FW_LABEL        EQU     0x01
+;прямоугольная область
+FW_RECT         EQU     0x02
+;углубленная область
+FW_RECT_DEEP    EQU     0x03
+;выпуклая область
+FW_RECT_CONVEX  EQU     0x04
+;отрисовка кнопки с текстом
+FW_BUTTON       EQU     0x05
+;отрисовка горизонтального разделителя
+FW_H_LINE       EQU     0x06
+;отрисовка вертикального разделителя
+FW_V_LINE       EQU     0x07
+;отрисовка левой кнопки скролбара  <-
+FW_SCR_LEFT     EQU     0x08
+;отрисовка правой кнопки скролбара ->
+FW_SCR_RIGHT    EQU     0x09
+;отрисовка верхней кнопки скролбара ^
+FW_SCR_UP       EQU     0x0A
+;отрисовка нижней кнопки скролбара
+FW_SCR_DOWN     EQU     0x0B
