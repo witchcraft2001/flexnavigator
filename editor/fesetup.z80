@@ -4,13 +4,13 @@ EditorSetup
 	CALL	MakeWindow
 	DEFB	#01
 	DEFW	#00C8,#0050
-	DEFW	#00F0,#005C
+	DEFW	#00F0,#006E
 	DEFB	FW_RECT	;Head place
 	DEFW	#0004,#0002
 	DEFW	#00E8,#000A
 	DEFB	#00
 	DEFB	FW_LABEL	;Text Line
-	DEFW	#0058,#0003
+	DEFW	#0054,#0003
 	DEFB	#0F
 	DEFB	"Editor settings",0
 
@@ -24,12 +24,12 @@ EditorSetup
 	DEFB	FW_LABEL	;Text Line
 	DEFW	#0014,#0015
 	DEFB	#F0
-HomeKeyFlg
+ExitDlgFlg
 	DEFB	#FF,#00
 	DEFB	FW_LABEL	;Text Line
 	DEFW	#0028,#0016
 	DEFB	#80
-	DEFB	"Find first symbol on Home key",0
+	DEFB	"Confirmation of closing the editor",0
 
 	DEFB	FW_RECT_DEEP	;Углубл
 	DEFW	#0010,#0023
@@ -41,13 +41,12 @@ HomeKeyFlg
 	DEFB	FW_LABEL	;Text Line
 	DEFW	#0014,#0025
 	DEFB	#F0
-IndentFlg
+HomeKeyFlg
 	DEFB	#FF,#00
 	DEFB	FW_LABEL	;Text Line
 	DEFW	#0028,#0026
 	DEFB	#80
-	DEFB	"Auto indent",0
-
+	DEFB	"Find first symbol on Home key",0
 
 	DEFB	FW_RECT_DEEP	;Углубл
 	DEFW	#0010,#0033
@@ -59,28 +58,45 @@ IndentFlg
 	DEFB	FW_LABEL	;Text Line
 	DEFW	#0014,#0035
 	DEFB	#F0
-BracketsFlg
+IndentFlg
 	DEFB	#FF,#00
 	DEFB	FW_LABEL	;Text Line
 	DEFW	#0028,#0036
 	DEFB	#80
+	DEFB	"Auto indent",0
+
+	DEFB	FW_RECT_DEEP	;Углубл
+	DEFW	#0010,#0043
+	DEFW	#0014,#000B
+	DEFB	FW_RECT	        ;Head place
+	DEFW	#0012,#0044
+	DEFW	#0010,#0009
+	DEFB	#0F
+	DEFB	FW_LABEL	;Text Line
+	DEFW	#0014,#0045
+	DEFB	#F0
+BracketsFlg
+	DEFB	#FF,#00
+	DEFB	FW_LABEL	;Text Line
+	DEFW	#0028,#0046
+	DEFB	#80
 	DEFB	"Autobrackets",0
 
 	DEFB	FW_H_LINE	;Horizontal line
-	DEFW	#0004,#0042
+	DEFW	#0004,#0054
 	DEFW	#00E8
 	DEFB	FW_RECT_CONVEX	;UpRectan
-	DEFW	#004D,#0048
+	DEFW	#004D,#005A
 	DEFW	#0048,#000E
 	DEFB	FW_LABEL	;Text Line
-	DEFW	#0060,#004B
+	DEFW	#0060,#005D
 	DEFB	#80
 	DEFB	"Cancel",0
 	DEFB	FW_RECT_CONVEX	;UpRectan
-	DEFW	#00A0,#0048
+	DEFW	#00A0,#005A
 	DEFW	#0040,#000E
 	DEFB	FW_LABEL	;Text Line
-	DEFW	#00BC,#004B
+	DEFW	#00BC,#005D
 	DEFB	#80
 	DEFB	"Ok",0
 	DEFB	FW_END
@@ -101,6 +117,11 @@ SetupLoop
 	CP	"O"
 	JP	Z,SetupOkey
         jr      SetupLoop
+
+SetupConfirmDlgInvert
+SetupHomeKeyInvert
+SetupAutoIndentInvert
+SetupAutoBracketsInvert
 SaveSetup
 SetupOkey
 SetupCancel
@@ -143,8 +164,14 @@ SetupTab
      DEFW #0170,#01B8,#00B8,#00C6,#0021,#0000,SetupCancel,#0000
      DEFW #01C8,#0210,#00B8,#00C6,#0021,#0000,SetupOkey,#0000
 
+     DEFW #00D8,#0192,#0063,#006D,#0020,#0000,SetupConfirmDlgInvert,#0000
+     DEFW #00D8,#0186,#0073,#007D,#0020,#0000,SetupHomeKeyInvert,#0000
+     DEFW #00D8,#0192,#0083,#008D,#0020,#0000,SetupAutoIndentInvert,#0000
+     DEFW #00D8,#0192,#0093,#009D,#0020,#0000,SetupAutoBracketsInvert,#0000
+
      DEFW #0000,#0060,#0000,#0100,#0020,#0000,SetupCancel,#0000
      DEFW #0220,#0280,#0000,#0100,#0020,#0000,SetupCancel,#0000
      DEFW #0000,#0280,#0000,#0040,#0020,#0000,SetupCancel,#0000
-     DEFW #0000,#0280,#00B8,#0100,#0020,#0000,SetupCancel,#0000
+     DEFW #0000,#0280,#00BC,#0100,#0020,#0000,SetupCancel,#0000
+
      DEFW #8000
