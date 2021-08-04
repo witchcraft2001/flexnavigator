@@ -118,10 +118,69 @@ SetupLoop
 	JP	Z,SetupOkey
         jr      SetupLoop
 
+CheckTxt
+	DEFB	#00,#00
+
 SetupConfirmDlgInvert
+	LD	HL,CheckTxt
+	LD	A,(QuitAsk.param)
+	XOR	#01
+	LD	(QuitAsk.param),A
+	INC	A
+	NEG 
+	LD	(HL),A
+	LD	DE,#00DC
+	LD	BC,#0065
+	LD	A,#F0
+	CALL	PrnTxtLnIFF
+	CALL	ResFire
+	RET 
+
 SetupHomeKeyInvert
+	LD	HL,CheckTxt
+	LD	A,(THomeString.param)
+	XOR	#01
+	LD	(THomeString.param),A
+	INC	A
+	NEG 
+	LD	(HL),A
+	LD	DE,#00DC
+	LD	BC,#0075
+	LD	A,#F0
+	CALL	PrnTxtLnIFF
+	CALL	ResFire
+	RET 
+
 SetupAutoIndentInvert
+	LD	HL,CheckTxt
+	LD	A,(CalcStartTabs.param)
+	XOR	#01
+	LD	(CalcStartTabs.param),A
+	INC	A
+	NEG 
+	LD	(HL),A
+	LD	DE,#00DC
+	LD	BC,#0085
+	LD	A,#F0
+	CALL	PrnTxtLnIFF
+	CALL	ResFire
+	RET 
+
 SetupAutoBracketsInvert
+	LD	HL,CheckTxt
+	LD	A,(AutoBrackets)
+	XOR	#01
+	LD	(AutoBrackets),A
+	INC	A
+	NEG 
+	LD	(HL),A
+	LD	DE,#00DC
+	LD	BC,#0095
+	LD	A,#F0
+	CALL	PrnTxtLnIFF
+	CALL	ResFire
+	RET 
+
 SaveSetup
 SetupOkey
 SetupCancel
@@ -160,18 +219,18 @@ SetupCancel
 
 ;[]==========================================================[]
 SetupTab
-     DEFW #01C8,#0210,#00A2,#00B0,#0001,#0000,SaveSetup,#0000
-     DEFW #0170,#01B8,#00B8,#00C6,#0021,#0000,SetupCancel,#0000
-     DEFW #01C8,#0210,#00B8,#00C6,#0021,#0000,SetupOkey,#0000
+;      DEFW #01C8,#0210,#00A2,#00B0,#0001,#0000,SaveSetup,#0000
+     DEFW #0114,#015C,#00AA,#00B8,#0021,#0000,SetupCancel,#0000
+     DEFW #0168,#01A8,#00AA,#00B8,#0021,#0000,SetupOkey,#0000
 
-     DEFW #00D8,#0192,#0063,#006D,#0020,#0000,SetupConfirmDlgInvert,#0000
-     DEFW #00D8,#0186,#0073,#007D,#0020,#0000,SetupHomeKeyInvert,#0000
-     DEFW #00D8,#0192,#0083,#008D,#0020,#0000,SetupAutoIndentInvert,#0000
-     DEFW #00D8,#0192,#0093,#009D,#0020,#0000,SetupAutoBracketsInvert,#0000
+     DEFW #00D8,#0192,#0063,#006D,#0000,#0000,SetupConfirmDlgInvert,#0000
+     DEFW #00D8,#0186,#0073,#007D,#0000,#0000,SetupHomeKeyInvert,#0000
+     DEFW #00D8,#0129,#0083,#008D,#0000,#0000,SetupAutoIndentInvert,#0000
+     DEFW #00D8,#0132,#0093,#009D,#0000,#0000,SetupAutoBracketsInvert,#0000
 
-     DEFW #0000,#0060,#0000,#0100,#0020,#0000,SetupCancel,#0000
-     DEFW #0220,#0280,#0000,#0100,#0020,#0000,SetupCancel,#0000
-     DEFW #0000,#0280,#0000,#0040,#0020,#0000,SetupCancel,#0000
+     DEFW #0000,#00C8,#0000,#0100,#0020,#0000,SetupCancel,#0000
+     DEFW #01B8,#0280,#0000,#0100,#0020,#0000,SetupCancel,#0000
+     DEFW #0000,#0280,#0000,#0050,#0020,#0000,SetupCancel,#0000
      DEFW #0000,#0280,#00BC,#0100,#0020,#0000,SetupCancel,#0000
 
      DEFW #8000
