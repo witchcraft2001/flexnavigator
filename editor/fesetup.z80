@@ -1,6 +1,23 @@
 EditorSetup
 	CALL	PutString
 	CALL	ResCursor
+
+	LD	A,(QuitAsk.param)
+	CALL	ParamToSymbol
+	LD	(ExitDlgFlg),A
+
+	LD	A,(THomeString.param)
+	CALL	ParamToSymbol
+	LD	(HomeKeyFlg),A
+
+	LD	A,(CalcStartTabs.param)
+	CALL	ParamToSymbol
+	LD	(IndentFlg),A
+
+	LD	A,(AutoBrackets)
+	CALL	ParamToSymbol
+	LD	(BracketsFlg),A
+
 	CALL	MakeWindow
 	DEFB	#01
 	DEFW	#00C8,#0050
@@ -118,6 +135,15 @@ SetupLoop
 	JP	Z,SetupOkey
         jr      SetupLoop
 
+;A - parameter
+;Out - A = A == 0 ? " " : "v"
+ParamToSymbol
+	OR	A
+	LD	A,#FE
+	RET	Z
+	INC	A
+	RET
+
 CheckTxt
 	DEFB	#00,#00
 
@@ -126,8 +152,7 @@ SetupConfirmDlgInvert
 	LD	A,(QuitAsk.param)
 	XOR	#01
 	LD	(QuitAsk.param),A
-	INC	A
-	NEG 
+	call	ParamToSymbol
 	LD	(HL),A
 	LD	DE,#00DC
 	LD	BC,#0065
@@ -141,8 +166,7 @@ SetupHomeKeyInvert
 	LD	A,(THomeString.param)
 	XOR	#01
 	LD	(THomeString.param),A
-	INC	A
-	NEG 
+	call	ParamToSymbol
 	LD	(HL),A
 	LD	DE,#00DC
 	LD	BC,#0075
@@ -156,8 +180,7 @@ SetupAutoIndentInvert
 	LD	A,(CalcStartTabs.param)
 	XOR	#01
 	LD	(CalcStartTabs.param),A
-	INC	A
-	NEG 
+	call	ParamToSymbol
 	LD	(HL),A
 	LD	DE,#00DC
 	LD	BC,#0085
@@ -171,8 +194,7 @@ SetupAutoBracketsInvert
 	LD	A,(AutoBrackets)
 	XOR	#01
 	LD	(AutoBrackets),A
-	INC	A
-	NEG 
+	call	ParamToSymbol
 	LD	(HL),A
 	LD	DE,#00DC
 	LD	BC,#0095
