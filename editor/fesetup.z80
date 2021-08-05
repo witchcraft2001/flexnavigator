@@ -187,7 +187,7 @@ SetupCancel
 	CALL	MakeWindow
 	DEFB	#7F
 	DEFB	#00
-	JP	EditorLoop
+	RET
 ;[]==========================================================[]
 ;Формат	таблицы
 ;	+00  2	Xmin
