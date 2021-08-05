@@ -164,7 +164,7 @@ HEditLoop
 	CP	#3F		;F5
 	JP	Z,HGoTo		;Переход на адрес пользователя
 	CP	#43
-	JP	Z,PrintFile
+	JP	Z,EditorSetup
 	CP	#54
 	JP	Z,HCursorLeft
 	CP	#56
@@ -691,9 +691,9 @@ InitStatus
 	DEFW	#01E0,#00F2
 	DEFW	#0050,#000E
 	DEFB	#01	;Text Line
-	DEFW	#01F6,#00F5
+	DEFW	#01EE,#00F5
 	DEFB	#80
-	DEFB	"F9 Print",0
+	DEFB	"F9 Settings",0
 
 	DEFB	#04	;UpRectan
 	DEFW	#0230,#00F2
@@ -762,9 +762,9 @@ InitHEXStatus
 	DEFW	#01E0,#00F2
 	DEFW	#0050,#000E
 	DEFB	#01	;Text Line
-	DEFW	#01F6,#00F5
+	DEFW	#01EE,#00F5
 	DEFB	#80
-	DEFB	"F9 Print",0
+	DEFB	"F9 Settings",0
 	DEFB	#04	;UpRectan
 	DEFW	#0230,#00F2
 	DEFW	#0050,#000E
@@ -1121,7 +1121,7 @@ ASCIItab
     DEFW #0000,#0050,#00F2,#0100,#01,#0000,About,#0000
     DEFW #0050,#00A0,#00F2,#0100,#01,#0000,SaveFile,#0000
     DEFW #00A0,#00F0,#00F2,#0100,#01,#0000,ChEditor,#0000
-    DEFW #01E0,#0230,#00F2,#0100,#01,#0000,PrintFile,#0000
+    DEFW #01E0,#0230,#00F2,#0100,#01,#0000,EditorSetup,#0000
     DEFW #0230,#0280,#00F2,#0100,#21,#0000,EditorExit,#0000
     DEFW #0270,#0280,#001C,#0024,#03,#0000,TCursorUp,#0000
     DEFW #0270,#0280,#00DC,#00E4,#03,#0000,TCursorDown,#0000
@@ -1141,7 +1141,7 @@ HEXtab
     DEFW #0050,#00A0,#00F2,#0100,#01,#0000,SaveFile,#0000
     DEFW #00A0,#00F0,#00F2,#0100,#01,#0000,ChEditor,#0000
     DEFW #00F0,#0140,#00F2,#0100,#01,#0000,HGoTo,#0000
-    DEFW #01E0,#0230,#00F2,#0100,#01,#0000,PrintFile,#0000
+    DEFW #01E0,#0230,#00F2,#0100,#01,#0000,EditorSetup,#0000
     DEFW #0230,#0280,#00F2,#0100,#21,#0000,EditorExit,#0000
     DEFW #0270,#0280,#001C,#0024,#03,#0000,HCursorUp,#0000
     DEFW #0270,#0280,#00DC,#00E4,#03,#0000,HCursorDown,#0000

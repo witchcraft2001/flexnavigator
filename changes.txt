@@ -2,6 +2,10 @@ FN - FlexNavigator
 FV - FileViewer
 FE - FileEditor
 
+FE v.1.06 05.08.2021 (Mikhaltchenkov Dmitry aka Hard/WCG)
++ По кнопке F9 вызываются настройки редактора с возможностью сохранить настройки
+  в файл
+
 FN v.1.13.1 02.08.2021 (Mikhaltchenkov Dmitry aka Hard/WCG)
 * версия без сжатия кодовых блоков
 
