@@ -3,7 +3,7 @@
 DOSline
 	SUB	A
 	LD	(HistCurrent),A
-	LD	C,#37
+	LD	C,Dss.ScanKey
 	RST	#10
 	BIT	4,B
 	JR	Z,DOSln0
@@ -38,7 +38,7 @@ DOSln0	LD	A,E
 	LD	A,(DOSslen)
 	OR	A
 	JR	NZ,DOSloop
-	LD	C,#31
+	LD	C,Dss.ScanKey
 	RST	#10
 	JP	MarkFile
 DOSln1	LD	A,D
@@ -50,7 +50,7 @@ DOSln1	LD	A,D
 	JR	Z,DOSloop
 	CP	#92
 	JR	Z,DOSloop
-DOSlnEx	LD	C,#31
+DOSlnEx	LD	C,Dss.ScanKey
 	RST	#10
 	RET 
 DOSloop	SUB	A
@@ -60,7 +60,7 @@ DOSloop	SUB	A
 	CALL	DOSInputLine
 	RET	C
 	JR	Z,RunDOSline
-	LD	C,#37
+	LD	C,Dss.ScanKey
 	RST	#10
 	LD	A,E
 	CP	#1B
@@ -461,7 +461,7 @@ DOSInputLine
 	LD	(InpMous+2),HL
 	RES	7,(IX+#01)
 	SET	6,(IX+#01)
-	LD	C,#37
+	LD	C,Dss.ScanKey
 	RST	#10
 	JR	NZ,$+6
 	RES	6,(IX+#01)
@@ -479,7 +479,7 @@ DOSLineLp
 	CALL	ChCursor
 	LD	IX,(InpMous+2)
 	CALL	TestCoords
-	LD	C,#37
+	LD	C,Dss.ScanKey
 	RST	#10
 	JR	Z,DOSLineLp
 	RES	7,D

@@ -7,6 +7,7 @@
 ; flex navigator equs
 
 	include "fnconst.inc"
+	include "dss_equ.z80"
 
 ;[]-----------------------------------------------------------------------[]
 	org	0x8000
@@ -94,7 +95,7 @@ ComNext	LD	A,(TreeFlag)
 
 ;[]-----------------------------------------------------------------------[]
 TestKeys
-	LD	C,0x37
+	LD	C,Dss.ScanKey
 	RST	0x10
 	JR	Z,KeyExit
 	RES	7,D
