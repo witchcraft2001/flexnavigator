@@ -1568,7 +1568,7 @@ LoadTRD
 	CALL	SetClock
 	LD	DE,TRDfile
 	LD	BC,#0119
-	LD	A,Dss.ScanKey
+	LD	A,#37
 	RST	#10
 	PUSH	AF
 	CALL	C,DOSError
