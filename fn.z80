@@ -1,29 +1,26 @@
 	DEVICE ZXSPECTRUM128
 ;[]=======================================================================[]
 ;				FLEX NAVIGATOR			      	   ;
-;				     v1.12			           ;
+;				    v1.13.1			           ;
 ;			   Last	edition: 02/04/2021		           ;
 ;[]=======================================================================[]
 ; flex navigator equs
 
 	include "fnconst.inc"
-
+	include "dss_equ.z80"
 ;[]-----------------------------------------------------------------------[]
 	org	0x8000
-;	section	.bss
 
 WorkBuffer:
 	ds	0x400			; work buffer for func/procs
 
 ;[]-----------------------------------------------------------------------[]
 	org	0x8400
-;	section	.bss
 
 PagesList:
 	ds	0x100			; buffer for memory pages
 ;[]-----------------------------------------------------------------------[]
 	org	0x8500
-;	section	.text
 StartOfFN
 ;UI palette & stack memory
 PALETTE:
@@ -94,7 +91,7 @@ ComNext	LD	A,(TreeFlag)
 
 ;[]-----------------------------------------------------------------------[]
 TestKeys
-	LD	C,0x37
+	LD	C,Dss.TestKey
 	RST	0x10
 	JR	Z,KeyExit
 	RES	7,D

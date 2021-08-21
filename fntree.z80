@@ -514,7 +514,7 @@ TstTree	PUSH	BC
 	OR	A
 	RET	NZ
 	PUSH	BC
-	LD	C,#37
+	LD	C,Dss.ScanKey
 	RST	#10
 	POP	BC
 	RET	NZ

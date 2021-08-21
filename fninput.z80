@@ -42,7 +42,7 @@ InpLineLp
 	CALL	ChCursor
 InpMous	LD	IX,#0000
 	CALL	TestCoords
-	LD	C,#37
+	LD	C,Dss.ScanKey
 	RST	#10
 	JR	Z,InpLineLp
 	RES	7,D
@@ -71,7 +71,7 @@ InpKeys	LD	A,(IX+#00)
 	PUSH	HL
 	PUSH	BC
 	PUSH	IX
-	LD	C,#31
+	LD	C,Dss.ScanKey
 	RST	#10
 	POP	IX
 	RET 
@@ -80,7 +80,7 @@ InpLineLp1
 	LD	HL,InpLineLp
 	PUSH	HL
 	PUSH	IX
-	LD	C,#31
+	LD	C,Dss.ScanKey
 	RST	#10
 	POP	IX
 	LD	A,E
@@ -119,17 +119,17 @@ InpLnExtC
 	LDIR 
 	RET 
 InpLnData
-	DEFW	#0000	;Адрес описателя строки
-			;  +00 Максимальная длина строки
-			;  +01 Флаг готовности
-			;  +02 текущая X позиция курсора
-			;  +03 текущая AddX
-			;  +04 количество введенных символов
-			;  +05 X позиция строки	на экране
-			;  +07 Y позиция строки	на экране
-			;  +09 X длина строки на экране
-			;  +0B Цвет строки
-			;  +0C ...сама строка
+	DEFW	#0000	;РђРґСЂРµСЃ РѕРїРёСЃР°С‚РµР»СЏ СЃС‚СЂРѕРєРё
+			;  +00 РњР°РєСЃРёРјР°Р»СЊРЅР°СЏ РґР»РёРЅР° СЃС‚СЂРѕРєРё
+			;  +01 Р¤Р»Р°Рі РіРѕС‚РѕРІРЅРѕСЃС‚Рё
+			;  +02 С‚РµРєСѓС‰Р°СЏ X РїРѕР·РёС†РёСЏ РєСѓСЂСЃРѕСЂР°
+			;  +03 С‚РµРєСѓС‰Р°СЏ AddX
+			;  +04 РєРѕР»РёС‡РµСЃС‚РІРѕ РІРІРµРґРµРЅРЅС‹С… СЃРёРјРІРѕР»РѕРІ
+			;  +05 X РїРѕР·РёС†РёСЏ СЃС‚СЂРѕРєРё	РЅР° СЌРєСЂР°РЅРµ
+			;  +07 Y РїРѕР·РёС†РёСЏ СЃС‚СЂРѕРєРё	РЅР° СЌРєСЂР°РЅРµ
+			;  +09 X РґР»РёРЅР° СЃС‚СЂРѕРєРё РЅР° СЌРєСЂР°РЅРµ
+			;  +0B Р¦РІРµС‚ СЃС‚СЂРѕРєРё
+			;  +0C ...СЃР°РјР° СЃС‚СЂРѕРєР°
 InpTable1
 	DEFW	#011B,InpLnExtC
 	DEFW	#280D,InpLnExtN
@@ -158,7 +158,7 @@ InsertSymbol
 	LD	A,(IX+#04)
 	SUB	(IX+#02)
 	JR	Z,NotInsert
-;Ввод в	середину текста
+;Р’РІРѕРґ РІ	СЃРµСЂРµРґРёРЅСѓ С‚РµРєСЃС‚Р°
 	LD	C,A
 	LD	B,#00
 	PUSH	IX
@@ -201,7 +201,7 @@ ClearInpLn
 	LD	(IX+#04),A
 	CALL	PrintInpLn
 	RET 
-;Курсор	влево на одно место
+;РљСѓСЂСЃРѕСЂ	РІР»РµРІРѕ РЅР° РѕРґРЅРѕ РјРµСЃС‚Рѕ
 ILleft	RES	7,(IX+#01)
 	LD	A,(IX+#02)
 	DEC	A
@@ -209,7 +209,7 @@ ILleft	RES	7,(IX+#01)
 	LD	(IX+#02),A
 	CALL	PrintInpLn
 	RET 
-;Курсор	вправо на одно место
+;РљСѓСЂСЃРѕСЂ	РІРїСЂР°РІРѕ РЅР° РѕРґРЅРѕ РјРµСЃС‚Рѕ
 ILright	RES	7,(IX+#01)
 	LD	A,(IX+#02)
 	CP	(IX+#04)
@@ -463,7 +463,7 @@ InsInpLnCol
 	RLCA 
 	RLCA 
 	OR	C
-	LD	HL,PrnINKl	;INK буфер
+	LD	HL,PrnINKl	;INK Р±СѓС„РµСЂ
 	LD	B,#08
 	CPL 
 	LD	(HL),A
@@ -480,7 +480,7 @@ InsInpLnCol
 	LD	(FillILc),A
 	OR	C
 	XOR	B
-	LD	HL,PrnPAPl	;PAPER буфер
+	LD	HL,PrnPAPl	;PAPER Р±СѓС„РµСЂ
 	LD	B,#08
 	LD	(HL),A
 	INC	HL
@@ -504,15 +504,15 @@ PrnInpLn1
 	LD	E,(IX+#03)
 	ADD	HL,DE
 	OR	A
-	CALL	NZ,TstInpLnLen	;На вход: HL-начало вывода
-				;	  А -кол.симв.до курсора
+	CALL	NZ,TstInpLnLen	;РќР° РІС…РѕРґ: HL-РЅР°С‡Р°Р»Рѕ РІС‹РІРѕРґР°
+				;	  Рђ -РєРѕР».СЃРёРјРІ.РґРѕ РєСѓСЂСЃРѕСЂР°
 	PUSH	IY
 	PUSH	IX
 	LD	A,(IX+#07)
-	LD	LY,A		;Y координата
+	LD	LY,A		;Y РєРѕРѕСЂРґРёРЅР°С‚Р°
 	LD	A,(IX+#04)
 	LD	HY,A
-	IN	A,(YPORT)	;Сохраняем Y порт
+	IN	A,(YPORT)	;РЎРѕС…СЂР°РЅСЏРµРј Y РїРѕСЂС‚
 	PUSH	AF
 	EXX 
 	LD	HL,PrnPAPl
@@ -528,7 +528,7 @@ PrnInpLn1
 	SRL	B
 	RR	C
 	LD	LX,C
-	LD	C,L		;Адрес строки
+	LD	C,L		;РђРґСЂРµСЃ СЃС‚СЂРѕРєРё
 	LD	B,H
 	IN	A,(PAGE1)
 	LD	HX,A
@@ -548,7 +548,7 @@ PrnInpLn1
 PInpLnP	LD	L,A
 	LD	H,high IFFFont-#C0
 	PUSH	BC
-	LD	B,(HL)		;длина символа
+	LD	B,(HL)		;РґР»РёРЅР° СЃРёРјРІРѕР»Р°
 	INC	H
 	LD	E,(HL)
 	INC	H
@@ -817,4 +817,3 @@ CurCursor
 	DEFB	#00
 CursBuffer
 	DEFS	9,0
-
