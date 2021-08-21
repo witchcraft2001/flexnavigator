@@ -46,6 +46,8 @@ EditorBegin
 	CALL	InitFile
 	CALL	PrintPage
 EditorLoop
+	LD	BC,#3531	;Сбрасываем буфер клавиатуры
+	RST	#10
 	CALL	ChCursor
 	LD	A,(EditMode)
 	OR	A
@@ -53,7 +55,7 @@ EditorLoop
 TEditLoop
 	LD	IX,ASCIItab
 	CALL	TestCoords
-	LD	C,#31		;Ожидаем нажатия клавиш
+	LD	C,#31		;ожидаем нажатия клавиш
 	RST	#10
 	JR	Z,EditorLoop
 	LD	A,D
@@ -139,7 +141,7 @@ TEditLoop
 HEditLoop
 	LD	IX,HEXtab
 	CALL	TestCoords
-	LD	C,#31		;Ожидаем нажатия клавиш
+	LD	BC,#3531	;Очищаем буфер и ожидаем нажатия клавиш
 	RST	#10
 	JP	Z,EditorLoop
 	LD	A,D		;
@@ -337,7 +339,7 @@ EditorExit
 SureLoop
 	LD	IX,SureTab
 	CALL	TestCoords
-	LD	C,#31
+	LD	C,#31		;check keys
 	RST	#10
 	JR	Z,SureLoop
 	LD	A,B
